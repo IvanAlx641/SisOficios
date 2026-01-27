@@ -3,5 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // Esto buscará el archivo resources/views/dashboard.blade.php
+    return view('dashboard'); 
 });
