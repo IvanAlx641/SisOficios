@@ -50,3 +50,34 @@
 .navbar-brand span {
     color: white !important;
 }
+
+/* --- CORRECCIÓN DE ESPACIADO FINAL --- */
+
+/* 1. Quitamos padding del envoltorio principal */
+body .page-wrapper {
+    padding-top: 0px !important;
+}
+
+/* 2. ¡EL CULPABLE! Quitamos el padding del Body Wrapper */
+/* Este div es el que conecta el menú con el contenido */
+body .body-wrapper {
+    padding-top: 0px !important; 
+    margin-top: 0px !important;
+}
+
+/* 3. Aseguramos que el contenedor fluido no tenga margen interno arriba */
+body .body-wrapper > .container-fluid {
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+}
+
+/* 4. (Opcional) Si la barra de menú horizontal tiene margen abajo, lo quitamos */
+.left-sidebar.with-horizontal {
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+/* 5. Aseguramos que no haya títulos invisibles estorbando */
+.page-titles {
+    display: none !important;
+}
