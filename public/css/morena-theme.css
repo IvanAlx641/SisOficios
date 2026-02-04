@@ -1,0 +1,52 @@
+/* public/css/morena-theme.css */
+
+:root {
+    /* Sobrescribimos el color PRIMARIO de Bootstrap (el azul por defecto) */
+    --bs-primary: #B12631; 
+    --bs-primary-rgb: 177, 38, 49; /* Necesario para las opacidades de Bootstrap */
+    
+    /* Color secundario (Dorado suave) */
+    --bs-secondary: #BC955C;
+    --bs-secondary-rgb: 188, 149, 92;
+
+    /* Opcional: Ajustar el color de los enlaces */
+    --bs-link-color: #B12631;
+    --bs-link-hover-color: #801B24;
+}
+
+/* Forzar botones primarios */
+.btn-primary {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+    background-color: #801B24 !important; /* Guinda más oscuro al pasar el mouse */
+    border-color: #801B24 !important;
+}
+
+/* --- MATERIALPRO SPECIFIC OVERRIDES --- */
+
+/* Fondo del Header Horizontal (Barra superior) */
+[data-layout="horizontal"] .app-header {
+    background-color: #8A1525 !important; /* Un tono más oscuro para el header se ve elegante */
+}
+
+/* Elementos activos en el menú */
+.sidebar-nav ul .sidebar-item.selected > .sidebar-link, 
+.sidebar-nav ul .sidebar-item.selected > .sidebar-link.active, 
+.sidebar-nav ul .sidebar-item > .sidebar-link.active {
+    background-color: var(--bs-primary) !important;
+    color: #ffffff !important;
+    border-radius: 4px; /* Opcional: bordes redondeados en items activos */
+}
+
+/* Color de iconos en el sidebar (normalmente azules) */
+.sidebar-nav ul .sidebar-item .sidebar-link i {
+    color: var(--bs-primary); 
+}
+
+/* Color del texto del logo si es texto */
+.navbar-brand span {
+    color: white !important;
+}

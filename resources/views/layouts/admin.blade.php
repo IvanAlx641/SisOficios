@@ -8,6 +8,7 @@
 
     <link rel="shortcut icon" type="image/png" href="{{ asset('materialpro/assets/images/logos/favicon.png') }}" />
     <link rel="stylesheet" href="{{ asset('materialpro/assets/css/styles.css') }}" />
+    <link href="{{ asset('css/morena-theme.css') }}" rel="stylesheet">
 
     <title>SisSoporteTecnico</title>
 </head>
