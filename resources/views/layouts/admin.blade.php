@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('materialpro/assets/css/styles.css') }}" />
     <link href="{{ asset('css/morena-theme.css') }}" rel="stylesheet">
 
-    <title>SisSoporteTecnico</title>
+    <title>Sistema de Oficios</title>
 </head>
 
 <body>
@@ -145,12 +145,6 @@
                                                         </div>
                                                     </div>
                                                     <div class="message-body pb-3">
-                                                        <div class="px-3 pt-3">
-                                                            <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                                                                <a href="#" class="d-flex align-items-center">Mi Perfil</a>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
                                                         <div class="px-3">
                                                             <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
                                                                 <a href="#" class="d-flex align-items-center">Cerrar Sesión</a>
@@ -172,53 +166,141 @@
                     <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar container-fluid">
                         <ul id="sidebarnav">
                             <li class="sidebar-item">
-                                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <iconify-icon icon="solar:screencast-2-linear" class="aside-icon"></iconify-icon>
-                                    <span class="hide-menu">Dashboard</span>
+                                <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+                                    <iconify-icon icon="solar:screencast-2-linear"></iconify-icon>
+                                    <span class="hide-menu">Inicio</span>
                                 </a>
-                                <ul aria-expanded="false" class="collapse first-level">
-                                    <li class="sidebar-item">
-                                        <a href="/" class="sidebar-link">
-                                            <i class="ti ti-circle"></i>
-                                            <span class="hide-menu">Analítica</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <iconify-icon icon="solar:widget-3-line-duotone" class="aside-icon"></iconify-icon>
-                                    <span class="hide-menu">Apps</span>
+                                    <iconify-icon icon="solar:user-id-line-duotone" class="aside-icon"></iconify-icon>
+                                    <span class="hide-menu">Administracion</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
-                                            <i class="ti ti-circle"></i>
-                                            <span class="hide-menu">Chat</span>
+                                            <i class="ti ti-user"></i>
+                                            <span class="hide-menu">Usuarios</span>
                                         </a>
                                     </li>
+
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
-                                            <i class="ti ti-circle"></i>
-                                            <span class="hide-menu">Calendario</span>
+                                            <i class="ti ti-file-pencil"></i>
+                                            <span class="hide-menu">Solicitantes</span>
                                         </a>
                                     </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-checklist"></i>
+                                            <span class="hide-menu">Tipos de Requerimientos</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-screen-share"></i>
+                                            <span class="hide-menu">Sistemas</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-users"></i>
+                                            <span class="hide-menu">Roles</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-user-check"></i>
+                                            <span class="hide-menu">Permisos</span>
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </li>
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <iconify-icon icon="solar:file-text-linear" class="aside-icon"></iconify-icon>
-                                    <span class="hide-menu">Páginas</span>
+                                    <span class="hide-menu">Oficios</span>
                                 </a>
+                                <ul aria-expanded="false" class="collapse first-level">
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-file-plus"></i>
+                                            <span class="hide-menu">Registro</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-tournament"></i>
+                                            <span class="hide-menu">Turno</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-arrow-guide"></i>
+                                            <span class="hide-menu">Seguimiento</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-file-symlink"></i>
+                                            <span class="hide-menu">Respuesta</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-file-search"></i>
+                                            <span class="hide-menu">Buscador</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <iconify-icon icon="solar:palette-linear" class="aside-icon"></iconify-icon>
-                                    <span class="hide-menu">UI</span>
+                                    <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
+                                    <span class="hide-menu">Actividades</span>
                                 </a>
+                                <ul aria-expanded="false" class="collapse first-level">
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-file-like"></i>
+                                            <span class="hide-menu">Bitacora</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <iconify-icon icon="solar:diagram-up-broken" class="aside-icon"></iconify-icon>
+                                    <span class="hide-menu">Informes</span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse first-level">
+                                    <li class="sidebar-item">   
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-file-analytics"></i>
+                                            <span class="hide-menu">Oficios</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">
+                                            <i class="ti ti-home-stats"></i>
+                                            <span class="hide-menu">Actividades</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </nav>
