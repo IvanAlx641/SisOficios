@@ -248,7 +248,6 @@
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     
     @stack('scripts') 
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Función para matar el espacio
@@ -277,6 +276,16 @@
 
             // 3. Ejecutar cada vez que se cambie el tamaño de la ventana (para cuando rotan pantallas)
             window.addEventListener('resize', fixLayoutPadding);
+        });
+    </script>
+    <script>
+        // DETECTOR DE SISTEMA OPERATIVO
+        document.addEventListener("DOMContentLoaded", function() {
+            // Si el sistema detecta que es Windows...
+            if (navigator.userAgent.indexOf("Windows") != -1) {
+                // ...agregamos la clase 'is-windows' al cuerpo de la página
+                document.body.classList.add('is-windows');
+            }
         });
     </script>
 </body>
