@@ -26,7 +26,7 @@
                         </div>
                         <div class="align-self-center">
                             <h3 class="mb-1 fs-6">$2376</h3>
-                            <span class="text-muted">Online Revenue</span>
+                            <span class="text-muted">Online revenue</span>
                         </div>
                     </div>
                 </div>

@@ -57,7 +57,7 @@
 
 body.is-windows .body-wrapper {
     /* Usamos margen negativo para "jalar" el contenido hacia arriba */
-    margin-top: -35px !important; 
+    margin-top: 40px !important; 
     padding-top: 0px !important;
 }
 
