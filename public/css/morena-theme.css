@@ -52,36 +52,3 @@
 }
 
 
-/* --- SOLUCIÓN DE CONSISTENCIA MAC/WINDOWS --- */
-
-/* 1. Forzamos que el contenedor del cuerpo NO tenga relleno calculado por JS */
-/* Usamos !important para anular lo que diga la Mac o Windows */
-body .body-wrapper {
-    padding-top: 0px !important; 
-    margin-top: 0px !important;
-}
-
-/* 2. Aseguramos que el contenedor interno tampoco tenga margen */
-body .page-wrapper > .container-fluid {
-    padding-top: 0px !important;
-    margin-top: 0px !important;
-}
-
-/* 3. BLINDAJE EXTRA: Media Query para pantallas grandes */
-/* A veces las pantallas retina de Mac activan este breakpoint y agregan espacio extra */
-@media (min-width: 768px) {
-    body[data-layout="horizontal"] .page-wrapper {
-        padding-top: 0px !important;
-    }
-    
-    body[data-layout="horizontal"] .body-wrapper {
-        padding-top: 0px !important;
-    }
-}
-
-/* 4. Forzamos que el header se comporte como un bloque sólido (Relative) */
-/* Esto evita que flote y cause espacios raros de cálculo */
-.app-header {
-    position: relative !important; 
-    top: 0 !important;
-}
