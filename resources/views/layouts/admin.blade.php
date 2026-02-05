@@ -190,20 +190,6 @@
                                             <span class="hide-menu">Sistemas</span>
                                         </a>
                                     </li>
-
-                                    <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
-                                            <i class="ti ti-users"></i>
-                                            <span class="hide-menu">Roles</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
-                                            <i class="ti ti-user-check"></i>
-                                            <span class="hide-menu">Permisos</span>
-                                        </a>
-                                    </li>
                                 </ul>
                             </li>
 
