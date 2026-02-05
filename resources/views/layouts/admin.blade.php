@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="horizontal">
+<html lang="es" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="horizontal">
 
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="shortcut icon" type="image/png" href="{{ asset('materialpro/assets/images/logos/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('materialpro/assets/images/morenaicons/favicon.png') }}" />
+    
     <link rel="stylesheet" href="{{ asset('materialpro/assets/css/styles.css') }}" />
     <link href="{{ asset('css/morena-theme.css') }}" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <style>
+        /* Ajuste del Logo PNG */
+        .logo-custom {
+            height: 45px; 
+            width: auto;
+            object-fit: contain; /* Asegura que no se deforme */
+        }
+        
+        /* Ocultar elementos no deseados */
+        .moon, .sun, .lang-flag { display: none !important; }
+    </style>
 
     <title>Sistema de Oficios</title>
 </head>
 
 <body>
     <div class="preloader">
-        <img src="{{ asset('materialpro/assets/images/logos/logo-icon.svg') }}" alt="loader" class="lds-ripple img-fluid" />
+        <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" alt="loader" class="lds-ripple img-fluid" style="width: 80px;" />
     </div>
 
     <div id="main-wrapper">
@@ -42,14 +57,7 @@
                             <div class="d-none d-lg-block">
                                 <div class="brand-logo d-flex align-items-center justify-content-between">
                                     <a href="/" class="text-nowrap logo-img d-flex align-items-center gap-2">
-                                        <b class="logo-icon">
-                                            <img src="{{ asset('materialpro/assets/images/logos/logo-light-icon.svg') }}" alt="homepage" class="dark-logo" />
-                                            <img src="{{ asset('materialpro/assets/images/logos/logo-light-icon.svg') }}" alt="homepage" class="light-logo" />
-                                        </b>
-                                        <span class="logo-text">
-                                            <img src="{{ asset('materialpro/assets/images/logos/logo-light-text.svg') }}" alt="homepage" class="dark-logo ps-2" />
-                                            <img src="{{ asset('materialpro/assets/images/logos/logo-light-text.svg') }}" class="light-logo ps-2" alt="homepage" />
-                                        </span>
+                                        <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" alt="logo" class="logo-custom" />
                                     </a>
                                 </div>
                             </div>
@@ -75,50 +83,17 @@
                                 <li class="nav-item d-none d-xl-block">
                                     <div class="brand-logo d-flex align-items-center justify-content-between">
                                         <a href="/" class="text-nowrap logo-img d-flex align-items-center gap-2">
-                                            <b class="logo-icon">
-                                                <img src="{{ asset('materialpro/assets/images/logos/logo-light-icon.svg') }}" alt="homepage" class="dark-logo" />
-                                                <img src="{{ asset('materialpro/assets/images/logos/logo-light-icon.svg') }}" alt="homepage" class="light-logo" />
-                                            </b>
-                                            <span class="logo-text">
-                                                <img src="{{ asset('materialpro/assets/images/logos/logo-light-text.svg') }}" alt="homepage" class="dark-logo ps-2" />
-                                                <img src="{{ asset('materialpro/assets/images/logos/logo-light-text.svg') }}" class="light-logo ps-2" alt="homepage" />
-                                            </span>
+                                            <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" alt="logo" class="logo-custom" />
                                         </a>
                                     </div>
                                 </li>
-
-                                <li class="nav-item d-none d-lg-block search-box">
-                                    <a class="nav-link nav-icon-hover d-none d-md-flex waves-effect waves-dark" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <iconify-icon icon="solar:magnifer-linear"></iconify-icon>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item hover-dd d-none d-lg-block dropdown">
-                                    <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-haspopup="true" aria-expanded="false">
-                                        <iconify-icon icon="solar:widget-3-line-duotone"></iconify-icon>
-                                    </a>
-                                    </li>
-                            </ul>
+                                
+                                </ul>
 
                             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <ul class="navbar-nav gap-2 flex-row ms-auto align-items-center justify-content-center">
                                         
-                                        <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle">
-                                            <a class="nav-link" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                                                <img src="{{ asset('materialpro/assets/images/svgs/icon-flag-en.svg') }}" alt="" width="20px" height="20px" class="round-20" />
-                                            </a>
-                                        </li>
-
-                                        <li class="nav-item nav-icon-hover-bg rounded-circle">
-                                            <a class="nav-link nav-icon-hover moon dark-layout" href="javascript:void(0)">
-                                                <iconify-icon icon="solar:moon-line-duotone" class="moon"></iconify-icon>
-                                            </a>
-                                            <a class="nav-link nav-icon-hover sun light-layout" href="javascript:void(0)">
-                                                <iconify-icon icon="solar:sun-2-line-duotone" class="sun"></iconify-icon>
-                                            </a>
-                                        </li>
-
                                         <li class="nav-item hover-dd dropdown nav-icon-hover-bg rounded-circle d-none d-lg-block">
                                             <a class="nav-link nav-icon-hover waves-effect waves-dark" href="javascript:void(0)" id="drop2" aria-expanded="false">
                                                 <iconify-icon icon="solar:bell-bing-line-duotone"></iconify-icon>
@@ -131,24 +106,33 @@
 
                                         <li class="nav-item hover-dd dropdown">
                                             <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                                                <img src="{{ asset('materialpro/assets/images/profile/user-1.jpg') }}" alt="user" width="30" class="profile-pic rounded-circle" />
+                                                <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5" 
+                                                     style="width: 35px; height: 35px;">
+                                                    {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
+                                                </div>
                                             </a>
+                                            
                                             <div class="dropdown-menu pt-0 content-dd overflow-hidden pt-0 dropdown-menu-end user-dd" aria-labelledby="drop2">
                                                 <div class="profile-dropdown position-relative" data-simplebar>
                                                     <div class="py-3 border-bottom">
                                                         <div class="d-flex align-items-center px-3">
-                                                            <img src="{{ asset('materialpro/assets/images/profile/user-1.jpg') }}" class="rounded-circle round-50" alt="" />
+                                                            <div class="bg-primary-subtle text-primary rounded-circle round-50 d-flex align-items-center justify-content-center fw-bold fs-5">
+                                                                {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
+                                                            </div>
                                                             <div class="ms-3">
-                                                                <h5 class="mb-1 fs-4">Ivan Negrete</h5>
-                                                                <p class="mb-0 fs-2 d-flex align-items-center text-muted">ivan76321@gmail.com</p>
+                                                                <h5 class="mb-1 fs-4 text-dark">{{ Auth::user()->nombre ?? 'Usuario' }}</h5>
+                                                                <p class="mb-0 fs-2 d-flex align-items-center text-muted">{{ Auth::user()->email ?? 'email' }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="message-body pb-3">
-                                                        <div class="px-3">
-                                                            <div class="h6 mb-0 dropdown-item py-8 px-3 rounded-2 link">
-                                                                <a href="#" class="d-flex align-items-center">Cerrar Sesión</a>
-                                                            </div>
+                                                        <div class="px-3 pt-3">
+                                                            <form action="{{ route('logout') }}" method="POST">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
+                                                                    <i class="ti ti-logout"></i> Cerrar Sesión
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -166,7 +150,7 @@
                     <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar container-fluid">
                         <ul id="sidebarnav">
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+                                <a class="sidebar-link" href="/" aria-expanded="false">
                                     <iconify-icon icon="solar:screencast-2-linear"></iconify-icon>
                                     <span class="hide-menu">Inicio</span>
                                 </a>
@@ -178,8 +162,9 @@
                                     <span class="hide-menu">Administracion</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
+                                    
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('usuario.index') }}" class="sidebar-link">
                                             <i class="ti ti-user"></i>
                                             <span class="hide-menu">Usuarios</span>
                                         </a>
@@ -195,7 +180,7 @@
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
                                             <i class="ti ti-checklist"></i>
-                                            <span class="hide-menu">Tipos de Requerimientos</span>
+                                            <span class="hide-menu">Catálogos</span>
                                         </a>
                                     </li>
 
@@ -219,7 +204,6 @@
                                             <span class="hide-menu">Permisos</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </li>
 

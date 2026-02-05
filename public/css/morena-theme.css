@@ -52,3 +52,38 @@
 }
 
 
+/* color dorado para elementos secundarios */
+  /* Tono Dorado Institucional */
+    :root {
+        --gold-color: #C09F62;
+        --gold-hover: #A88A52; /* Un poco más oscuro para el hover */
+    }
+
+    /* Botón Dorado Contorno (Para Email y Filtros) */
+    .btn-outline-gold {
+        color: var(--gold-color);
+        border-color: var(--gold-color);
+    }
+    .btn-outline-gold:hover, 
+    .btn-check:checked + .btn-outline-gold {
+        background-color: var(--gold-color);
+        border-color: var(--gold-color);
+        color: white;
+    }
+
+    /* NUEVO: Botón Dorado Sólido (Para Reactivar) */
+    .btn-gold {
+        background-color: var(--gold-color);
+        border-color: var(--gold-color);
+        color: white;
+    }
+    .btn-gold:hover {
+        background-color: var(--gold-hover);
+        border-color: var(--gold-hover);
+        color: white;
+    }
+
+    /* Texto Dorado */
+    .text-gold {
+        color: var(--gold-color) !important;
+    }

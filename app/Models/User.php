@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,33 +11,50 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'users';
+
+    // --- Configuración de Fechas Personalizadas ---
+    // Laravel llenará automáticamente fecha_creacion y fecha_modificacion
+    public $timestamps = true;
+    const CREATED_AT = 'fecha_creacion';
+    const UPDATED_AT = 'fecha_modificacion';
+
+    // Lista exacta de columnas permitidas (según tu DB)
     protected $fillable = [
-        'name',
+        'nombre',
         'email',
+        'rol',
+        'inactivo',                 // 'X' o NULL
+        'email_verified_at',
         'password',
+        'dependencia_id',
+        'unidad_administrativa_id',
+        'usuario_creacion_id',
+        'usuario_modificacion_id',
+        'fecha_ultimo_acceso'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'fecha_creacion' => 'datetime',
+        'fecha_modificacion' => 'datetime',
+        'fecha_ultimo_acceso' => 'datetime',
+        'password' => 'hashed', // Encriptación automática
     ];
+
+    // --- Relaciones de Auditoría ---
+    public function creador()
+    {
+        return $this->belongsTo(User::class, 'usuario_creacion_id');
+    }
+
+    public function modificador()
+    {
+        return $this->belongsTo(User::class, 'usuario_modificacion_id');
+    }
 }
