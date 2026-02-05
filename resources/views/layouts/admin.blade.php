@@ -330,45 +330,5 @@
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     
     @stack('scripts') 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Función para matar el espacio
-            function fixLayoutPadding() {
-                // Seleccionamos los elementos conflictivos
-                var bodyWrapper = document.querySelector('.body-wrapper');
-                var pageWrapper = document.querySelector('.page-wrapper');
-                
-                // Forzamos padding 0 con la máxima prioridad posible
-                if(bodyWrapper) {
-                    bodyWrapper.style.paddingTop = '0px';
-                    bodyWrapper.style.marginTop = '0px';
-                }
-                if(pageWrapper) {
-                    pageWrapper.style.paddingTop = '0px';
-                }
-            }
-
-            // 1. Ejecutar inmediatamente
-            fixLayoutPadding();
-
-            // 2. Ejecutar medio segundo después (por si el script del tema tarda en cargar)
-            setTimeout(fixLayoutPadding, 100);
-            setTimeout(fixLayoutPadding, 500);
-            setTimeout(fixLayoutPadding, 1000);
-
-            // 3. Ejecutar cada vez que se cambie el tamaño de la ventana (para cuando rotan pantallas)
-            window.addEventListener('resize', fixLayoutPadding);
-        });
-    </script>
-    <script>
-        // DETECTOR DE SISTEMA OPERATIVO
-        document.addEventListener("DOMContentLoaded", function() {
-            // Si el sistema detecta que es Windows...
-            if (navigator.userAgent.indexOf("Windows") != -1) {
-                // ...agregamos la clase 'is-windows' al cuerpo de la página
-                document.body.classList.add('is-windows');
-            }
-        });
-    </script>
 </body>
 </html>

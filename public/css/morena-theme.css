@@ -52,17 +52,3 @@
 }
 
 
-/* --- PARCHE EXCLUSIVO PARA WINDOWS --- */
-/* Esto arregla el gap provocado por la barra de scroll de 17px */
-
-body.is-windows .body-wrapper {
-    /* Usamos margen negativo para "jalar" el contenido hacia arriba */
-    margin-top: 40px !important; 
-    padding-top: 0px !important;
-}
-
-body.is-windows .page-wrapper {
-    padding-top: 0px !important;
-}
-
-/* Ajuste fino: Si -35px es mucho, prueba con -25px o -40px */
