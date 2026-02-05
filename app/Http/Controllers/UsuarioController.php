@@ -34,6 +34,7 @@ class UsuarioController extends Controller
 
     // --- MENSAJES AJUSTADOS AL FORMATO DE LA IMAGEN ---
     protected $mensajes = [
+        'nombre.regex' => 'El nombre completo solo debe contener letras y espacios.',
         'nombre.required' => 'El campo nombre completo es requerido.',
         'nombre.min' => 'El campo nombre completo debe tener al menos 5 caracteres.',
         'email.required' => 'El campo correo electrónico es requerido.',
@@ -84,7 +85,13 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|min:5|max:190',
+            'nombre' => [
+            'required',
+            'string',
+            'min:5',
+            'max:190',
+            'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/'
+        ],
             'email' => 'required|email|unique:users,email',
             'rol' => 'required|in:' . implode(',', array_keys($this->roles)),
             'unidad_administrativa_id' => 'required_unless:rol,Administrador TI', 
