@@ -26,6 +26,13 @@
         border-color: var(--gold-color);
         color: white;
     }
+
+    .btn-ginda {
+        background-color: var(-guinda-color);
+        border-color: var(-guinda-color);
+        color: white;
+    }
+
     .btn-gold:hover {
         background-color: var(--gold-hover);
         border-color: var(--gold-hover);
@@ -96,8 +103,19 @@
 
 <div class="container-fluid">
     <div class="card bg-primary-subtle shadow-none position-relative overflow-hidden mb-4">
-        <div class="col-9">
-            <h4 class="fw-semibold mb-8">Gestión de Usuarios</h4>
+        <div> 
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h4 class="fw-semibold mb-0">Gestión de usuarios</h4>
+                </div>
+            
+                <div class="col-3 text-end">
+                    <a href="{{ route('usuario.create') }}" class="btn btn-primary w-50 py-2">
+                        <i class="ti ti-plus me-1"></i> Agregar
+                    </a>
+                </div>
+            
+            </div>
         </div>
     </div>
 
@@ -115,7 +133,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold text-primary">Correo Electrónico</label>
+                        <label class="form-label fw-semibold text-primary">Correo electrónico</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white text-primary border-primary"><i class="ti ti-mail"></i></span>
                             <input type="text" name="email" class="form-control border-primary" placeholder="Buscar por correo..." value="{{ $request->email }}">
@@ -123,39 +141,39 @@
                     </div>
 
                     <div class="col-md-3">
-                         <label class="form-label fw-semibold text-primary">Rol</label>
-                         <select class="form-select border-primary" name="rol" onchange="this.form.submit()">
-                             <option value="Todos">Todos los roles</option>
-                             <option value="Administrador TI" {{ $request->rol == 'Administrador TI' ? 'selected' : '' }}>Administrador TI</option>
-                             <option value="Titular de área" {{ $request->rol == 'Titular de área' ? 'selected' : '' }}>Titular de área</option>
-                             <option value="Capturista" {{ $request->rol == 'Capturista' ? 'selected' : '' }}>Capturista</option>
-                             <option value="Responsable" {{ $request->rol == 'Responsable' ? 'selected' : '' }}>Responsable</option>
-                             <option value="Analista" {{ $request->rol == 'Analista' ? 'selected' : '' }}>Analista</option>
-                         </select>
+                        <label class="form-label fw-semibold text-primary">Rol</label>
+                        <select class="form-select border-primary" name="rol" onchange="this.form.submit()">
+                            <option value="Todos">Todos los roles</option>
+                            <option value="Administrador TI" {{ $request->rol == 'Administrador TI' ? 'selected' : '' }}>Administrador TI</option>
+                            <option value="Titular de área" {{ $request->rol == 'Titular de área' ? 'selected' : '' }}>Titular de área</option>
+                            <option value="Capturista" {{ $request->rol == 'Capturista' ? 'selected' : '' }}>Capturista</option>
+                            <option value="Responsable" {{ $request->rol == 'Responsable' ? 'selected' : '' }}>Responsable</option>
+                            <option value="Analista" {{ $request->rol == 'Analista' ? 'selected' : '' }}>Analista</option>
+                        </select>
                     </div>
 
-                    <div class="col-md-3 text-end">
-                        <a href="{{ route('usuario.create') }}" class="btn btn-primary w-100 py-2">
-                            <i class="ti ti-plus me-1"></i> Nuevo Usuario
-                        </a>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary-subtle text-primary">
+                            <i class="ti ti-filter me-1"></i> Buscar
+                        </button>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-8 d-flex align-items-center flex-wrap">
-                        <label class="form-label fw-semibold text-gold me-3 mb-0">Estatus:</label>
+                        <label class="form-label fw-semibold text-primary me-3 mb-0">Estatus:</label>
                         
                         <div class="btn-group me-4" role="group">
                             <input type="radio" class="btn-check" name="inactivo" value="Todas" id="st_all" 
-                                   onchange="this.form.submit()" {{ ($request->inactivo == 'Todas' || !$request->filled('inactivo')) ? 'checked' : '' }}>
+                                onchange="this.form.submit()" {{ ($request->inactivo == 'Todas' || !$request->filled('inactivo')) ? 'checked' : '' }}>
                             <label class="btn btn-outline-gold" for="st_all">Todos</label>
 
                             <input type="radio" class="btn-check" name="inactivo" value="Activas" id="st_active" 
-                                   onchange="this.form.submit()" {{ $request->inactivo == 'Activas' ? 'checked' : '' }}>
+                                onchange="this.form.submit()" {{ $request->inactivo == 'Activas' ? 'checked' : '' }}>
                             <label class="btn btn-outline-success-custom" for="st_active">Activos</label>
 
                             <input type="radio" class="btn-check" name="inactivo" value="Inactivas" id="st_inactive" 
-                                   onchange="this.form.submit()" {{ $request->inactivo == 'Inactivas' ? 'checked' : '' }}>
+                                onchange="this.form.submit()" {{ $request->inactivo == 'Inactivas' ? 'checked' : '' }}>
                             <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                         </div>
 
@@ -164,12 +182,7 @@
                             <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small class="text-muted fw-semibold">Inactivo</small></div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-4 text-end">
-                        <button type="submit" class="btn btn-primary-subtle text-primary">
-                            <i class="ti ti-filter me-1"></i> Aplicar Filtros
-                        </button>
-                    </div>
+
                 </div>
             </form>
         </div>
@@ -196,7 +209,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <span class="status-dot {{ $usuario->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}" 
-                                          title="{{ $usuario->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
+                                        title="{{ $usuario->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
                                     </span>
                                     
                                     <a href="{{ route('usuario.edit', $usuario->id) }}" class="fs-4 fw-semibold mb-0 name-link">
