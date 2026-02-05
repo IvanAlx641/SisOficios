@@ -4,7 +4,7 @@
 
 <div class="card border-0 shadow-sm rounded-3">
     
-    <div class="card-header bg-white border-bottom-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white border-bottom-0 pt-4 px-4">
         <div>
             <h4 class="fw-bold text-primary mb-1">
                 {{ $usuario->exists ? 'Editar Usuario' : 'Registrar Nuevo Usuario' }}
@@ -13,9 +13,6 @@
                 Complete la información requerida. Los campos con <span class="text-danger">*</span> son obligatorios.
             </p>
         </div>
-        <a href="{{ route('usuario.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-            <i class="ti ti-arrow-left me-1"></i> Regresar
-        </a>
     </div>
 
     <div class="card-body p-4">
@@ -59,25 +56,27 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-primary small">ROL DE SISTEMA <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="ti ti-shield-lock text-muted"></i></span>
-                        <select name="rol" class="form-select border-start-0 ps-0 @error('rol') is-invalid @enderror" required>
-                            <option value="">Seleccione una opción...</option>
-                            @foreach($roles as $key => $label)
-                                <option value="{{ $key }}" {{ old('rol', $usuario->rol) == $key ? 'selected' : '' }}>
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-primary small mb-3">ROL DE SISTEMA <span class="text-danger">*</span></label>
+                    
+                    <div class="d-flex flex-wrap gap-3 @error('rol') is-invalid @enderror">
+                        @foreach($roles as $key => $label)
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="rol" id="rol_{{ $key }}" value="{{ $key }}" 
+                                       {{ old('rol', $usuario->rol) == $key ? 'checked' : '' }} required>
+                                <label class="form-check-label" for="rol_{{ $key }}">
                                     {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('rol')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
+
+                    @error('rol')
+                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-4">
                     <label class="form-label fw-bold text-primary small">UNIDAD ADMINISTRATIVA <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="ti ti-building-arch text-muted"></i></span>
@@ -96,7 +95,7 @@
                 </div>
 
                 @if($usuario->exists)
-                    <div class="col-12 mt-4">
+                    <div class="col-12 mt-5">
                         <div class="p-4 bg-light rounded-3 border">
                             <h6 class="text-primary fw-bold mb-3 d-flex align-items-center">
                                 <i class="ti ti-key me-2"></i> Actualizar Contraseña (Opcional)
