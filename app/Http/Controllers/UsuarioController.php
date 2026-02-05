@@ -23,7 +23,7 @@ class UsuarioController extends Controller
         'Analista' => 'Analista',
     ];
 
-    // Catálogo Temporal de Unidades (Esto luego vendrá de una tabla de BD)
+    // Catálogo Temporal
     protected $unidades = [
         1 => 'DIRECCIÓN GENERAL',
         2 => 'UNIDAD DE TRANSPARENCIA',
@@ -32,19 +32,15 @@ class UsuarioController extends Controller
         5 => 'CONTRALORÍA INTERNA'
     ];
 
-    // Mensajes de error personalizados
+    // --- MENSAJES AJUSTADOS AL FORMATO DE LA IMAGEN ---
     protected $mensajes = [
-        'nombre.required' => 'El nombre del usuario es obligatorio.',
-        'nombre.min' => 'El nombre debe tener al menos 5 caracteres.',
-        'email.required' => 'El correo electrónico es obligatorio.',
-        'email.email' => 'Ingresa un correo electrónico válido.',
-        'email.unique' => 'Este correo ya está registrado en el sistema.',
-        'rol.required' => 'Debes seleccionar un rol.',
-        'rol.in' => 'El rol seleccionado no es válido.',
-        'unidad_administrativa_id.required' => 'La unidad administrativa (dependencia) es obligatoria.',
-        'password.required' => 'La contraseña es obligatoria para usuarios nuevos.',
-        'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-        'password.confirmed' => 'Las contraseñas no coinciden.',
+        'nombre.required' => 'El campo nombre completo es requerido.',
+        'nombre.min' => 'El campo nombre completo debe tener al menos 5 caracteres.',
+        'email.required' => 'El campo correo electrónico es requerido.',
+        'email.email' => 'El campo correo electrónico debe ser válido.',
+        'email.unique' => 'Este correo electrónico ya está registrado.',
+        'rol.required' => 'El campo rol es requerido.',
+        'unidad_administrativa_id.required_unless' => 'El campo unidad administrativa es requerido a menos que rol se encuentre en Administrador TI.',
     ];
 
     public function __construct()
@@ -57,7 +53,7 @@ class UsuarioController extends Controller
         $query = User::query();
 
         if ($request->filled('nombre')) {
-            $query->where('nombre', 'like', '%' . mb_strtoupper($request->nombre) . '%');
+            $query->where('nombre', 'like', '%' . $request->nombre . '%');
         }
         if ($request->filled('email')) {
             $query->where('email', 'like', '%' . $request->email . '%');
@@ -74,7 +70,6 @@ class UsuarioController extends Controller
         }
 
         $usuarios = $query->orderBy('id', 'desc')->paginate(25);
-
         return view('usuarios.index', compact('usuarios', 'request'));
     }
 
@@ -88,29 +83,26 @@ class UsuarioController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validaciones
         $request->validate([
             'nombre' => 'required|string|min:5|max:190',
             'email' => 'required|email|unique:users,email',
             'rol' => 'required|in:' . implode(',', array_keys($this->roles)),
-            'unidad_administrativa_id' => 'required', // AHORA ES OBLIGATORIO
-        ], $this->mensajes); // Pasamos los mensajes personalizados
+            'unidad_administrativa_id' => 'required_unless:rol,Administrador TI', 
+        ], $this->mensajes);
 
-        // 2. Creación
-        // Nota: Al crear manualmente, no pedimos contraseña en el form porque 
-        // usaremos el botón de "Enviar Credenciales" después, o generamos una basura.
+        $unidadId = ($request->rol === 'Administrador TI') ? null : $request->unidad_administrativa_id;
+
         User::create([
-            'nombre' => mb_strtoupper($request->nombre),
+            'nombre' => mb_convert_case($request->nombre, MB_CASE_TITLE, "UTF-8"),
             'email' => $request->email,
             'rol' => $request->rol,
-            'unidad_administrativa_id' => $request->unidad_administrativa_id,
-            'password' => Hash::make(Str::random(16)), // Contraseña temporal aleatoria
-            'email_verified_at' => null, // Nace sin verificar
+            'unidad_administrativa_id' => $unidadId,
+            'password' => Hash::make(Str::random(16)), 
+            'email_verified_at' => null,
             'usuario_creacion_id' => auth()->id(),
         ]);
 
-        return redirect()->route('usuario.index')
-            ->with('success', 'Usuario registrado. Haz clic en el "Avioncito" para enviarle sus credenciales.');
+        return redirect()->route('usuario.index')->with('success', 'Usuario registrado correctamente.');
     }
 
     public function edit(User $usuario): View
@@ -122,42 +114,29 @@ class UsuarioController extends Controller
 
     public function update(Request $request, User $usuario)
     {
-        // 1. Validaciones
-        $rules = [
+        $request->validate([
             'nombre' => 'required|string|min:5|max:190',
             'email' => 'required|email|unique:users,email,' . $usuario->id,
             'rol' => 'required|in:' . implode(',', array_keys($this->roles)),
-            'unidad_administrativa_id' => 'required',
-            // La contraseña es opcional (nullable) en edición. Solo si escribe algo, validamos.
-            'password' => 'nullable|confirmed|min:8', 
-        ];
+            'unidad_administrativa_id' => 'required_unless:rol,Administrador TI',
+        ], $this->mensajes);
 
-        $request->validate($rules, $this->mensajes);
-
-        // 2. Prepara datos
-        $data = $request->except(['password', 'password_confirmation', '_token', '_method']);
-        $data['nombre'] = mb_strtoupper($request->nombre);
-        $data['usuario_modificacion_id'] = auth()->id();
-
-        // 3. Lógica de Cambio de Contraseña Manual
-        // Solo si el campo NO está vacío, la actualizamos.
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-            
-            // Si el admin cambia la contraseña manualmente, asumimos que el usuario ya la conoce
-            // Opcional: Podrías marcarlo verificado o no, depende de tu flujo.
-            // Por seguridad, lo dejamos verificado para que no le pida cambiarla de nuevo inmediatamente.
-            $data['email_verified_at'] = now(); 
+        $data = $request->except(['_token', '_method', 'inactivo']);
+        
+        $data['nombre'] = mb_convert_case($request->nombre, MB_CASE_TITLE, "UTF-8");
+        
+        if ($request->rol === 'Administrador TI') {
+            $data['unidad_administrativa_id'] = null;
         }
+
+        $data['inactivo'] = $request->input('inactivo') === 'X' ? 'X' : null;
+        $data['usuario_modificacion_id'] = auth()->id();
 
         $usuario->update($data);
 
         return redirect()->route('usuario.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
-    // ... (El resto de métodos notificacion, desactivar, reactivar, destroy se mantienen igual) ...
-    // Solo pego el resto para que el archivo esté completo si lo copias todo.
-    
     public function notificacion(User $usuario)
     {
         $this->authorize('update', $usuario);
@@ -165,25 +144,15 @@ class UsuarioController extends Controller
         if ($usuario->email_verified_at != null) {
             $token = Password::createToken($usuario);
             Mail::to($usuario->email)->send(new RecuperarContrasena($token, $usuario->email));
-            return redirect()->route('usuario.index')->with('success', 'El usuario ya está activo. Se envió enlace de recuperación.');
+            return redirect()->route('usuario.index')->with('success', 'Enlace de recuperación enviado.');
         } else {
             $passwordTemporal = Str::random(9);
             $usuario->update([
                 'password' => Hash::make($passwordTemporal),
-                'email_verified_at' => null,
                 'usuario_modificacion_id' => auth()->id()
-            ]);
-
-            try {
-                Mail::to($usuario->email)->send(new CredencialesNuevoUsuario($usuario, $passwordTemporal));
-                $mensaje = 'Credenciales temporales enviadas.';
-                $tipo = 'success';
-            } catch (\Exception $e) {
-                $mensaje = 'Error al enviar: ' . $e->getMessage();
-                $tipo = 'warning';
-            }
-
-            return redirect()->route('usuario.index')->with($tipo, $mensaje);
+            ]); 
+            Mail::to($usuario->email)->send(new CredencialesNuevoUsuario($usuario, $passwordTemporal));
+            return redirect()->route('usuario.index')->with('success', 'Credenciales temporales enviadas.');
         }
     }
 

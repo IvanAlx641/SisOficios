@@ -6,8 +6,10 @@
     :root {
         --gold-color: #C09F62;
         --gold-hover: #A88A52;
+        --guinda-color: #9D2449; /* Color Guinda Institucional */
     }
 
+    /* --- TUS ESTILOS ORIGINALES --- */
     .btn-outline-gold {
         color: var(--gold-color);
         border-color: var(--gold-color);
@@ -32,6 +34,63 @@
 
     .text-gold {
         color: var(--gold-color) !important;
+    }
+
+    /* --- NUEVOS ESTILOS PARA LOS CAMBIOS SOLICITADOS --- */
+
+    /* 1. Filtros de Estatus con Colores */
+    .btn-check:checked + .btn-outline-success-custom {
+        background-color: #28a745; border-color: #28a745; color: white;
+    }
+    .btn-outline-success-custom {
+        color: #28a745; border-color: #28a745;
+    }
+    .btn-outline-success-custom:hover {
+        background-color: #28a745; color: white;
+    }
+
+    .btn-check:checked + .btn-outline-danger-custom {
+        background-color: #dc3545; border-color: #dc3545; color: white;
+    }
+    .btn-outline-danger-custom {
+        color: #dc3545; border-color: #dc3545;
+    }
+    .btn-outline-danger-custom:hover {
+        background-color: #dc3545; color: white;
+    }
+
+    /* 2. Puntos de Estatus (Dots) */
+    .status-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px; /* Separación pequeña con el texto */
+    }
+    .dot-active { background-color: #28a745; box-shadow: 0 0 4px #28a745; }
+    .dot-inactive { background-color: #dc3545; box-shadow: 0 0 4px #dc3545; }
+
+    /* 3. Nombre con Link y Hover Guinda */
+    .name-link {
+        color: #2a3547; /* Color oscuro original */
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    .name-link:hover {
+        color: var(--guinda-color) !important;
+        font-weight: bold;
+    }
+
+    /* 4. Botones Deshabilitados (Grises) */
+    .action-disabled {
+        color: #adb5bd !important; /* Gris */
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    /* 5. Color Guinda para Eliminar */
+    .text-guinda {
+        color: var(--guinda-color) !important;
     }
 </style>
 
@@ -83,24 +142,30 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-6 d-flex align-items-center">
+                    <div class="col-md-8 d-flex align-items-center flex-wrap">
                         <label class="form-label fw-semibold text-gold me-3 mb-0">Estatus:</label>
-                        <div class="btn-group" role="group">
+                        
+                        <div class="btn-group me-4" role="group">
                             <input type="radio" class="btn-check" name="inactivo" value="Todas" id="st_all" 
                                    onchange="this.form.submit()" {{ ($request->inactivo == 'Todas' || !$request->filled('inactivo')) ? 'checked' : '' }}>
                             <label class="btn btn-outline-gold" for="st_all">Todos</label>
 
                             <input type="radio" class="btn-check" name="inactivo" value="Activas" id="st_active" 
                                    onchange="this.form.submit()" {{ $request->inactivo == 'Activas' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-gold" for="st_active">Activos</label>
+                            <label class="btn btn-outline-success-custom" for="st_active">Activos</label>
 
                             <input type="radio" class="btn-check" name="inactivo" value="Inactivas" id="st_inactive" 
                                    onchange="this.form.submit()" {{ $request->inactivo == 'Inactivas' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-gold" for="st_inactive">Inactivos</label>
+                            <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary-subtle">
+                            <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small class="text-muted fw-semibold">Activo</small></div>
+                            <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small class="text-muted fw-semibold">Inactivo</small></div>
                         </div>
                     </div>
                     
-                    <div class="col-md-6 text-end">
+                    <div class="col-md-4 text-end">
                         <button type="submit" class="btn btn-primary-subtle text-primary">
                             <i class="ti ti-filter me-1"></i> Aplicar Filtros
                         </button>
@@ -112,18 +177,16 @@
 
     <div class="card w-100 position-relative overflow-hidden">
         <div class="card-body p-4">
+            
             <div class="table-responsive rounded-2">
                 <table class="table border text-nowrap customize-table mb-0 align-middle">
                     <thead class="text-white bg-primary">
                         <tr>
                             <th><h6 class="fs-4 fw-semibold mb-0 text-white">Nombre</h6></th>
-                            
                             <th><h6 class="fs-4 fw-semibold mb-0 text-white">Correo electrónico</h6></th>
-                            
                             <th><h6 class="fs-4 fw-semibold mb-0 text-white">Rol</h6></th>
-
                             <th class="text-center"><h6 class="fs-4 fw-semibold mb-0 text-white">Envío de cuenta</h6></th>
-                            <th class="text-center"><h6 class="fs-4 fw-semibold mb-0 text-white">Estatus/Editar</h6></th>
+                            <th class="text-center"><h6 class="fs-4 fw-semibold mb-0 text-white">Desactivar</h6></th>
                             <th class="text-center"><h6 class="fs-4 fw-semibold mb-0 text-white">Eliminar</h6></th>
                         </tr>
                     </thead>
@@ -132,10 +195,13 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-primary-subtle text-primary rounded-circle round-40 d-flex align-items-center justify-content-center fw-bold me-3">
-                                        {{ substr($usuario->nombre, 0, 1) }}
-                                    </div>
-                                    <h6 class="fs-4 fw-semibold mb-0 text-dark">{{ $usuario->nombre }}</h6>
+                                    <span class="status-dot {{ $usuario->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}" 
+                                          title="{{ $usuario->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
+                                    </span>
+                                    
+                                    <a href="{{ route('usuario.edit', $usuario->id) }}" class="fs-4 fw-semibold mb-0 name-link">
+                                        {{ $usuario->nombre }}
+                                    </a>
                                 </div>
                             </td>
 
@@ -151,7 +217,7 @@
                                         @endif
 
                                         <small class="text-muted fs-2">
-                                            {{ $usuario->fecha_creacion ? $usuario->fecha_creacion->format('d/m/Y H:i:s') : 'N/A' }}
+                                            {{ $usuario->fecha_creacion ? $usuario->fecha_creacion->format('d/m/Y H:i') : 'N/A' }}
                                         </small>
                                     </div>
                                 </div>
@@ -165,53 +231,43 @@
 
                             <td class="text-center">
                                 @if($usuario->inactivo != 'X')
-                                    <form action="{{ route('usuario.notificacion', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Generar nueva contraseña y enviarla por correo?');">
+                                    <form action="{{ route('usuario.notificacion', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Enviar credenciales/recuperación?');">
                                         @csrf
                                         <button type="submit" class="btn btn-outline-gold border-0 bg-transparent" data-bs-toggle="tooltip" title="Enviar Credenciales">
                                             <i class="ti ti-mail-forward fs-6"></i>
                                         </button>
                                     </form>
+                                @else
+                                    <button class="btn border-0 bg-transparent action-disabled" disabled>
+                                        <i class="ti ti-mail-forward fs-6"></i>
+                                    </button>
                                 @endif
                             </td>
 
                             <td class="text-center">
-                                <div class="d-flex justify-content-center gap-2">
-                                    @if($usuario->inactivo != 'X')
-                                        <a href="{{ route('usuario.edit', $usuario->id) }}" class="btn btn-outline-primary border-0 bg-transparent text-primary" data-bs-toggle="tooltip" title="Editar">
-                                            <i class="ti ti-pencil fs-6"></i>
-                                        </a>
-
-                                        <form action="{{ route('usuario.desactivar', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Desactivar usuario?');">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="btn btn-outline-primary border-0 bg-transparent text-primary" data-bs-toggle="tooltip" title="Inactivar cuenta">
-                                                <i class="ti ti-user-off fs-6"></i>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <form action="{{ route('usuario.reactivar', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Reactivar este usuario?');">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="btn btn-gold rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;" data-bs-toggle="tooltip" title="Reactivar">
-                                                <i class="ti ti-power fs-4"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                            </td>
-
-                            <td class="text-center">
-                                @if($usuario->inactivo == 'X')
-                                    <form action="{{ route('usuario.destroy', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Eliminar definitivamente?');">
+                                @if($usuario->inactivo != 'X')
+                                    <form action="{{ route('usuario.desactivar', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Desactivar usuario?');">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-primary border-0 bg-transparent text-danger" data-bs-toggle="tooltip" title="Eliminar">
-                                            <i class="ti ti-trash fs-6"></i>
+                                        @method('PUT')
+                                        <button type="submit" class="btn btn-outline-danger border-0 bg-transparent text-danger" data-bs-toggle="tooltip" title="Desactivar cuenta">
+                                            <i class="ti ti-user-off fs-6"></i>
                                         </button>
                                     </form>
                                 @else
-                                    <span class="text-muted opacity-25"><i class="ti ti-trash fs-6"></i></span>
+                                    <button class="btn border-0 bg-transparent action-disabled" disabled title="Usuario Inactivo">
+                                        <i class="ti ti-user-off fs-6"></i>
+                                    </button>
                                 @endif
+                            </td>
+
+                            <td class="text-center">
+                                <form action="{{ route('usuario.destroy', $usuario->id) }}" method="POST" onsubmit="return confirm('¿Eliminar definitivamente este usuario?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn border-0 bg-transparent text-guinda" data-bs-toggle="tooltip" title="Eliminar Permanentemente">
+                                        <i class="ti ti-trash fs-6"></i>
+                                    </button>
+                                </form>
                             </td>
 
                         </tr>
