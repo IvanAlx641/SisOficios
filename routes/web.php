@@ -48,14 +48,8 @@ Route::middleware(['auth'])->group(function () {
         // Rutas para el catálogo de Solicitantes
         Route::resource('solicitantes', App\Http\Controllers\SolicitanteController::class);
 
-<<<<<<< HEAD
         // Si añadiste los métodos extras de activar/desactivar, añade también estas:
         Route::put('solicitantes/{solicitante}/desactivar', [App\Http\Controllers\SolicitanteController::class, 'desactivar'])->name('solicitantes.desactivar');
         Route::put('solicitantes/{solicitante}/reactivar', [App\Http\Controllers\SolicitanteController::class, 'reactivar'])->name('solicitantes.reactivar');
-=======
-        Route::resource('tiporequerimiento', TipoRequerimientoController::class)
-        ->parameters(['tiporequerimiento' => 'tiporequerimiento']);
-
->>>>>>> 6a851f171828a40b4ed189d1d3ba3c4a19566447
     });
 });
