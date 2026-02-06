@@ -57,6 +57,10 @@
                             <input type="radio" class="btn-check" name="inactivo" value="Inactivas" id="st_inactive" onchange="this.form.submit()" {{ $request->inactivo == 'Inactivas' ? 'checked' : '' }}>
                             <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                         </div>
+                        <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary-subtle">
+                            <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small class="text-muted fw-semibold">Activo</small></div>
+                            <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small class="text-muted fw-semibold">Inactivo</small></div>
+                        </div>
                     </div>
                 </div>
             </form>
