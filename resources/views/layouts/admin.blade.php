@@ -227,12 +227,7 @@
                                         </a>
                                     </li>
 
-                                    <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
-                                            <i class="ti ti-file-search"></i>
-                                            <span class="hide-menu">Buscador</span>
-                                        </a>
-                                    </li>
+                                    
                                 </ul>
                             </li>
 
