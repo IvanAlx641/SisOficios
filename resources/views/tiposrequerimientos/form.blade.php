@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label class="form-label fw-bold text-muted small mb-3">Configuración de requerimientos <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-muted small mb-3">Aplicacion de requerimientos <span class="text-danger">*</span></label>
                     
                     <div class="d-flex gap-5">
                         <div class="form-check">

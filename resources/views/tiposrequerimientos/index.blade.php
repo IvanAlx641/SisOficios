@@ -27,7 +27,7 @@
                 <div class="row g-3 align-items-end">
                     
                     <div class="col-md-9">
-                        <label class="form-label fw-bold text-guinda small">Nombre</label>
+                        <label class="form-label fw-bold text-guinda small">Tipo de requerimiento</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white text-guinda border-guinda"><i class="ti ti-search"></i></span>
                             <input type="text" name="tipo_requerimiento" class="form-control border-guinda" 
