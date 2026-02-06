@@ -172,7 +172,7 @@
 }
 
 /* =========================================
-   4. FILTROS DE ESTATUS (Botones Radio)
+4. FILTROS DE ESTATUS (Botones Radio)
    ========================================= */
 .btn-check:checked + .btn-outline-success-custom {
     background-color: var(--success-color); border-color: var(--success-color); color: white;
@@ -187,7 +187,7 @@
 .btn-outline-danger-custom:hover { background-color: var(--danger-color); color: white; }
 
 /* =========================================
-   5. FORMULARIOS E INPUTS
+5. FORMULARIOS E INPUTS
    ========================================= */
 .form-label {
     color: var(--guinda-color);
@@ -242,7 +242,7 @@
 }
 
 /* =========================================
-   6. TABLAS Y BADGES
+6. TABLAS Y BADGES
    ========================================= */
 .status-dot {
     width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px;
@@ -264,7 +264,7 @@
 }
 
 /* =========================================
-   7. LAYOUT Y COMPONENTES
+7. LAYOUT Y COMPONENTES
    ========================================= */
 /* Ajuste de Bordes del Template */
 .topbar, .app-header {

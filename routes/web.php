@@ -51,11 +51,8 @@ Route::middleware(['auth'])->group(function () {
         // Si añadiste los métodos extras de activar/desactivar, añade también estas:
         Route::put('solicitantes/{solicitante}/desactivar', [App\Http\Controllers\SolicitanteController::class, 'desactivar'])->name('solicitantes.desactivar');
         Route::put('solicitantes/{solicitante}/reactivar', [App\Http\Controllers\SolicitanteController::class, 'reactivar'])->name('solicitantes.reactivar');
-<<<<<<< HEAD
-=======
 
         Route::resource('tiporequerimiento', TipoRequerimientoController::class)
         ->parameters(['tiporequerimiento' => 'tiporequerimiento']);
->>>>>>> 266d240aacf15e020bc1b98ba93bafb121697821
     });
 });
