@@ -42,9 +42,9 @@
                 <div class="col-md-6">
                     <label class="form-label">Correo electrónico <span class="text-danger">*</span></label>
                     <input type="email" name="email" 
-                           class="form-control @error('email') is-invalid @enderror" 
-                           value="{{ old('email', $usuario->email) }}" 
-                           placeholder="usuario@dominio.gob.mx" required>
+                        class="form-control @error('email') is-invalid @enderror" 
+                        value="{{ old('email', $usuario->email) }}" 
+                        placeholder="usuario@dominio.gob.mx" required>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -109,7 +109,7 @@
 
             <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
                 <button type="submit" class="btn btn-guinda rounded-pill shadow-sm">
-                    <i class="ti ti-device-floppy me-2"></i> Guardar
+                    Guardar
                 </button>
 
                 <a href="{{ route('usuario.index') }}" class="btn-cancelar">

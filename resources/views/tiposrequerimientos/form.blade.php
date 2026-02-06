@@ -32,9 +32,9 @@
                 <div class="col-md-12">
                     <label class="form-label fw-bold text-muted small">Tipo de requerimiento <span class="text-danger">*</span></label>
                     <input type="text" name="tipo_requerimiento" 
-                           class="form-control @error('tipo_requerimiento') is-invalid @enderror" 
-                           value="{{ old('tipo_requerimiento', $tiporequerimiento->tipo_requerimiento) }}" 
-                           placeholder="" required>
+                        class="form-control @error('tipo_requerimiento') is-invalid @enderror" 
+                        value="{{ old('tipo_requerimiento', $tiporequerimiento->tipo_requerimiento) }}" 
+                        placeholder="" required>
                     @error('tipo_requerimiento')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -46,8 +46,8 @@
                     <div class="d-flex gap-5">
                         <div class="form-check">
                             <input class="form-check-input @error('requerimiento_oficio') is-invalid @enderror" 
-                                   type="checkbox" name="requerimiento_oficio" id="checkOficios"
-                                   {{ old('requerimiento_oficio', $tiporequerimiento->requerimiento_oficio) == 'X' ? 'checked' : '' }}>
+                                type="checkbox" name="requerimiento_oficio" id="checkOficios"
+                                {{ old('requerimiento_oficio', $tiporequerimiento->requerimiento_oficio) == 'X' ? 'checked' : '' }}>
                             <label class="form-check-label" for="checkOficios">Requerimiento de los oficios</label>
                         </div>
 

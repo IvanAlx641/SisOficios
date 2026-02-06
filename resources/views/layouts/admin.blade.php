@@ -28,12 +28,12 @@
         .user-initial-circle {
             width: 40px !important;
             height: 40px !important;
-            min-width: 40px; /* Evita que se aplaste */
+            min-width: 40px; 
             border-radius: 50% !important;
             display: flex;
             align-items: center;
             justify-content: center;
-            aspect-ratio: 1 / 1; /* Fuerza proporción cuadrada para el círculo */
+            aspect-ratio: 1 / 1; 
             font-weight: bold;
             font-size: 1.2rem;
         }
@@ -317,22 +317,7 @@
                             </div>
                         @endif
 
-                        @if ($errors->any())
-                            <div class="alert alert-warning alert-dismissible fade show shadow-sm border-0" role="alert"
-                                style="background-color: #fff3cd; color: #664d03; border-left: 5px solid #ffc107 !important;">
-                                <div class="d-flex align-items-center mb-1">
-                                    <i class="ti ti-alert-circle fs-4 me-2 text-warning"></i>
-                                    <strong>Hay problemas con la información enviada:</strong>
-                                </div>
-                                <ul class="mb-0 small ps-4">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-                    </div>
+                        </div>
                     @yield('content')
                 </div>
             </div>
@@ -365,7 +350,7 @@
                         var bsAlert = new bootstrap.Alert(alert);
                         bsAlert.close();
                     });
-                }, 5000); 
+                }, 5000); // 5 SEGUNDOS
             }
         });
     </script>
