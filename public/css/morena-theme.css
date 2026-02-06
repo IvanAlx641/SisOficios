@@ -2,7 +2,7 @@
 
 :root {
     /* Sobrescribimos el color PRIMARIO de Bootstrap (el azul por defecto) */
-    --bs-primary: #B12631; 
+    --bs-primary: #9D2449; 
     --bs-primary-rgb: 177, 38, 49; /* Necesario para las opacidades de Bootstrap */
     
     /* Color secundario (Dorado suave) */
@@ -10,7 +10,7 @@
     --bs-secondary-rgb: 188, 149, 92;
 
     /* Opcional: Ajustar el color de los enlaces */
-    --bs-link-color: #B12631;
+    --bs-link-color: #9D2449;
     --bs-link-hover-color: #801B24;
 }
 
@@ -29,7 +29,7 @@
 
 /* Fondo del Header Horizontal (Barra superior) */
 [data-layout="horizontal"] .app-header {
-    background-color: #8A1525 !important; /* Un tono más oscuro para el header se ve elegante */
+    background-color: #9D2449 !important; /* Un tono más oscuro para el header se ve elegante */
 }
 
 /* Elementos activos en el menú */
@@ -87,3 +87,209 @@
     .text-gold {
         color: var(--gold-color) !important;
     }
+
+    /* =========================================
+   1. VARIABLES GLOBALES
+   ========================================= */
+:root {
+    --gold-color: #C09F62;
+    --gold-hover: #A88A52;
+    --guinda-color: #9D2449; /* Color Institucional */
+    --guinda-hover: #801d3a;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+}
+
+/* =========================================
+   2. UTILIDADES DE COLOR
+   ========================================= */
+.text-guinda { color: var(--guinda-color) !important; }
+.bg-guinda { background-color: var(--guinda-color) !important; color: white !important; }
+.border-guinda { border-color: var(--guinda-color) !important; }
+
+.text-gold { color: var(--gold-color) !important; }
+
+/* =========================================
+   3. BOTONES PERSONALIZADOS
+   ========================================= */
+/* Botón Guinda Sólido */
+.btn-guinda {
+    background-color: var(--guinda-color);
+    border-color: var(--guinda-color);
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.btn-guinda:hover {
+    background-color: var(--guinda-hover);
+    border-color: var(--guinda-hover);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Botón Guinda Outline */
+.btn-outline-guinda {
+    color: var(--guinda-color);
+    border-color: var(--guinda-color);
+    background-color: transparent;
+    font-weight: 600;
+}
+.btn-outline-guinda:hover {
+    background-color: var(--guinda-color);
+    color: white;
+}
+
+/* Botón Dorado (Gold) */
+.btn-outline-gold {
+    color: var(--gold-color);
+    border-color: var(--gold-color);
+}
+.btn-outline-gold:hover, 
+.btn-check:checked + .btn-outline-gold {
+    background-color: var(--gold-color);
+    border-color: var(--gold-color);
+    color: white;
+}
+
+/* Enlace Cancelar */
+.btn-cancelar {
+    color: var(--guinda-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.btn-cancelar:hover {
+    text-decoration: underline;
+    color: var(--guinda-hover);
+}
+
+/* Botones Deshabilitados (Acciones tabla) */
+.action-disabled {
+    color: #adb5bd !important;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* =========================================
+   4. FILTROS DE ESTATUS (Botones Radio)
+   ========================================= */
+.btn-check:checked + .btn-outline-success-custom {
+    background-color: var(--success-color); border-color: var(--success-color); color: white;
+}
+.btn-outline-success-custom { color: var(--success-color); border-color: var(--success-color); }
+.btn-outline-success-custom:hover { background-color: var(--success-color); color: white; }
+
+.btn-check:checked + .btn-outline-danger-custom {
+    background-color: var(--danger-color); border-color: var(--danger-color); color: white;
+}
+.btn-outline-danger-custom { color: var(--danger-color); border-color: var(--danger-color); }
+.btn-outline-danger-custom:hover { background-color: var(--danger-color); color: white; }
+
+/* =========================================
+   5. FORMULARIOS E INPUTS
+   ========================================= */
+.form-label {
+    color: var(--guinda-color);
+    font-weight: 700 !important;
+    font-size: 0.85rem;
+}
+
+.form-control, .form-select {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.75rem;
+    border-color: #dee2e6;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--guinda-color);
+    box-shadow: 0 0 0 0.25rem rgba(157, 36, 73, 0.25);
+}
+
+/* Switch Estatus */
+.form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    cursor: pointer;
+}
+.form-switch .form-check-input:checked {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(157, 36, 73, 0.25);
+    border-color: var(--guinda-color);
+}
+
+/* Validaciones (Rojo) */
+.invalid-feedback {
+    font-size: 0.8em;
+    color: var(--danger-color);
+    display: block;
+    margin-top: 0.25rem;
+    font-weight: 600;
+}
+
+.form-control.is-invalid, .form-select.is-invalid {
+    border-color: var(--danger-color);
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* =========================================
+   6. TABLAS Y BADGES
+   ========================================= */
+.status-dot {
+    width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px;
+}
+.dot-active { background-color: var(--success-color); box-shadow: 0 0 4px var(--success-color); }
+.dot-inactive { background-color: var(--danger-color); box-shadow: 0 0 4px var(--danger-color); }
+
+.name-link {
+    color: #2a3547; text-decoration: none; transition: all 0.2s;
+}
+.name-link:hover {
+    color: var(--guinda-color) !important; font-weight: bold;
+}
+
+.badge-guinda-subtle {
+    background-color: rgba(157, 36, 73, 0.1) !important;
+    color: var(--guinda-color) !important;
+    border: 1px solid rgba(157, 36, 73, 0.2);
+}
+
+/* =========================================
+   7. LAYOUT Y COMPONENTES
+   ========================================= */
+/* Ajuste de Bordes del Template */
+.topbar, .app-header {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+/* Logo */
+.logo-custom {
+    height: 45px; width: auto; object-fit: contain;
+}
+
+/* Círculo de Inicial de Usuario (Navbar) */
+.user-initial-circle {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Helpers */
+.moon, .sun, .lang-flag { display: none !important; }
