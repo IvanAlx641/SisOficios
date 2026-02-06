@@ -178,9 +178,9 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('tiporequerimiento.index') }}" class="sidebar-link">
                                             <i class="ti ti-checklist"></i>
-                                            <span class="hide-menu">Catálogos</span>
+                                            <span class="hide-menu">Tipos de Requerimientos</span>
                                         </a>
                                     </li>
 

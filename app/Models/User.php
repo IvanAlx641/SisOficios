@@ -57,4 +57,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'usuario_modificacion_id');
     }
+    // --- Relaciones de Clases ---
+    public function tiposRequerimientosCreados()
+    {
+        return $this->hasMany(TipoRequerimiento::class, 'usuario_creacion_id');
+    }
+
+    public function tiposRequerimientosModificados()
+    {
+        return $this->hasMany(TipoRequerimiento::class, 'usuario_modificacion_id');
+    }
 }

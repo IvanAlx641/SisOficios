@@ -2,7 +2,7 @@
 
 :root {
     /* Sobrescribimos el color PRIMARIO de Bootstrap (el azul por defecto) */
-    --bs-primary: #B12631; 
+    --bs-primary: #9D2449; 
     --bs-primary-rgb: 177, 38, 49; /* Necesario para las opacidades de Bootstrap */
     
     /* Color secundario (Dorado suave) */
@@ -10,7 +10,7 @@
     --bs-secondary-rgb: 188, 149, 92;
 
     /* Opcional: Ajustar el color de los enlaces */
-    --bs-link-color: #B12631;
+    --bs-link-color: #9D2449;
     --bs-link-hover-color: #801B24;
 }
 
@@ -29,7 +29,7 @@
 
 /* Fondo del Header Horizontal (Barra superior) */
 [data-layout="horizontal"] .app-header {
-    background-color: #8A1525 !important; /* Un tono más oscuro para el header se ve elegante */
+    background-color: #9D2449 !important; /* Un tono más oscuro para el header se ve elegante */
 }
 
 /* Elementos activos en el menú */

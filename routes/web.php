@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FirstLoginController;
+use App\Http\Controllers\TipoRequerimientoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/usuarios/{usuario}/desactivar', [UsuarioController::class, 'desactivar'])->name('usuario.desactivar');
         Route::put('/usuarios/{usuario}/reactivar', [UsuarioController::class, 'reactivar'])->name('usuario.reactivar');
         Route::resource('usuarios', UsuarioController::class)->names('usuario');
+
+        Route::resource('tiporequerimiento', TipoRequerimientoController::class)
+        ->parameters(['tiporequerimiento' => 'tiporequerimiento']);
 
     });
 
