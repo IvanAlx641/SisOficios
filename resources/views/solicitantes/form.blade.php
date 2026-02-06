@@ -90,7 +90,7 @@
 
             <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
                 <button type="submit" class="btn btn-guinda rounded-pill shadow-sm">
-                    <i class="ti ti-device-floppy me-2"></i> Guardar
+                    Guardar
                 </button>
                 <a href="{{ route('solicitante.index') }}" class="btn-cancelar">Cancelar</a>
             </div>

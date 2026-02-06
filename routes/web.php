@@ -5,8 +5,9 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FirstLoginController;
 use App\Http\Controllers\TipoRequerimientoController;
-// Importamos el nuevo controlador
 use App\Http\Controllers\SolicitanteController;
+// Importamos el controlador de Sistemas
+use App\Http\Controllers\SistemaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,11 @@ Route::middleware(['auth'])->group(function () {
         // --- MÓDULO TIPOS DE REQUERIMIENTOS ---
         Route::resource('tiporequerimiento', TipoRequerimientoController::class)
             ->parameters(['tiporequerimiento' => 'tiporequerimiento']);
+
+        // --- MÓDULO SISTEMAS DE INFORMACIÓN ---
+        // Seguimos el patrón de nombres en singular para el recurso
+        Route::resource('sistema', SistemaController::class)
+            ->parameters(['sistema' => 'sistema']);
 
         // --- MÓDULO SOLICITANTES ---
         // 1. Ruta AJAX (API interna) para cargar Unidades según la Dependencia seleccionada

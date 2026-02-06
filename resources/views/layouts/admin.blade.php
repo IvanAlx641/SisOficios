@@ -204,7 +204,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('sistema.index') }}" class="sidebar-link">
                                             <i class="ti ti-screen-share"></i>
                                             <span class="hide-menu">Sistemas</span>
                                         </a>
