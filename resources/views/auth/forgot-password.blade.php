@@ -26,13 +26,13 @@
             </div>
         @endif
 
-        <form action="{{ route('password.email') }}" method="POST">
+        <form action="{{ route('password.email') }}" method="POST" novalidate>
             @csrf
             <div class="mb-3">
                 <label class="form-label small fw-bold text-muted">CORREO ELECTRÓNICO</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white border-end-0"><i class="ti ti-mail text-muted"></i></span>
-                    <input type="email" name="email" class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" placeholder="ejemplo@correo.com" required>
+                    <input type="email" name="email" class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" placeholder="ejemplo@correo.com">
                 </div>
                 @error('email')
                     <div class="text-danger small mt-1">{{ $message }}</div>

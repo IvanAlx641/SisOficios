@@ -24,10 +24,17 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->validate(
+            [
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ],
+            [
+                'email.required' => 'El correo es obligatorio',
+                'email.email' => 'El correo no es válido',
+                'password.required' => 'La contraseña es obligatoria',
+            ]
+        );
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -71,7 +78,8 @@ class AuthController extends Controller
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate(['email' => 'required|email|exists:users,email'], [
-            'email.exists' => 'No encontramos ningún usuario con este correo electrónico.'
+            'email.exists' => 'No encontramos ningún usuario con este correo electrónico.',
+            'email.required'=>'Favor de ingresar su correo electronico'
         ]);
 
         // Generar token
@@ -105,13 +113,14 @@ class AuthController extends Controller
         ], [
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed' => 'Las contraseñas no coinciden.',
-            'email.exists' => 'El correo electrónico no es válido.'
+            'email.exists' => 'El correo electrónico no es válido.',
+            
         ]);
 
         // Verificar Token
         $checkToken = DB::table('password_reset_tokens')
-                        ->where(['email' => $request->email, 'token' => $request->token])
-                        ->first();
+            ->where(['email' => $request->email, 'token' => $request->token])
+            ->first();
 
         if (!$checkToken) {
             return back()->withInput()->withErrors(['email' => 'El enlace es inválido o ha expirado. Por favor solicita uno nuevo.']);
