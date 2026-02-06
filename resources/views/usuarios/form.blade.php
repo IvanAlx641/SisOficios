@@ -31,9 +31,9 @@
                 <div class="col-md-6">
                     <label class="form-label">Nombre completo <span class="text-danger">*</span></label>
                     <input type="text" name="nombre" 
-                           class="form-control @error('nombre') is-invalid @enderror" 
-                           value="{{ old('nombre', $usuario->nombre) }}" 
-                           placeholder="Ej. Juan Pérez García" required>
+                        class="form-control @error('nombre') is-invalid @enderror" 
+                        value="{{ old('nombre', $usuario->nombre) }}" 
+                        placeholder="Ej. Juan Pérez García" required>
                     @error('nombre')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

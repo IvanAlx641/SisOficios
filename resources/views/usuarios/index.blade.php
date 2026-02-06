@@ -96,9 +96,9 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-guinda text-white">
                         <tr>
-                            <th class="ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Nombre</h6></th>
-                            <th class="py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Correo electrónico</h6></th>
-                            <th class="py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Rol</h6></th>
+                            <th class="text-center ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Nombre</h6></th>
+                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Correo electrónico</h6></th>
+                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Rol</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Envío de cuenta</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Desactivar</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6></th>

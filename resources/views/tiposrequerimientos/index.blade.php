@@ -77,7 +77,7 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-guinda text-white">
                         <tr>
-                            <th class="ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6></th>
+                            <th class="text-center ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Aplica oficios</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Aplica actividades</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6></th>

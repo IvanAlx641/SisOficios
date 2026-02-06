@@ -3,40 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Solicitante;
-use App\Models\User; // Importante para la Policy
+use App\Models\Dependencia;
+use App\Models\UnidadAdministrativa;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 
 class SolicitanteController extends Controller
 {
-    // USAMOS EL MISMO CATÁLOGO MANUAL DE USUARIOS (Para que no marque error)
-    protected $unidades = [
-        1 => 'DIRECCIÓN GENERAL',
-        2 => 'UNIDAD DE TRANSPARENCIA',
-        3 => 'DIRECCIÓN DE TECNOLOGÍAS',
-        4 => 'DEPARTAMENTO DE RECURSOS HUMANOS',
-        5 => 'CONTRALORÍA INTERNA'
-    ];
-
     protected $mensajes = [
-        'nombre.required' => 'El campo nombre del solicitante es requerido.',
-        'nombre.min' => 'El campo nombre del solicitante debe tener al menos 5 caracteres.',
-        'cargo.required' => 'El campo cargo es requerido.',
-        'unidad_administrativa_id.required' => 'El campo unidad administrativa es requerido.',
+        'nombre.required' => 'El nombre del solicitante es obligatorio.',
+        'dependencia_id.required' => 'Debes seleccionar una dependencia.',
+        'unidad_administrativa_id.required' => 'Debes seleccionar una unidad administrativa.',
+        'cargo.required' => 'El cargo o puesto es obligatorio.',
     ];
 
     public function __construct()
     {
-        // Asegúrate de tener la SolicitantePolicy creada
         $this->authorizeResource(Solicitante::class, 'solicitante');
     }
 
     public function index(Request $request): View
     {
-        $query = Solicitante::query();
+        // Carga para el filtro
+        $dependencias = Dependencia::whereNull('inactivo')
+            ->orderBy('nombre_dependencia')
+            ->pluck('nombre_dependencia', 'id');
 
+        // Query principal con relaciones
+        $query = Solicitante::with(['dependencia', 'unidadAdministrativa']);
+
+        // Filtros
         if ($request->filled('nombre')) {
             $query->where('nombre', 'like', '%' . $request->nombre . '%');
+        }
+
+        if ($request->filled('dependencia_id') && $request->dependencia_id != 'Todas') {
+            $query->where('dependencia_id', $request->dependencia_id);
         }
 
         if ($request->filled('inactivo')) {
@@ -47,121 +51,107 @@ class SolicitanteController extends Controller
             }
         }
 
-        $solicitantes = $query->orderBy('id', 'desc')->paginate(25);
-        $unidades = $this->unidades; // Usamos el array de arriba
+        $solicitantes = $query->orderBy('id', 'desc')->paginate(50);
 
-        return view('solicitantes.index', compact('solicitantes', 'unidades', 'request'));
+        return view('solicitantes.index', compact('solicitantes', 'dependencias', 'request'));
     }
 
     public function create(): View
     {
         $solicitante = new Solicitante();
-        $unidades = $this->unidades;
-        return view('solicitantes.form', compact('solicitante', 'unidades'));
+        
+        $dependencias = Dependencia::whereNull('inactivo')
+            ->orderBy('nombre_dependencia')
+            ->pluck('nombre_dependencia', 'id');
+            
+        return view('solicitantes.form', compact('solicitante', 'dependencias'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nombre' => 'required|string|min:5|max:190',
-            'cargo' => 'required|string|max:190',
-            'unidad_administrativa_id' => 'required',
+            'nombre' => 'bail|required|string|max:190',
+            'dependencia_id' => 'bail|required|integer|exists:cdependencias,id',
+            'unidad_administrativa_id' => 'bail|required|integer|exists:cunidades_administrativas,id',
+            'cargo' => 'bail|required|string|max:150',
         ], $this->mensajes);
 
         Solicitante::create([
             'nombre' => mb_convert_case($request->nombre, MB_CASE_TITLE, "UTF-8"),
-            'cargo' => mb_strtoupper($request->cargo, "UTF-8"),
+            'dependencia_id' => $request->dependencia_id,
             'unidad_administrativa_id' => $request->unidad_administrativa_id,
-            'dependencia_id' => 1, 
+            'cargo' => mb_strtoupper($request->cargo),
+            'inactivo' => null,
+            'fecha_creacion' => now(),
             'usuario_creacion_id' => auth()->id(),
         ]);
 
-        return redirect()->route('solicitantes.index')->with('success', 'Solicitante registrado correctamente.');
+        return redirect()->route('solicitante.index')
+            ->with('success', 'Solicitante registrado exitosamente.');
     }
-    /**
-     * Muestra el formulario para editar un solicitante
-     */
+
     public function edit(Solicitante $solicitante): View
     {
-        // Pasamos el catálogo manual de unidades
-        $unidades = $this->unidades;
-        return view('solicitantes.form', compact('solicitante', 'unidades'));
+        $dependencias = Dependencia::whereNull('inactivo')
+            ->orderBy('nombre_dependencia')
+            ->pluck('nombre_dependencia', 'id');
+            
+        // Cargamos las unidades de esa dependencia para que el select aparezca lleno
+        $unidades = UnidadAdministrativa::where('dependencia_id', $solicitante->dependencia_id)
+            ->whereNull('inactivo')
+            ->orderBy('nombre_unidad_administrativa')
+            ->pluck('nombre_unidad_administrativa', 'id');
+
+        return view('solicitantes.form', compact('solicitante', 'dependencias', 'unidades'));
     }
 
-    /**
-     * Actualiza el registro en la base de datos
-     */
-    public function update(Request $request, Solicitante $solicitante)
+    public function update(Request $request, Solicitante $solicitante): RedirectResponse
     {
-        // Validamos con los mismos mensajes rojos de Usuarios
         $request->validate([
-            'nombre' => 'required|string|min:5|max:190',
-            'cargo' => 'required|string|max:190',
-            'unidad_administrativa_id' => 'required',
+            'nombre' => 'bail|required|string|max:190',
+            'dependencia_id' => 'bail|required|integer|exists:cdependencias,id',
+            'unidad_administrativa_id' => 'bail|required|integer|exists:cunidades_administrativas,id',
+            'cargo' => 'bail|required|string|max:150',
         ], $this->mensajes);
 
-        // Obtenemos todos los datos excepto tokens y el estatus
-        $data = $request->except(['_token', '_method', 'inactivo']);
-        
-        // Formateamos nombre y cargo (Título y Mayúsculas)
-        $data['nombre'] = mb_convert_case($request->nombre, MB_CASE_TITLE, "UTF-8");
-        $data['cargo'] = mb_strtoupper($request->cargo, "UTF-8");
+        $solicitante->update([
+            'nombre' => mb_convert_case($request->nombre, MB_CASE_TITLE, "UTF-8"),
+            'dependencia_id' => $request->dependencia_id,
+            'unidad_administrativa_id' => $request->unidad_administrativa_id,
+            'cargo' => mb_strtoupper($request->cargo),
+            'inactivo' => $request->input('inactivo') === 'X' ? 'X' : null,
+            'fecha_modificacion' => now(),
+            'usuario_modificacion_id' => auth()->id(),
+        ]);
 
-        // Lógica de inactivación (igual a Usuarios: si viene marcado es 'X', si no es null)
-        $data['inactivo'] = $request->input('inactivo') === 'X' ? 'X' : null;
-        
-        // Auditoría de modificación
-        $data['usuario_modificacion_id'] = auth()->id();
-
-        $solicitante->update($data);
-
-        return redirect()->route('solicitantes.index')
+        return redirect()->route('solicitante.index')
             ->with('success', 'Solicitante actualizado correctamente.');
     }
 
-    /**
-     * Desactivar solicitante (Acción rápida desde el index)
-     */
-    public function desactivar(Solicitante $solicitante)
+    public function destroy(Solicitante $solicitante): RedirectResponse
     {
-        $this->authorize('update', $solicitante);
-        
-        $solicitante->update([
-            'inactivo' => 'X', 
-            'usuario_modificacion_id' => auth()->id()
-        ]);
+        // Validacion comentada (Esperando módulo de Oficios)
+        /*
+        if ($solicitante->solicitantesOficios()->count() > 0) {
+            return redirect()->route('solicitante.index')
+                ->with('error', 'El registro tiene información vinculada y no puede ser eliminado.');
+        }
+        */
 
-        return redirect()->route('solicitantes.index')
-            ->with('success', 'Solicitante desactivado correctamente.');
-    }
-
-    /**
-     * Reactivar solicitante
-     */
-    public function reactivar(Solicitante $solicitante)
-    {
-        $this->authorize('update', $solicitante);
-        
-        $solicitante->update([
-            'inactivo' => null, 
-            'usuario_modificacion_id' => auth()->id()
-        ]);
-
-        return redirect()->route('solicitantes.index')
-            ->with('success', 'Solicitante reactivado correctamente.');
-    }
-
-    /**
-     * Eliminar registro físicamente
-     */
-    public function destroy(Solicitante $solicitante)
-    {
-        $this->authorize('delete', $solicitante);
-        
         $solicitante->delete();
 
-        return redirect()->route('solicitantes.index')
-            ->with('success', 'Solicitante eliminado permanentemente.');
+        return redirect()->route('solicitante.index')
+            ->with('success', 'El registro ha sido eliminado exitosamente.');
     }
-    // ... resto de métodos (edit, update) siguiendo la misma lógica ...
+
+    // Método AJAX para cargar unidades dinámicamente
+    public function getUnidades($dependencia_id): JsonResponse
+    {
+        $unidades = UnidadAdministrativa::where('dependencia_id', $dependencia_id)
+            ->whereNull('inactivo')
+            ->orderBy('orden', 'asc') // Ordenar por campo 'orden'
+            ->get(['id', 'nombre_unidad_administrativa']);
+
+        return response()->json($unidades);
+    }
 }

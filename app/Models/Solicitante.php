@@ -2,49 +2,74 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+// use Illuminate\Database\Eloquent\Relations\HasMany; // Descomentar cuando exista SolicitanteOficio
 
 class Solicitante extends Model
 {
     use HasFactory;
 
-    // Nombre exacto de la tabla en tu imagen
-    protected $table = 'csolicitantes'; 
+    protected $table = 'csolicitantes';
+    public $timestamps = false; // Usamos fechas manuales
 
-    // Configuración de fechas personalizadas (Auditoría)
-    public $timestamps = true;
-    const CREATED_AT = 'fecha_creacion';
-    const UPDATED_AT = 'fecha_modificacion';
-
-    // Campos permitidos para llenado masivo
     protected $fillable = [
         'nombre',
-        'cargo',
         'dependencia_id',
         'unidad_administrativa_id',
-        'inactivo',                // 'X' o NULL
+        'cargo',
+        'inactivo',
+        'fecha_creacion',
         'usuario_creacion_id',
+        'fecha_modificacion',
         'usuario_modificacion_id',
     ];
 
-    // Formateo de fechas
     protected $casts = [
         'fecha_creacion' => 'datetime',
         'fecha_modificacion' => 'datetime',
     ];
 
-    // --- Relaciones para la Tabla ---
-    
-    // Para mostrar el nombre de la Unidad en la tabla
-    public function unidad()
+    // --- RELACIONES ACTIVAS (Modelos que YA existen) ---
+
+    public function dependencia(): BelongsTo
+    {
+        return $this->belongsTo(Dependencia::class, 'dependencia_id');
+    }
+
+    public function unidadAdministrativa(): BelongsTo
     {
         return $this->belongsTo(UnidadAdministrativa::class, 'unidad_administrativa_id');
     }
 
-    // Para mostrar quién lo registró
-    public function creador()
+    public function creador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_creacion_id');
+    }
+
+    public function modificador(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_modificacion_id');
+    }
+
+    // --- RELACIONES PENDIENTES (Modelos que AÚN NO existen) ---
+    // Comentadas para que no den error
+
+    /*
+    public function solicitantesOficios(): HasMany
+    {
+        return $this->hasMany(SolicitanteOficio::class, 'solicitante_id');
+    }
+    */
+
+    // Helper para listas (útil para cuando usemos Solicitante en el módulo de Oficios)
+    public function scopeListaSolicitantes($query) : array
+    {
+        return $query->selectRaw("id, CONCAT(nombre, ' - ', cargo) AS nombre_cargo")
+            ->whereNull('inactivo')
+            ->pluck('nombre_cargo', 'id')
+            ->prepend('Selecciona un solicitante', '')
+            ->toArray();
     }
 }

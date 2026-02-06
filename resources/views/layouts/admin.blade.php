@@ -190,7 +190,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a href="{{route('solicitantes.index')}}" class="sidebar-link">
+                                        <a href="{{route('solicitante.index')}}" class="sidebar-link">
                                             <i class="ti ti-file-pencil"></i>
                                             <span class="hide-menu">Solicitantes</span>
                                         </a>

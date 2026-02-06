@@ -2,93 +2,146 @@
 
 @section('content')
 
-<style>
-    .btn-guinda { background-color: #9D2449; color: white; font-weight: 600; padding: 0.6rem 2rem; }
-    .btn-guinda:hover { background-color: #801d3a; color: white; }
-    .btn-cancelar { color: #9D2449; font-weight: 600; text-decoration: none; }
-    .btn-cancelar:hover { text-decoration: underline; color: #801d3a; }
-
-    .invalid-feedback { font-size: 0.875em; color: #dc3545; display: block; }
-    .form-control.is-invalid { border-color: #dc3545; }
-</style>
-
 <div class="card border-0 shadow-sm rounded-3">
+    
     <div class="card-header bg-white border-bottom-0 pt-4 px-4">
-        <h4 class="fw-bold" style="color: #9D2449;">
-            {{ $solicitante->exists ? 'Editar solicitante' : 'Registrar nuevo solicitante' }}
-        </h4>
-        <p class="text-muted small">Campos con <span class="text-danger">*</span> son obligatorios.</p>
+        <div>
+            <h4 class="fw-bold text-guinda mb-1">
+                {{ $solicitante->exists ? 'Editar solicitante' : 'Registrar nuevo solicitante' }}
+            </h4>
+            <p class="text-muted small mb-0">
+                Complete la información. Los campos con <span class="text-danger">*</span> son obligatorios.
+            </p>
+        </div>
     </div>
 
     <div class="card-body p-4">
-        <form action="{{ $solicitante->exists ? route('solicitantes.update', $solicitante->id) : route('solicitantes.store') }}" method="POST" novalidate>
+        
+        @if ($solicitante->exists)
+            <form action="{{ route('solicitante.update', $solicitante->id) }}" method="POST" novalidate>
+            @method('PUT')
+        @else
+            <form action="{{ route('solicitante.store') }}" method="POST" novalidate>
+        @endif
+
             @csrf
-            @if($solicitante->exists) @method('PUT') @endif
 
             <div class="row g-4">
-                {{-- Nombre --}}
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small">Nombre completo <span class="text-danger">*</span></label>
-                    <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" value="{{ old('nombre', $solicitante->nombre) }}" required>
+                
+                <div class="col-md-12">
+                    <label class="form-label">Nombre completo <span class="text-danger">*</span></label>
+                    <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" 
+                           value="{{ old('nombre', $solicitante->nombre) }}" required>
                     @error('nombre') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
-                {{-- Cargo --}}
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small">Cargo / Puesto <span class="text-danger">*</span></label>
-                    <input type="text" name="cargo" class="form-control @error('cargo') is-invalid @enderror" value="{{ old('cargo', $solicitante->cargo) }}" required>
-                    @error('cargo') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                </div>
-
-                {{-- Unidad Administrativa --}}
-                <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted small">Unidad Administrativa <span class="text-danger">*</span></label>
-                    <select name="unidad_administrativa_id" class="form-select @error('unidad_administrativa_id') is-invalid @enderror" required>
-                        <option value="">Seleccione una unidad</option>
-                        @foreach($unidades as $id => $nombre)
-                            <option value="{{ $id }}" {{ old('unidad_administrativa_id', $solicitante->unidad_administrativa_id) == $id ? 'selected' : '' }}>
+                    <label class="form-label">Dependencia u organismo auxiliar <span class="text-danger">*</span></label>
+                    <select name="dependencia_id" id="dependencia_id" class="form-select @error('dependencia_id') is-invalid @enderror" required>
+                        <option value="">Seleccione una opción</option>
+                        @foreach($dependencias as $id => $nombre)
+                            <option value="{{ $id }}" {{ old('dependencia_id', $solicitante->dependencia_id) == $id ? 'selected' : '' }}>
                                 {{ $nombre }}
                             </option>
                         @endforeach
                     </select>
+                    @error('dependencia_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Unidad administrativa <span class="text-danger">*</span></label>
+                    <select name="unidad_administrativa_id" id="unidad_administrativa_id" class="form-select @error('unidad_administrativa_id') is-invalid @enderror" required>
+                        <option value="">Seleccione primero una dependencia</option>
+                        @if(isset($unidades))
+                            @foreach($unidades as $id => $nombre)
+                                <option value="{{ $id }}" {{ old('unidad_administrativa_id', $solicitante->unidad_administrativa_id) == $id ? 'selected' : '' }}>
+                                    {{ $nombre }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
                     @error('unidad_administrativa_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
-                {{-- Estatus (Switch similar a Usuarios) --}}
-                @if($solicitante->exists)
-                <div class="col-md-6 d-flex align-items-end">
-                    <div class="form-check form-switch mb-2">
-                        <input type="hidden" name="inactivo" id="inputInactivo" value="{{ $solicitante->inactivo }}">
-                        <input class="form-check-input" type="checkbox" id="switchEstatus" {{ $solicitante->inactivo ? '' : 'checked' }} onchange="toggleEstatus()">
-                        <label class="form-check-label ms-2 fw-bold" for="switchEstatus" id="labelEstatus">
-                            {{ $solicitante->inactivo ? 'Solicitante inactivo' : 'Solicitante activo' }}
-                        </label>
-                    </div>
+                <div class="col-md-12">
+                    <label class="form-label">Cargo o puesto <span class="text-danger">*</span></label>
+                    <input type="text" name="cargo" class="form-control @error('cargo') is-invalid @enderror" 
+                        value="{{ old('cargo', $solicitante->cargo) }}" required>
+                    @error('cargo') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+
+                @if($solicitante->exists)
+                    <div class="col-md-8 mt-8">
+                        <div class="form-check form-switch mb-2 p-3 rounded-3">
+                            <input type="hidden" name="inactivo" id="inputInactivo" value="{{ $solicitante->inactivo }}">
+                            
+                            <div class="d-flex align-items-center ms-4">
+                                <input class="form-check-input mt-0" type="checkbox" role="switch" id="switchEstatus" 
+                                    {{ $solicitante->inactivo ? '' : 'checked' }} onchange="toggleEstatus()">
+                                
+                                <label class="form-check-label ms-3 fw-bold" for="switchEstatus" id="labelEstatus">
+                                    {{ $solicitante->inactivo ? 'Registro inactivo' : 'Registro activo' }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 @endif
             </div>
 
-            <div class="d-flex gap-3 mt-5 pt-3">
-                <button type="submit" class="btn btn-guinda rounded-pill">Guardar Registro</button>
-                <a href="{{ route('solicitantes.index') }}" class="btn-cancelar">Cancelar</a>
+            <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
+                <button type="submit" class="btn btn-guinda rounded-pill shadow-sm">
+                    <i class="ti ti-device-floppy me-2"></i> Guardar
+                </button>
+                <a href="{{ route('solicitante.index') }}" class="btn-cancelar">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function toggleEstatus() {
-        const sw = document.getElementById('switchEstatus');
-        const hidden = document.getElementById('inputInactivo');
-        const label = document.getElementById('labelEstatus');
+    // 1. AJAX para cargar unidades
+    document.getElementById('dependencia_id').addEventListener('change', function() {
+        var dependenciaId = this.value;
+        var unidadSelect = document.getElementById('unidad_administrativa_id');
         
-        if(sw.checked) {
-            hidden.value = ''; label.innerText = 'Solicitante activo';
-            label.classList.replace('text-danger', 'text-success');
+        unidadSelect.innerHTML = '<option value="">Cargando...</option>';
+        
+        if(dependenciaId) {
+            fetch('/api/unidades-por-dependencia/' + dependenciaId) // Asegúrate de definir esta ruta
+                .then(response => response.json())
+                .then(data => {
+                    unidadSelect.innerHTML = '<option value="">Seleccione una unidad</option>';
+                    data.forEach(unidad => {
+                        unidadSelect.innerHTML += `<option value="${unidad.id}">${unidad.nombre_unidad_administrativa}</option>`;
+                    });
+                });
         } else {
-            hidden.value = 'X'; label.innerText = 'Solicitante inactivo';
-            label.classList.add('text-danger');
+            unidadSelect.innerHTML = '<option value="">Seleccione primero una dependencia</option>';
+        }
+    });
+
+    // 2. Switch Estatus
+    function toggleEstatus() {
+        const switchElem = document.getElementById('switchEstatus');
+        const inputHidden = document.getElementById('inputInactivo');
+        const labelElem = document.getElementById('labelEstatus');
+
+        if (switchElem.checked) {
+            inputHidden.value = ''; 
+            labelElem.innerText = 'Registro activo';
+            labelElem.classList.remove('text-danger');
+            labelElem.classList.add('text-success');
+        } else {
+            inputHidden.value = 'X';
+            labelElem.innerText = 'Registro inactivo';
+            labelElem.classList.remove('text-success');
+            labelElem.classList.add('text-danger');
         }
     }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        if(document.getElementById('switchEstatus')) toggleEstatus();
+    });
 </script>
+
 @endsection
