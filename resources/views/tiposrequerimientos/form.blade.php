@@ -2,38 +2,6 @@
 
 @section('content')
 
-<style>
-    /* Estilos Formulario */
-    .btn-guinda {
-        background-color: #9D2449; color: white; border: none;
-        padding-left: 2rem; padding-right: 2rem; font-weight: 600;
-    }
-    .btn-guinda:hover { background-color: #801d3a; color: white; }
-    
-    .btn-cancelar { color: #9D2449; font-weight: 600; text-decoration: none; }
-    .btn-cancelar:hover { text-decoration: underline; color: #801d3a; }
-
-    /* Validación Roja */
-    .invalid-feedback { font-size: 0.875em; color: #dc3545; display: block; margin-top: 0.25rem; }
-    .form-control.is-invalid, .form-check-input.is-invalid {
-        border-color: #dc3545;
-    }
-    .form-control.is-invalid {
-        padding-right: calc(1.5em + 0.75rem);
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right calc(0.375em + 0.1875rem) center;
-        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
-    }
-    
-    /* Switch Estatus */
-    .form-switch .form-check-input {
-        width: 3em; height: 1.5em; background-color: #e9ecef; border-color: #dee2e6;
-    }
-    .form-switch .form-check-input:checked { background-color: #28a745; border-color: #28a745; }
-    
-    .form-control { font-size: 0.95rem; padding: 0.6rem 0.75rem; }
-</style>
 
 <div class="card border-0 shadow-sm rounded-3">
     
@@ -85,8 +53,8 @@
 
                         <div class="form-check">
                             <input class="form-check-input @error('requerimiento_actividad') is-invalid @enderror" 
-                                   type="checkbox" name="requerimiento_actividad" id="checkActividad"
-                                   {{ old('requerimiento_actividad', $tiporequerimiento->requerimiento_actividad) == 'X' ? 'checked' : '' }}>
+                                type="checkbox" name="requerimiento_actividad" id="checkActividad"
+                                {{ old('requerimiento_actividad', $tiporequerimiento->requerimiento_actividad) == 'X' ? 'checked' : '' }}>
                             <label class="form-check-label" for="checkActividad">Requerimiento de las actividades</label>
                         </div>
                     </div>
@@ -105,7 +73,7 @@
                         <input type="hidden" name="inactivo" id="inputInactivo" value="{{ $tiporequerimiento->inactivo }}">
                         
                         <input class="form-check-input" type="checkbox" role="switch" id="switchEstatus" 
-                               {{ $tiporequerimiento->inactivo == 'X' ? '' : 'checked' }} onchange="toggleEstatus()">
+                            {{ $tiporequerimiento->inactivo == 'X' ? '' : 'checked' }} onchange="toggleEstatus()">
                         
                         <label class="form-check-label ms-2 fw-bold" for="switchEstatus" id="labelEstatus">
                             {{ $tiporequerimiento->inactivo == 'X' ? 'Registro inactivo' : 'Registro activo' }}

@@ -2,96 +2,13 @@
 
 @section('content')
 
-<style>
-    :root {
-        --gold-color: #C09F62;
-        --gold-hover: #A88A52;
-        --guinda-color: #9D2449; /* Color Guinda Institucional */
-        --guinda-hover: #801d3a;
-    }
-
-    /* --- CLASES DE COLOR INSTITUCIONAL --- */
-    .text-guinda { color: var(--guinda-color) !important; }
-    .bg-guinda { background-color: var(--guinda-color) !important; color: white !important; }
-    .border-guinda { border-color: var(--guinda-color) !important; }
-
-    /* Botón Guinda Sólido */
-    .btn-guinda {
-        background-color: var(--guinda-color);
-        border-color: var(--guinda-color);
-        color: white;
-    }
-    .btn-guinda:hover {
-        background-color: var(--guinda-hover);
-        border-color: var(--guinda-hover);
-        color: white;
-    }
-
-    /* Botón Guinda Borde (Outline) */
-    .btn-outline-guinda {
-        color: var(--guinda-color);
-        border-color: var(--guinda-color);
-        background-color: transparent;
-    }
-    .btn-outline-guinda:hover {
-        background-color: var(--guinda-color);
-        color: white;
-    }
-
-    /* Focus de Inputs (Sombra Guinda) */
-    .form-control:focus, .form-select:focus {
-        border-color: var(--guinda-color);
-        box-shadow: 0 0 0 0.25rem rgba(157, 36, 73, 0.25);
-    }
-
-    /* --- ESTILOS DORADOS (GOLD) --- */
-    .btn-outline-gold {
-        color: var(--gold-color);
-        border-color: var(--gold-color);
-    }
-    .btn-outline-gold:hover, 
-    .btn-check:checked + .btn-outline-gold {
-        background-color: var(--gold-color);
-        border-color: var(--gold-color);
-        color: white;
-    }
-    .text-gold { color: var(--gold-color) !important; }
-
-    /* --- FILTROS DE ESTATUS --- */
-    .btn-check:checked + .btn-outline-success-custom {
-        background-color: #28a745; border-color: #28a745; color: white;
-    }
-    .btn-outline-success-custom { color: #28a745; border-color: #28a745; }
-    .btn-outline-success-custom:hover { background-color: #28a745; color: white; }
-
-    .btn-check:checked + .btn-outline-danger-custom {
-        background-color: #dc3545; border-color: #dc3545; color: white;
-    }
-    .btn-outline-danger-custom { color: #dc3545; border-color: #dc3545; }
-    .btn-outline-danger-custom:hover { background-color: #dc3545; color: white; }
-
-    /* --- OTROS --- */
-    .status-dot {
-        width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px;
-    }
-    .dot-active { background-color: #28a745; box-shadow: 0 0 4px #28a745; }
-    .dot-inactive { background-color: #dc3545; box-shadow: 0 0 4px #dc3545; }
-
-    .name-link {
-        color: #2a3547; text-decoration: none; transition: all 0.2s;
-    }
-    .name-link:hover {
-        color: var(--guinda-color) !important; font-weight: bold;
-    }
-</style>
-
 <div class="container-fluid">
     
-    <div class="card shadow-none position-relative overflow-hidden mb-4 border-0" style="background-color: #f8f9fa;">
+    <div>
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-9">
-                    <h4 class="fw-bold mb-0 text-guinda">Tipos de Requerimientos</h4>
+                    <h4 class="fw-bold mb-0 text-guinda">Tipos de requerimientos</h4>
                 </div>
             
                 <div class="col-3 text-end">
@@ -114,7 +31,7 @@
                         <div class="input-group">
                             <span class="input-group-text bg-white text-guinda border-guinda"><i class="ti ti-search"></i></span>
                             <input type="text" name="tipo_requerimiento" class="form-control border-guinda" 
-                                   placeholder="Buscar..." value="{{ $request->tipo_requerimiento }}">
+                                placeholder="Buscar..." value="{{ $request->tipo_requerimiento }}">
                         </div>
                     </div>
 
@@ -131,15 +48,15 @@
                         
                         <div class="btn-group me-4 shadow-sm" role="group">
                             <input type="radio" class="btn-check" name="inactivo" value="Todas" id="st_all" 
-                                   onchange="this.form.submit()" {{ ($request->inactivo == 'Todas' || !$request->filled('inactivo')) ? 'checked' : '' }}>
+                                onchange="this.form.submit()" {{ ($request->inactivo == 'Todas' || !$request->filled('inactivo')) ? 'checked' : '' }}>
                             <label class="btn btn-outline-gold" for="st_all">Todos</label>
 
                             <input type="radio" class="btn-check" name="inactivo" value="Activos" id="st_active" 
-                                   onchange="this.form.submit()" {{ $request->inactivo == 'Activos' ? 'checked' : '' }}>
+                                onchange="this.form.submit()" {{ $request->inactivo == 'Activos' ? 'checked' : '' }}>
                             <label class="btn btn-outline-success-custom" for="st_active">Activos</label>
 
                             <input type="radio" class="btn-check" name="inactivo" value="Inactivos" id="st_inactive" 
-                                   onchange="this.form.submit()" {{ $request->inactivo == 'Inactivos' ? 'checked' : '' }}>
+                                onchange="this.form.submit()" {{ $request->inactivo == 'Inactivos' ? 'checked' : '' }}>
                             <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                         </div>
 
@@ -160,9 +77,9 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-guinda text-white">
                         <tr>
-                            <th class="ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Tipo de Requerimiento</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Aplica Oficios</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Aplica Actividades</h6></th>
+                            <th class="ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6></th>
+                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Aplica oficios</h6></th>
+                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Aplica actividades</h6></th>
                             <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6></th>
                         </tr>
                     </thead>
@@ -172,7 +89,7 @@
                             <td class="ps-4">
                                 <div class="d-flex align-items-center">
                                     <span class="status-dot {{ $tipo->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}" 
-                                          title="{{ $tipo->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
+                                        title="{{ $tipo->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
                                     </span>
                                     <a href="{{ route('tiporequerimiento.edit', $tipo->id) }}" class="fs-4 fw-bold mb-0 name-link">
                                         {{ $tipo->tipo_requerimiento }}

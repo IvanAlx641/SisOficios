@@ -18,11 +18,31 @@
         .logo-custom {
             height: 45px; 
             width: auto;
-            object-fit: contain; /* Asegura que no se deforme */
+            object-fit: contain;
         }
         
         /* Ocultar elementos no deseados */
         .moon, .sun, .lang-flag { display: none !important; }
+
+        /* CORRECCIÓN ICONO DE USUARIO (CÍRCULO PERFECTO) */
+        .user-initial-circle {
+            width: 40px !important;
+            height: 40px !important;
+            min-width: 40px; /* Evita que se aplaste */
+            border-radius: 50% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1; /* Fuerza proporción cuadrada para el círculo */
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* CORRECCIÓN BORDES/LÍNEAS EXTRA */
+        .topbar, .app-header {
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
     </style>
 
     <title>Sistema de Oficios</title>
@@ -71,7 +91,7 @@
                         </nav>
                     </div>
 
-                    <div class="app-header with-horizontal">
+                    <div class="app-header with-horizontal border-0 shadow-none">
                         <nav class="navbar navbar-expand-xl container-fluid">
                             <ul class="navbar-nav gap-2 align-items-center">
                                 <li class="nav-item d-block d-xl-none">
@@ -106,8 +126,7 @@
 
                                         <li class="nav-item hover-dd dropdown">
                                             <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                                                <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5" 
-                                                     style="width: 35px; height: 35px;">
+                                                <div class="bg-white text-primary user-initial-circle">
                                                     {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
                                                 </div>
                                             </a>
@@ -278,6 +297,42 @@
             </aside>
             <div class="body-wrapper">
                 <div class="container-fluid">
+                    
+                    <div class="mb-3">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 d-flex align-items-center" role="alert" 
+                                style="background-color: #d1e7dd; color: #0f5132; border-left: 5px solid #198754 !important;">
+                                <i class="ti ti-circle-check fs-4 me-2 text-success"></i>
+                                <div><strong>¡Excelente!</strong> {{ session('success') }}</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 d-flex align-items-center" role="alert"
+                                style="background-color: #f8d7da; color: #842029; border-left: 5px solid #dc3545 !important;">
+                                <i class="ti ti-alert-triangle fs-4 me-2 text-danger"></i>
+                                <div><strong>¡Atención!</strong> {{ session('error') }}</div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="alert alert-warning alert-dismissible fade show shadow-sm border-0" role="alert"
+                                style="background-color: #fff3cd; color: #664d03; border-left: 5px solid #ffc107 !important;">
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="ti ti-alert-circle fs-4 me-2 text-warning"></i>
+                                    <strong>Hay problemas con la información enviada:</strong>
+                                </div>
+                                <ul class="mb-0 small ps-4">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                    </div>
                     @yield('content')
                 </div>
             </div>
@@ -300,5 +355,19 @@
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     
     @stack('scripts') 
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var alerts = document.querySelectorAll('.alert-success, .alert-danger');
+            if(alerts) {
+                setTimeout(function() {
+                    alerts.forEach(function(alert) {
+                        var bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    });
+                }, 5000); 
+            }
+        });
+    </script>
 </body>
 </html>
