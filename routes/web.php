@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     // --- GRUPO: SISTEMA PRINCIPAL (Aplica middleware "force.change") ---
     // Aquí metemos todo lo que requiere que el usuario ya tenga su contraseña configurada
     Route::middleware(['force.change'])->group(function () {
-        
+
         // Dashboard
         Route::get('/', function () {
             return view('dashboard');
@@ -44,7 +44,11 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/usuarios/{usuario}/desactivar', [UsuarioController::class, 'desactivar'])->name('usuario.desactivar');
         Route::put('/usuarios/{usuario}/reactivar', [UsuarioController::class, 'reactivar'])->name('usuario.reactivar');
         Route::resource('usuarios', UsuarioController::class)->names('usuario');
+        // Rutas para el catálogo de Solicitantes
+        Route::resource('solicitantes', App\Http\Controllers\SolicitanteController::class);
 
+        // Si añadiste los métodos extras de activar/desactivar, añade también estas:
+        Route::put('solicitantes/{solicitante}/desactivar', [App\Http\Controllers\SolicitanteController::class, 'desactivar'])->name('solicitantes.desactivar');
+        Route::put('solicitantes/{solicitante}/reactivar', [App\Http\Controllers\SolicitanteController::class, 'reactivar'])->name('solicitantes.reactivar');
     });
-
 });

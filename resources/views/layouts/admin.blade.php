@@ -171,7 +171,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{route('solicitantes.index')}}" class="sidebar-link">
                                             <i class="ti ti-file-pencil"></i>
                                             <span class="hide-menu">Solicitantes</span>
                                         </a>
