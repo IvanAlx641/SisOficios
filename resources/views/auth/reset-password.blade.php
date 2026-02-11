@@ -1,61 +1,242 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
-    <title>Nueva Contraseña</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restablecer Contraseña - Secretaría de la Contraloría</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/morena-theme.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
     <style>
-        body { background: #f8f9fa; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: 'Segoe UI', sans-serif; }
-        .card { max-width: 400px; width: 100%; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-radius: 12px; }
-        .btn-gold { background-color: #C09F62; color: white; border-radius: 50px; width: 100%; padding: 10px; border: none; font-weight: 600; }
-        .btn-gold:hover { background-color: #a88a52; color: white; }
+        :root {
+            --guinda: #9D2449;
+            --dorado: #C09F62;
+            --dorado-oscuro: #a88a52;
+        }
+
+        body,
+        html {
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: white;
+            overflow: hidden;
+        }
+
+        .login-sidebar {
+            position: relative;
+            background: url("{{ asset('materialpro/assets/images/morenaicons/fondo_login.jpg') }}") no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+        }
+
+        .footer-icons-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-color: var(--guinda);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            border-top: 5px solid var(--dorado);
+        }
+
+        .icon-item {
+            text-align: center;
+            color: white;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .icon-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .icon-circle {
+            width: 45px;
+            height: 45px;
+            border: 2px solid var(--dorado);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px auto;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .icon-item:hover .icon-circle {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .login-form-wrapper {
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .img-logos {
+            width: 100%;
+            max-width: 280px;
+            display: block;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .img-titulo {
+            width: 100%;
+            max-width: 320px;
+            display: block;
+            margin: 0 auto 0.5rem auto;
+        }
+
+        .img-pleca {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            display: block;
+            margin: 0 auto 1.5rem auto;
+            opacity: 0.9;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-title {
+            color: var(--guinda);
+            font-weight: 700;
+        }
+
+        .form-label-custom {
+            color: var(--guinda);
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+        }
+
+        .btn-gold-action {
+            background-color: var(--dorado);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 0;
+            font-weight: 700;
+            width: 100%;
+            border: none;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-gold-action:hover {
+            background-color: var(--dorado-oscuro);
+            color: white;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
+
 <body>
-    <div class="card p-4">
-        <div class="text-center mb-4">
-            <h4 class="fw-bold" style="color: #9D2449;">Crear Nueva Contraseña</h4>
-            <small class="text-muted">Introduce tus nuevas credenciales de acceso</small>
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <div class="col-lg-8 d-none d-lg-block login-sidebar">
+                <div class="footer-icons-bar">
+                    <div class="icon-item">
+                        <div class="icon-circle"><i class="ti ti-search fs-3"></i></div>
+                        <div class="icon-label">Búsqueda</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle"><i class="ti ti-eye fs-3"></i></div>
+                        <div class="icon-label">Monitoreo</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle"><i class="ti ti-file-analytics fs-3"></i></div>
+                        <div class="icon-label">Seguimiento</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle"><i class="ti ti-clipboard-list fs-3"></i></div>
+                        <div class="icon-label">Reporte</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 login-form-wrapper">
+                <div class="login-card">
+                    <img src="{{ asset('materialpro/assets/images/morenaicons/logos.jpg') }}" class="img-logos"
+                        alt="Logos">
+                    <img src="{{ asset('materialpro/assets/images/morenaicons/textologin.png') }}" class="img-titulo"
+                        alt="Titulo">
+                    <img src="{{ asset('materialpro/assets/images/morenaicons/pleca.png') }}" class="img-pleca"
+                        alt="Pleca">
+
+                    <div class="auth-header">
+                        <h4 class="auth-title">Crear Nueva Contraseña</h4>
+                        <p class="text-muted small">Introduce tus nuevas credenciales de acceso</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('password.update') }}">
+                        @csrf
+                        <input type="hidden" name="token" value="{{ request()->route('token') }}">
+
+                        <div class="mb-3">
+                            <label class="form-label-custom">CORREO ELECTRÓNICO</label>
+                            <input type="email" name="email" value="{{ old('email', request()->email) }}"
+                                class="form-control @error('email') is-invalid @enderror" readonly>
+                            @error('email')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label-custom">NUEVA CONTRASEÑA</label>
+                            <input type="password" name="password"
+                                class="form-control @error('password') is-invalid @enderror" autofocus>
+                            @error('password')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label-custom">CONFIRMAR CONTRASEÑA</label>
+                            <input type="password" name="password_confirmation" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn-gold-action">
+                            Restablecer Contraseña
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <form action="{{ route('password.update') }}" method="POST">
-            @csrf
-            
-            <input type="hidden" name="token" value="{{ $token }}">
-
-            <div class="mb-3">
-                <label class="form-label small fw-bold text-muted">CORREO</label>
-                <input type="email" name="email" class="form-control bg-light text-muted" value="{{ $email ?? old('email') }}" readonly>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label small fw-bold text-muted">NUEVA CONTRASEÑA</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0"><i class="ti ti-lock text-muted"></i></span>
-                    <input type="password" name="password" class="form-control border-start-0 ps-0 @error('password') is-invalid @enderror" required autofocus>
-                </div>
-                
-                <div class="form-text text-muted small mt-1">
-                    <i class="ti ti-info-circle"></i> Mínimo 8 caracteres.
-                </div>
-                
-                @error('password')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label small fw-bold text-muted">CONFIRMAR CONTRASEÑA</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0"><i class="ti ti-lock-check text-muted"></i></span>
-                    <input type="password" name="password_confirmation" class="form-control border-start-0 ps-0" required>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-gold">Restablecer Contraseña</button>
-        </form>
     </div>
+
 </body>
+
 </html>

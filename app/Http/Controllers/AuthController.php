@@ -44,7 +44,8 @@ class AuthController extends Controller
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-                return back()->withErrors(['email' => 'Su cuenta está desactivada. Contacte al administrador.']);
+                //Mensaje para usuarios inactivos
+                return back()->withErrors(['email' => 'Las credenciales proporcionadas no coinciden con nuestros registros']);
             }
 
             $request->session()->regenerate();
@@ -114,6 +115,9 @@ class AuthController extends Controller
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed' => 'Las contraseñas no coinciden.',
             'email.exists' => 'El correo electrónico no es válido.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'token.required' => 'El token de seguridad es necesario.'
             
         ]);
 

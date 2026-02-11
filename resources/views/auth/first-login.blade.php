@@ -2,105 +2,138 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Configurar Contraseña - Primer Ingreso</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configurar Contraseña - Secretaría de la Contraloría</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
     <style>
-        body { 
-            background-color: #f8f9fa; 
-            height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+        :root {
+            --guinda: #9D2449;
+            --dorado: #C09F62;
+            --dorado-oscuro: #a88a52;
+        }
+
+        body, html {
+            height: 100vh;
+            margin: 0;
             font-family: 'Segoe UI', sans-serif;
+            background: white;
+            overflow: hidden; /* Cero scroll */
         }
-        .card { 
-            max-width: 450px; 
-            width: 100%; 
-            border: none; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            overflow: hidden;
-            border-radius: 12px;
+
+        /* === COLUMNA IZQUIERDA (IDÉNTICA AL LOGIN) === */
+        .login-sidebar {
+            position: relative;
+            background: url("{{ asset('materialpro/assets/images/morenaicons/fondo_login.jpg') }}") no-repeat center center;
+            background-size: cover;
+            height: 100vh;
         }
-        .header { 
-            background-color: #9D2449; 
-            color: white; 
-            padding: 25px 20px; 
-            text-align: center; 
+
+        .footer-icons-bar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
+            background-color: var(--guinda); display: flex; align-items: center;
+            justify-content: center; gap: 2rem; border-top: 5px solid var(--dorado);
         }
-        .text-guinda { color: #9D2449; }
         
-        .btn-gold { 
-            background-color: #C09F62; 
-            color: white; 
-            width: 100%; 
-            border-radius: 50px; 
-            padding: 12px; 
-            border: none; 
-            font-weight: bold;
-            transition: all 0.3s;
+        .icon-item { text-align: center; color: white; transition: all 0.3s ease; cursor: default; }
+        .icon-item:hover { transform: translateY(-8px); }
+        .icon-circle {
+            width: 45px; height: 45px; border: 2px solid var(--dorado); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto;
+            background: rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
         }
-        .btn-gold:hover { 
-            background-color: #a88a52; 
-            color: white; 
-            transform: translateY(-2px);
+        .icon-item:hover .icon-circle { box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .icon-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+
+        /* === COLUMNA DERECHA (ESTRUCTURA DE LOGIN) === */
+        .login-form-wrapper {
+            background: white; display: flex; align-items: center; justify-content: center;
+            height: 100vh;
         }
+        .login-card { width: 100%; max-width: 420px; padding: 20px; }
+
+        /* Imágenes fijas (Posición milimétrica) */
+        .img-logos { width: 100%; max-width: 280px; display: block; margin: 0 auto 1.5rem auto; }
+        .img-titulo { width: 100%; max-width: 320px; display: block; margin: 0 auto 0.5rem auto; }
+        .img-pleca { width: 100%; max-width: 350px; height: auto; display: block; margin: 0 auto 1.5rem auto; opacity: 0.9; }
+
+        /* Estilo Formulario */
+        .auth-header { text-align: center; margin-bottom: 1rem; }
+        .auth-title { color: var(--guinda); font-weight: 700; margin-bottom: 2px; }
+        
+        .alert-mini {
+            background-color: #fff8e1; border-left: 4px solid #ffc107; color: #856404;
+            font-size: 0.8rem; padding: 10px; border-radius: 4px; margin-bottom: 1.5rem;
+        }
+
+        .form-label-custom { color: var(--guinda); font-weight: 700; font-size: 0.8rem; margin-bottom: 5px; display: block; }
+        .form-control { border-radius: 12px; padding: 12px; border: 1px solid #e0e0e0; }
+        
+        .btn-gold-action {
+            background-color: var(--dorado); color: white; border-radius: 50px; padding: 12px 0;
+            font-weight: 700; width: 100%; border: none; margin-top: 10px; transition: 0.3s;
+        }
+        .btn-gold-action:hover { background-color: var(--dorado-oscuro); color: white; transform: translateY(-1px); }
+        
+        .btn-cancel { background: none; border: none; color: #6c757d; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
+        .btn-cancel:hover { color: var(--guinda); }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="header">
-            <h4 class="mb-1 fw-bold">Bienvenido</h4>
-            <div style="font-size: 0.9rem; opacity: 0.9;">Configuración Inicial de Seguridad</div>
-        </div>
-        
-        <div class="card-body p-4 pt-5">
-            <div class="alert alert-warning border-0 bg-warning-subtle text-warning-emphasis small mb-4">
-                <i class="ti ti-info-circle me-1"></i> 
-                Por seguridad, al ser tu primer ingreso, debes establecer una contraseña personal.
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-lg-8 d-none d-lg-block login-sidebar">
+            <div class="footer-icons-bar">
+                <div class="icon-item"><div class="icon-circle"><i class="ti ti-search fs-3"></i></div><div class="icon-label">Búsqueda</div></div>
+                <div class="icon-item"><div class="icon-circle"><i class="ti ti-eye fs-3"></i></div><div class="icon-label">Monitoreo</div></div>
+                <div class="icon-item"><div class="icon-circle"><i class="ti ti-file-analytics fs-3"></i></div><div class="icon-label">Seguimiento</div></div>
+                <div class="icon-item"><div class="icon-circle"><i class="ti ti-clipboard-list fs-3"></i></div><div class="icon-label">Reporte</div></div>
             </div>
-            
-            <form action="{{ route('password.update_initial') }}" method="POST">
-                @csrf
-                
-                <div class="mb-3">
-                    <label class="form-label text-guinda fw-bold small">NUEVA CONTRASEÑA</label>
-                    <input type="password" name="password" 
-                        class="form-control form-control-lg fs-6 @error('password') is-invalid @enderror" 
-                        placeholder="Escribe tu nueva contraseña" required autofocus>
-                    
-                    <div class="form-text text-muted small mt-1">
-                        <i class="ti ti-lock"></i> Mínimo 8 caracteres.
+        </div>
+
+        <div class="col-lg-4 login-form-wrapper">
+            <div class="login-card">
+                <img src="{{ asset('materialpro/assets/images/morenaicons/logos.jpg') }}" class="img-logos" alt="Logos">
+                <img src="{{ asset('materialpro/assets/images/morenaicons/textologin.png') }}" class="img-titulo" alt="Titulo">
+                <img src="{{ asset('materialpro/assets/images/morenaicons/pleca.png') }}" class="img-pleca" alt="Pleca">
+
+                <div class="auth-header">
+                    <h4 class="auth-title">Bienvenido</h4>
+                    <p class="text-muted small">Configuración Inicial de Seguridad</p>
+                </div>
+
+                <div class="alert alert-mini">
+                    <i class="ti ti-info-circle me-1"></i> Por seguridad, debes establecer una contraseña personal.
+                </div>
+
+                <form action="{{ route('password.update_initial') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label class="form-label-custom">NUEVA CONTRASEÑA</label>
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Escribe tu nueva contraseña" required autofocus>
+                        @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                     </div>
 
-                    @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label-custom">CONFIRMAR CONTRASEÑA</label>
+                        <input type="password" name="password_confirmation" class="form-control" placeholder="Repite la contraseña" required>
+                    </div>
 
-                <div class="mb-4">
-                    <label class="form-label text-guinda fw-bold small">CONFIRMAR CONTRASEÑA</label>
-                    <input type="password" name="password_confirmation" 
-                        class="form-control form-control-lg fs-6" 
-                        placeholder="Repite la contraseña" required>
-                </div>
-
-                <button type="submit" class="btn-gold shadow-sm">
-                    Guardar y Acceder
-                </button>
-            </form>
-            
-            <div class="text-center mt-4">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-link text-muted text-decoration-none small" style="font-size: 0.85rem;">
-                        Cancelar y Cerrar Sesión
-                    </button>
+                    <button type="submit" class="btn-gold-action">Guardar y Acceder</button>
                 </form>
+
+                <div class="text-center mt-4">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn-cancel">Cancelar y Cerrar Sesión</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
 </body>
 </html>

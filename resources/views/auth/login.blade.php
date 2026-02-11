@@ -237,31 +237,31 @@
                     <img src="{{ asset('materialpro/assets/images/morenaicons/pleca.png') }}" alt="Separador"
                         class="img-pleca">
 
-                 
+
 
                     <form action="{{ route('login.post') }}" method="POST" novalidate>
                         @csrf
 
                         <div class="mb-3">
                             <label class="form-label">Correo electrónico:</label>
-                            <input type="email" name="email" class="form-control" placeholder="correo">
+                            <div>
+                                <input type="email" name="email"
+                                    class="form-control @error('email') is-invalid @enderror">
+                            </div>
                             @error('email')
-                                <div class="text-danger mt-1">
-                                    {{ $message }}
-                                </div>
+                                <div class="text-danger small mt-1">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Contraseña:</label>
-                            <input type="password" name="password" class="form-control" placeholder="contraseña">
-                            @error('password')
-                                <div class="text-danger mt-1">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror ">
                         </div>
-
+                        @error('password')
+                            <div class="text-danger small mt-1">
+                                {{ $message }}
+                            </div>
+                        @enderror
                         <button type="submit" class="btn btn-guinda">Entrar</button>
 
                         <div class="mt-4">

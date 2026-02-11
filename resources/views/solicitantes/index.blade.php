@@ -4,7 +4,10 @@
 
 <div class="container-fluid">
     
-    <div >
+        
+  
+
+    <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm">
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-9">
@@ -19,9 +22,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm">
         <div class="card-body p-4">
             <form action="{{ route('solicitante.index') }}" method="GET">
                 <div class="row g-3 align-items-end">
