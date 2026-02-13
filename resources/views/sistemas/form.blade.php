@@ -2,11 +2,10 @@
 
 @section('content')
 <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+    <div class="card-header bg-light border-bottom-0 pt-4 px-4">
         <h4 class="fw-bold text-guinda mb-1">
-            {{ $sistema->exists ? 'Editar sistema' : 'Registrar nuevo sistema' }}
+            {{ $sistema->exists ? 'Editar sistema' : 'Gestión de sistemas' }}
         </h4>
-        <p class="text-muted small mb-0">Los campos con <span class="text-danger">*</span> son obligatorios.</p>
     </div>
 
     <div class="card-body p-4">
@@ -23,7 +22,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Sigla del sistema <span class="text-danger">*</span></label>
+                    <label class="form-label">Siglas del sistema <span class="text-danger">*</span></label>
                     <input type="text" name="sigla_sistema" class="form-control @error('sigla_sistema') is-invalid @enderror" 
                            value="{{ old('sigla_sistema', $sistema->sigla_sistema) }}" placeholder="Ej. SAM" required>
                     @error('sigla_sistema') <div class="invalid-feedback">{{ $message }}</div> @enderror

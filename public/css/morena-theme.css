@@ -104,6 +104,7 @@
    2. UTILIDADES DE COLOR
    ========================================= */
 .text-guinda { color: var(--guinda-color) !important; }
+.text-guinda2 { color: gray !important; }
 .bg-guinda { background-color: var(--guinda-color) !important; color: white !important; }
 .border-guinda { border-color: var(--guinda-color) !important; }
 
@@ -154,7 +155,7 @@
 
 /* Enlace Cancelar */
 .btn-cancelar {
-    color: var(--guinda-color);
+    color: grey;
     font-weight: 600;
     text-decoration: none;
     transition: color 0.3s;
@@ -190,7 +191,7 @@
 5. FORMULARIOS E INPUTS
    ========================================= */
 .form-label {
-    color: var(--guinda-color);
+    color: grey;
     font-weight: 700 !important;
     font-size: 0.85rem;
 }
@@ -251,7 +252,7 @@
 .dot-inactive { background-color: var(--danger-color); box-shadow: 0 0 4px var(--danger-color); }
 
 .name-link {
-    color: #2a3547; text-decoration: none; transition: all 0.2s;
+    color: gray; text-decoration: none; transition: all 0.2s;
 }
 .name-link:hover {
     color: var(--guinda-color) !important; font-weight: bold;
@@ -293,3 +294,4 @@
 
 /* Helpers */
 .moon, .sun, .lang-flag { display: none !important; }
+.bg-morena-primary { background-color: var(--guinda-color) !important; }

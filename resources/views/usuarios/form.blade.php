@@ -4,14 +4,11 @@
 
 <div class="card border-0 shadow-sm rounded-3">
     
-    <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+    <div class="card-header bg-light border-bottom-0 pt-4 px-4 ">
         <div>
             <h4 class="fw-bold text-guinda mb-1">
-                {{ $usuario->exists ? 'Editar usuario' : 'Registrar nuevo usuario' }}
+                {{ $usuario->exists ? 'Editar usuario' : 'Gestión de usuarios' }}
             </h4>
-            <p class="text-muted small mb-0">
-                Complete la información requerida. Los campos con <span class="text-danger">*</span> son obligatorios.
-            </p>
         </div>
     </div>
 

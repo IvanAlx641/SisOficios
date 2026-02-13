@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm">
-            <div class="card-body px-4 py-3">
+            <div class="card-body px-4 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-9">
                         <h4 class="fw-bold mb-0 text-guinda">Tipos de requerimientos</h4>
@@ -12,7 +12,7 @@
                     <div class="col-3 text-end">
                         <a href="{{ route('tiporequerimiento.create') }}"
                             class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill">
-                            <i class="ti ti-plus me-1"></i> Agregar
+                            Nuevo
                         </a>
                     </div>
                 </div>
@@ -23,25 +23,23 @@
                     <div class="row g-3 align-items-end">
 
                         <div class="col-md-9">
-                            <label class="form-label fw-bold text-guinda small">Tipo de requerimiento</label>
+                            <label class="form-label fw-bold text-guinda2 small">Tipo de requerimiento</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-white text-guinda border-guinda"><i
-                                        class="ti ti-search"></i></span>
                                 <input type="text" name="tipo_requerimiento" class="form-control border-guinda"
                                     placeholder="Buscar..." value="{{ $request->tipo_requerimiento }}">
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-outline-guinda w-100 fw-bold">
-                                <i class="ti ti-filter me-1"></i> Buscar
+                        <div class="col-md-3 end text-md-end">
+                            <button type="submit" class="btn btn-outline-guinda w-50 fw-bold">
+                                Buscar
                             </button>
                         </div>
                     </div>
 
                     <div class="row mt-4">
                         <div class="col-md-8 d-flex align-items-center flex-wrap">
-                            <label class="form-label fw-bold text-guinda me-3 mb-0">Estatus:</label>
+                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
 
                             <div class="btn-group me-4 shadow-sm" role="group">
                                 <input type="radio" class="btn-check" name="inactivo" value="Todas" id="st_all"

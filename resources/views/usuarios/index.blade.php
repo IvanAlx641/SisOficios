@@ -4,7 +4,7 @@
     <div class="container-fluid">
 
         <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm">
-            <div class="card-body px-4 py-3">
+            <div class="card-body px-4 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-9">
                         <h4 class="fw-bold mb-0 text-guinda">Gestión de usuarios</h4>
@@ -12,7 +12,7 @@
 
                     <div class="col-3 text-end">
                         <a href="{{ route('usuario.create') }}" class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill">
-                            <i class="ti ti-plus me-1"></i> Agregar
+                            Nuevo
                         </a>
                     </div>
                 </div>
@@ -23,27 +23,24 @@
                     <div class="row g-3 align-items-end">
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda small">Nombre</label>
+                            <label class="form-label fw-bold text-guinda2 small">Nombre</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-white text-guinda border-guinda"><i
-                                        class="ti ti-search"></i></span>
                                 <input type="text" name="nombre" class="form-control border-guinda"
                                     placeholder="Buscar por nombre..." value="{{ $request->nombre }}">
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda small">Correo electrónico</label>
+                            <label class="form-label fw-bold text-guinda2 small">Correo electrónico</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-white text-guinda border-guinda"><i
-                                        class="ti ti-mail"></i></span>
+                                
                                 <input type="text" name="email" class="form-control border-guinda"
                                     placeholder="Buscar por correo..." value="{{ $request->email }}">
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda small">Rol</label>
+                            <label class="form-label fw-bold text-guinda2 small">Rol</label>
                             <select class="form-select border-guinda" name="rol" onchange="this.form.submit()">
                                 <option value="Todos">Todos los roles</option>
                                 <option value="Administrador TI"
@@ -59,16 +56,16 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-outline-guinda w-100 fw-bold">
-                                <i class="ti ti-filter me-1"></i> Buscar
+                        <div class="col-md-3 text-end">
+                            <button type="submit" class="btn btn-outline-guinda w-50 fw-bold alling-right">
+                                Buscar
                             </button>
                         </div>
                     </div>
 
                     <div class="row mt-4">
                         <div class="col-md-8 d-flex align-items-center flex-wrap">
-                            <label class="form-label fw-bold text-guinda me-3 mb-0">Estatus:</label>
+                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
 
                             <div class="btn-group me-4 shadow-sm" role="group">
                                 <input type="radio" class="btn-check" name="inactivo" value="Todas" id="st_all"
