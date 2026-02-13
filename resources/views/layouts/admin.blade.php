@@ -54,58 +54,63 @@
     </div>
 
     <div id="main-wrapper">
+        <aside class="left-sidebar with-vertical">
+            <div>
+                <nav class="sidebar-nav scroll-sidebar" data-simplebar>
+                    <ul id="sidebarnav">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/" aria-expanded="false">
+                                <iconify-icon icon="solar:screencast-2-linear" class="aside-icon"></iconify-icon>
+                                <span class="hide-menu">Inicio</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
 
         <div class="page-wrapper">
             
-            <header class="topbar rounded-0 border-0 bg-morena-primary">
-                <nav class="navbar navbar-expand-lg container-fluid px-2 py-0 h-100 d-flex justify-content-between align-items-center" style="min-height: 70px;">
+        <header class="topbar rounded-0 border-0 bg-morena-primary">
+            <div class="app-header border-0 shadow-none">
+                <nav class="navbar navbar-expand-xl container p-0" style="font-family: inherit;">
                     
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center justify-content-between w-100" style="height: 64px;">
                         
-                        <a href="/" class="text-nowrap logo-img d-flex align-items-center p-0">
-                            <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" 
-                                alt="logo" 
-                                class="logo-custom" 
-                                style="max-height: 45px; width: auto;" />
-                        </a>
-
-                        <span class="h4 mb-0 text-white fw-bold ms-2 text-nowrap">
-                            Sistema de Oficios
-                        </span>
-
-                        <a href="/" class="d-flex align-items-center text-white ms-3 text-decoration-none" title="Ir al Inicio">
-                            <iconify-icon icon="solar:home-2-bold" class="fs-4"></iconify-icon>
-                        </a>
-                    </div>
-
-                    <ul class="navbar-nav flex-row align-items-center">
-                        <li class="nav-item hover-dd dropdown">
-                            <a class="nav-link nav-icon-hover d-flex align-items-center p-0" href="javascript:void(0)" id="drop2" aria-expanded="false">
-                                
-                                <span class="text-white fw-bold me-3 text-nowrap d-none d-sm-block">
-                                    {{ Auth::user()->nombre ?? 'Usuario' }}
-                                </span>
-
-                                <div class="bg-white text-primary user-initial-circle shadow-sm">
-                                    {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
-                                </div>
+                        <div class="d-flex align-items-center">
+                            <a href="/" class="text-nowrap logo-img d-flex align-items-center">
+                                <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" alt="logo" class="logo-custom" style="height: 40px;" />
                             </a>
 
-                            <div class="dropdown-menu content-dd overflow-hidden pt-0 dropdown-menu-end user-dd" aria-labelledby="drop2">
-                                <div class="profile-dropdown position-relative" data-simplebar>
-                                    <div class="py-3 border-bottom">
-                                        <div class="d-flex align-items-center px-3">
-                                            <div class="bg-primary-subtle text-primary rounded-circle round-50 d-flex align-items-center justify-content-center fw-bold fs-5">
-                                                {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
-                                            </div>
-                                            <div class="ms-3">
-                                                <h5 class="mb-1 fs-4 text-dark">{{ Auth::user()->nombre ?? 'Usuario' }}</h5>
-                                                <p class="mb-0 fs-2 d-flex align-items-center text-muted">{{ Auth::user()->email ?? 'email' }}</p>
-                                            </div>
+                            <span class="text-white fw-bold fs-4 ms-3">
+                                Sistema de Oficios
+                            </span>
+
+                            <a href="/dashboard" class="text-white d-flex align-items-center ms-3" title="Dashboard">
+                                <iconify-icon icon="solar:home-2-linear" width="24" height="24"></iconify-icon>
+                            </a>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link d-flex align-items-center p-0" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="d-none d-lg-block text-nowrap text-white fw-medium me-3">
+                                            {{ Auth::user()->nombre ?? 'Usuario' }}
+                                        </span>
+                                        
+                                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" 
+                                            style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
+                                            {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
                                         </div>
-                                    </div>
-                                    <div class="message-body pb-3">
-                                        <div class="px-3 pt-3">
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="drop2" style="min-width: 210px;">
+                                        <div class="py-3 border-bottom text-center">
+                                            <h5 class="mb-1 fs-4 text-dark fw-semibold">{{ Auth::user()->nombre ?? 'Usuario' }}</h5>
+                                            <p class="mb-0 fs-2 text-muted">{{ Auth::user()->email ?? 'email' }}</p>
+                                        </div>
+                                        <div class="p-3">
                                             <form action="{{ route('logout') }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
@@ -114,12 +119,14 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    </div>
                 </nav>
-            </header>
+            </div>
+        </header>
 
                 <aside class="left-sidebar with-horizontal">
                 <div>
