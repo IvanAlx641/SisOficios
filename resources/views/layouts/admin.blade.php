@@ -13,18 +13,23 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-    <style>
-        /* Ajuste del Logo PNG */
+<style>
+        /* --- 1. MEJORA VISUAL (Fuentes) --- */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         .logo-custom {
             height: 45px; 
             width: auto;
             object-fit: contain;
         }
         
-        /* Ocultar elementos no deseados */
+        /* Ocultar elementos innecesarios */
         .moon, .sun, .lang-flag { display: none !important; }
 
-        /* CORRECCIÓN ICONO DE USUARIO (CÍRCULO PERFECTO) */
+        /* Estilo del Círculo de Usuario */
         .user-initial-circle {
             width: 40px !important;
             height: 40px !important;
@@ -38,10 +43,88 @@
             font-size: 1.2rem;
         }
         
-        /* CORRECCIÓN BORDES/LÍNEAS EXTRA */
         .topbar, .app-header {
             border-bottom: none !important;
             box-shadow: none !important;
+        }
+
+        /* --- 2. SOLUCIÓN DEFINITIVA AL MENU (Cerrar Sesión) --- */
+        .custom-dropdown-pos {
+            position: absolute !important;
+            
+            /* ALINEACIÓN EXACTA: 
+               Usamos -10px o 0px dependiendo de tu gusto. 
+               Si '0' no llega al borde de la imagen, ponle un valor negativo como '-15px'. */
+            right: -15px !important;  
+            
+            left: auto !important;
+            top: 100% !important;
+            
+            /* TAMAÑO Y ESTÉTICA */
+            min-width: 300px !important; /* Más ancha para que se vea elegante */
+            margin-top: 15px !important; /* Separación visual de la barra roja */
+            border-radius: 12px !important;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important;
+            border: 1px solid rgba(0,0,0,0.05) !important;
+            padding: 0 !important; /* Limpieza interna */
+            
+            /* ESTABILIDAD (Evita que salte al hacer clic) */
+            transform: none !important; 
+            will-change: transform;
+        }
+
+        /* EL PUENTE INVISIBLE (Magia para que no se cierre) 
+           Crea una zona segura entre el nombre y el cuadro blanco */
+        .custom-dropdown-pos::before {
+            content: '';
+            position: absolute;
+            top: -20px; /* Cubre el hueco hacia arriba */
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: transparent; 
+            display: block;
+        }
+
+        /* Animación suave de entrada */
+        .dropdown-menu.show {
+            display: block !important;
+            animation: fadeInMenu 0.2s ease-out forwards;
+        }
+
+        @keyframes fadeInMenu {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 3. MÓVIL (RESPONSIVE) --- */
+        .sidebartoggler { display: none; }
+
+        @media (max-width: 1199px) {
+            .sidebartoggler {
+                display: block !important;
+                color: white !important;
+                margin-right: 15px;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .header-container {
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+
+            .app-title-text { display: none; }
+            
+            /* Ajuste específico para móvil para que no se salga de la pantalla */
+            .custom-dropdown-pos {
+                right: -10px !important;
+                min-width: 260px !important;
+            }
+        }
+
+        @media (min-width: 576px) {
+            .app-title-text { display: block; }
         }
     </style>
 
@@ -54,15 +137,118 @@
     </div>
 
     <div id="main-wrapper">
+         //- MENU VERTICAL (MÓVIL) -//
         <aside class="left-sidebar with-vertical">
             <div>
                 <nav class="sidebar-nav scroll-sidebar" data-simplebar>
                     <ul id="sidebarnav">
+
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/" aria-expanded="false">
-                                <iconify-icon icon="solar:screencast-2-linear" class="aside-icon"></iconify-icon>
-                                <span class="hide-menu">Inicio</span>
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:user-id-line-duotone" class="aside-icon"></iconify-icon>
+                                <span class="hide-menu">Administracion</span>
                             </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('usuario.index') }}" class="sidebar-link">
+                                        <i class="ti ti-user"></i>
+                                        <span class="hide-menu">Usuarios</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="{{route('solicitante.index')}}" class="sidebar-link">
+                                        <i class="ti ti-file-pencil"></i>
+                                        <span class="hide-menu">Solicitantes</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="{{ route('tiporequerimiento.index') }}" class="sidebar-link">
+                                        <i class="ti ti-checklist"></i>
+                                        <span class="hide-menu">Tipos de Requerimientos</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="{{ route('sistema.index') }}" class="sidebar-link">
+                                        <i class="ti ti-screen-share"></i>
+                                        <span class="hide-menu">Sistemas</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:file-text-linear" class="aside-icon"></iconify-icon>
+                                <span class="hide-menu">Oficios</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-file-plus"></i>
+                                        <span class="hide-menu">Registro</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-tournament"></i>
+                                        <span class="hide-menu">Turno</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-arrow-guide"></i>
+                                        <span class="hide-menu">Seguimiento</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-file-symlink"></i>
+                                        <span class="hide-menu">Respuesta</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-file-search"></i>
+                                        <span class="hide-menu">Buscador</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
+                                <span class="hide-menu">Actividades</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-file-like"></i>
+                                        <span class="hide-menu">Bitacora</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <iconify-icon icon="solar:diagram-up-broken" class="aside-icon"></iconify-icon>
+                                <span class="hide-menu">Informes</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level">
+                                <li class="sidebar-item">   
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-file-analytics"></i>
+                                        <span class="hide-menu">Oficios</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">
+                                        <i class="ti ti-home-stats"></i>
+                                        <span class="hide-menu">Actividades</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </nav>
@@ -71,73 +257,71 @@
 
         <div class="page-wrapper">
             
-        <header class="topbar rounded-0 border-0 bg-morena-primary">
-            <div class="app-header border-0 shadow-none">
-                <nav class="navbar navbar-expand-xl container p-0" style="font-family: inherit;">
-                    
-                    <div class="d-flex align-items-center justify-content-between w-100" style="height: 64px;">
+            <header class="topbar rounded-0 border-0 bg-morena-primary">
+                <div class="app-header border-0 shadow-none">
+                    <nav class="navbar navbar-expand-xl container-fluid p-0 px-3 header-container" style="font-family: inherit;">
                         
-                        <div class="d-flex align-items-center">
-                            <a href="/" class="text-nowrap logo-img d-flex align-items-center">
-                                <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" alt="logo" class="logo-custom" style="height: 40px;" />
-                            </a>
+                        <div class="d-flex align-items-center justify-content-between w-100" style="height: 64px;">
+                            
+                            <div class="d-flex align-items-center">
+                                <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                                    <i class="ti ti-menu-2"></i>
+                                </a>
 
-                            <span class="text-white fw-bold fs-4 ms-3">
-                                Sistema de Oficios
-                            </span>
+                                <a class="text-nowrap logo-img d-flex align-items-center">
+                                    <img src="{{ asset('materialpro/assets/images/morenaicons/Logolayoyt.png') }}" alt="logo" class="logo-custom" style="height: 40px;" />
+                                </a>
 
-                            <a href="/dashboard" class="text-white d-flex align-items-center ms-3" title="Dashboard">
-                                <iconify-icon icon="solar:home-2-linear" width="24" height="24"></iconify-icon>
-                            </a>
+                                <span class="text-white fw-bold fs-4 ms-3 app-title-text">
+                                    Sistema de Oficios
+                                </span>
+
+                                <a href="/" class="text-white d-flex align-items-center ms-3 d-none d-sm-flex" title="Dashboard">
+                                    <iconify-icon icon="solar:home-2-linear" width="24" height="24"></iconify-icon>
+                                </a>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown position-relative">
+                                        <a class="nav-link d-flex align-items-center p-0" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="d-none d-lg-block text-nowrap text-white fw-medium me-3">
+                                                {{ Auth::user()->nombre ?? 'Usuario' }}
+                                            </span>
+                                            
+                                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" 
+                                                style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
+                                                {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
+                                            </div>
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-end shadow border-0 custom-dropdown-pos" aria-labelledby="drop2" style="min-width: 210px;">
+                                            <div class="py-3 border-bottom text-center">
+                                                <h5 class="mb-1 fs-4 text-dark fw-semibold">{{ Auth::user()->nombre ?? 'Usuario' }}</h5>
+                                                <p class="mb-0 fs-2 text-muted">{{ Auth::user()->email ?? 'email' }}</p>
+                                            </div>
+                                            <div class="p-3">
+                                                <form action="{{ route('logout') }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
+                                                        <i class="ti ti-logout"></i> Cerrar Sesión
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
                         </div>
+                    </nav>
+                </div>
+            </header>
 
-                        <div class="d-flex align-items-center">
-                            <ul class="navbar-nav">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link d-flex align-items-center p-0" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="d-none d-lg-block text-nowrap text-white fw-medium me-3">
-                                            {{ Auth::user()->nombre ?? 'Usuario' }}
-                                        </span>
-                                        
-                                        <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" 
-                                            style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
-                                            {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
-                                        </div>
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="drop2" style="min-width: 210px;">
-                                        <div class="py-3 border-bottom text-center">
-                                            <h5 class="mb-1 fs-4 text-dark fw-semibold">{{ Auth::user()->nombre ?? 'Usuario' }}</h5>
-                                            <p class="mb-0 fs-2 text-muted">{{ Auth::user()->email ?? 'email' }}</p>
-                                        </div>
-                                        <div class="p-3">
-                                            <form action="{{ route('logout') }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
-                                                    <i class="ti ti-logout"></i> Cerrar Sesión
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                    </div>
-                </nav>
-            </div>
-        </header>
-
-                <aside class="left-sidebar with-horizontal">
+            <aside class="left-sidebar with-horizontal">
                 <div>
                     <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar container-fluid">
                         <ul id="sidebarnav">
-                            <li class="sidebar-item">
-                                <a class="sidebar-link" href="/" aria-expanded="false">
-                                    <iconify-icon icon="solar:screencast-2-linear"></iconify-icon>
-                                    <span class="hide-menu">Inicio</span>
-                                </a>
-                            </li>
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -145,28 +329,24 @@
                                     <span class="hide-menu">Administracion</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
-                                    
                                     <li class="sidebar-item">
                                         <a href="{{ route('usuario.index') }}" class="sidebar-link">
                                             <i class="ti ti-user"></i>
                                             <span class="hide-menu">Usuarios</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="{{route('solicitante.index')}}" class="sidebar-link">
                                             <i class="ti ti-file-pencil"></i>
                                             <span class="hide-menu">Solicitantes</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="{{ route('tiporequerimiento.index') }}" class="sidebar-link">
                                             <i class="ti ti-checklist"></i>
                                             <span class="hide-menu">Tipos de Requerimientos</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="{{ route('sistema.index') }}" class="sidebar-link">
                                             <i class="ti ti-screen-share"></i>
@@ -188,28 +368,24 @@
                                             <span class="hide-menu">Registro</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
                                             <i class="ti ti-tournament"></i>
                                             <span class="hide-menu">Turno</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
                                             <i class="ti ti-arrow-guide"></i>
                                             <span class="hide-menu">Seguimiento</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
                                             <i class="ti ti-file-symlink"></i>
                                             <span class="hide-menu">Respuesta</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
                                             <i class="ti ti-file-search"></i>
@@ -246,7 +422,6 @@
                                             <span class="hide-menu">Oficios</span>
                                         </a>
                                     </li>
-
                                     <li class="sidebar-item">
                                         <a href="#" class="sidebar-link">
                                             <i class="ti ti-home-stats"></i>
@@ -316,6 +491,41 @@
                     });
                 }, 5000); // 5 SEGUNDOS
             }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Buscamos específicamente los enlaces del menú vertical (Móvil) que tienen flechita
+            var mobileMenuLinks = document.querySelectorAll('.left-sidebar.with-vertical .sidebar-link.has-arrow');
+
+            mobileMenuLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    // Prevenir que navegue a #
+                    e.preventDefault();
+                    
+                    // Seleccionar el submenú (la lista <ul> que sigue al enlace)
+                    var nextUl = this.nextElementSibling;
+                    
+                    if (nextUl && nextUl.tagName === 'UL') {
+                        // Verificar si está abierto o cerrado
+                        var isOpen = nextUl.style.display === 'block' || nextUl.classList.contains('show');
+
+                        if (isOpen) {
+                            // CERRAR
+                            nextUl.style.display = 'none';
+                            nextUl.classList.remove('in', 'show');
+                            this.classList.remove('active');
+                            this.setAttribute('aria-expanded', 'false');
+                        } else {
+                            // ABRIR
+                            nextUl.style.display = 'block';
+                            nextUl.classList.add('in', 'show');
+                            this.classList.add('active');
+                            this.setAttribute('aria-expanded', 'true');
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
