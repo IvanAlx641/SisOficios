@@ -141,4 +141,52 @@
     });
 </script>
 
+<script>
+    // 1. INICIALIZAR LOS BUSCADORES AL CARGAR LA PÁGINA
+    document.addEventListener("DOMContentLoaded", function() {
+        // Convertimos el primer select
+        convertirSelectABuscador('dependencia_id');
+        
+        // Convertimos el segundo select (si ya tiene datos cargados por 'old' o edición)
+        convertirSelectABuscador('unidad_administrativa_id');
+
+        // Tu código del switch Estatus
+        if(document.getElementById('switchEstatus')) toggleEstatus();
+    });
+
+    // 2. TU AJAX (Ligeramente modificado)
+    document.getElementById('dependencia_id').addEventListener('change', function() {
+        var dependenciaId = this.value;
+        var unidadSelect = document.getElementById('unidad_administrativa_id');
+        
+        // Limpiamos opciones mientras carga
+        unidadSelect.innerHTML = '<option value="">Cargando...</option>';
+        
+        // Importante: Si ya habíamos convertido este select, el visual se debe actualizar
+        // Así que lo regeneramos para que diga "Cargando..."
+        convertirSelectABuscador('unidad_administrativa_id');
+        
+        if(dependenciaId) {
+            fetch('/api/unidades-por-dependencia/' + dependenciaId) 
+                .then(response => response.json())
+                .then(data => {
+                    unidadSelect.innerHTML = '<option value="">Seleccione una unidad</option>';
+                    data.forEach(unidad => {
+                        unidadSelect.innerHTML += `<option value="${unidad.id}">${unidad.nombre_unidad_administrativa}</option>`;
+                    });
+
+                    // >>> AQUÍ ESTÁ LA MAGIA <<<
+                    // Una vez que el select oculto tiene los nuevos options,
+                    // llamamos a la función de nuevo para que regenere el buscador visual
+                    convertirSelectABuscador('unidad_administrativa_id'); 
+                });
+        } else {
+            unidadSelect.innerHTML = '<option value="">Seleccione primero una dependencia</option>';
+            convertirSelectABuscador('unidad_administrativa_id');
+        }
+    });
+
+    // ... (Tu función toggleEstatus sigue igual) ...
+</script>
+
 @endsection

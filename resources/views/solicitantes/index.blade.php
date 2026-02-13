@@ -2,12 +2,14 @@
 
 @section('content')
 
+
 <div class="container-fluid">
     
-        
-  
-
-    <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm">
+    {{-- 
+       NOTA: Quité 'overflow-hidden' de esta card para que el menú desplegable 
+       pueda salirse de la caja y verse completo.
+    --}}
+    <div class="card w-100 position-relative border-0 shadow-sm">
         <div class="card-body px-4 py-3 bg-light">
             <div class="row align-items-center">
                 <div class="col-9">
@@ -34,7 +36,12 @@
 
                     <div class="col-md-5">
                         <label class="form-label">Dependencia</label>
-                        <select name="dependencia_id" class="form-select border-guinda" onchange="this.form.submit()">
+                        {{-- 
+                           AQUÍ ESTÁ EL CAMBIO: 
+                           1. Agregué id="filtro_dependencia"
+                           2. El onchange="this.form.submit()" seguirá funcionando gracias al JS
+                        --}}
+                        <select name="dependencia_id" id="filtro_dependencia" class="form-select border-guinda" onchange="this.form.submit()">
                             <option value="Todas">Todas las dependencias</option>
                             @foreach($dependencias as $id => $nombre)
                                 <option value="{{ $id }}" {{ $request->dependencia_id == $id ? 'selected' : '' }}>
@@ -133,4 +140,94 @@
         </div>
     </div>
 </div>
+
+{{-- 2. SCRIPT PARA ACTIVAR EL BUSCADOR --}}
+<script>
+    function convertirSelectABuscador(idSelect) {
+        const originalSelect = document.getElementById(idSelect);
+        if (!originalSelect) return;
+
+        const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
+        if (wrapperPrevio) wrapperPrevio.remove();
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'searchable-dropdown-wrapper';
+
+        const trigger = document.createElement('button');
+        trigger.className = 'form-select searchable-trigger border-guinda'; // Agregué border-guinda para mantener tu estilo
+        trigger.type = 'button';
+        
+        const selectedOption = originalSelect.options[originalSelect.selectedIndex];
+        trigger.textContent = selectedOption ? selectedOption.text : 'Seleccione una opción';
+
+        const menu = document.createElement('div');
+        menu.className = 'searchable-menu';
+
+        const inputSearch = document.createElement('input');
+        inputSearch.className = 'form-control mb-2';
+        inputSearch.type = 'text';
+        inputSearch.placeholder = 'Buscar...';
+        inputSearch.onclick = function(e) { e.stopPropagation(); }; // Evita cierre al clickear input
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'searchable-options';
+
+        function poblarOpciones() {
+            optionsList.innerHTML = '';
+            Array.from(originalSelect.options).forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'searchable-option';
+                item.textContent = option.text;
+                
+                item.addEventListener('click', () => {
+                    originalSelect.value = option.value;
+                    trigger.textContent = option.text;
+                    menu.classList.remove('show');
+                    inputSearch.value = '';
+                    filtrarOpciones('');
+                    
+                    // ESTO DISPARA EL SUBMIT DEL FORMULARIO
+                    originalSelect.dispatchEvent(new Event('change')); 
+                });
+                optionsList.appendChild(item);
+            });
+        }
+        poblarOpciones();
+
+        function filtrarOpciones(texto) {
+            const items = optionsList.querySelectorAll('.searchable-option');
+            const filtro = texto.toLowerCase();
+            items.forEach(item => {
+                const coincide = item.textContent.toLowerCase().includes(filtro);
+                item.style.display = coincide ? 'block' : 'none';
+            });
+        }
+
+        inputSearch.addEventListener('keyup', (e) => filtrarOpciones(e.target.value));
+
+        trigger.addEventListener('click', (e) => {
+            document.querySelectorAll('.searchable-menu').forEach(m => { if(m !== menu) m.classList.remove('show'); });
+            menu.classList.toggle('show');
+            if(menu.classList.contains('show')) setTimeout(() => inputSearch.focus(), 100);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) menu.classList.remove('show');
+        });
+
+        menu.appendChild(inputSearch);
+        menu.appendChild(optionsList);
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(menu);
+
+        originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
+        originalSelect.style.display = 'none';
+    }
+
+    // INICIALIZACIÓN
+    document.addEventListener("DOMContentLoaded", function() {
+        convertirSelectABuscador('filtro_dependencia');
+    });
+</script>
+
 @endsection

@@ -1,9 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
+
+
     <div class="container-fluid">
 
-        <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm">
+        {{-- 2. AJUSTE HTML: Quité 'overflow-hidden' de esta clase para que el menú se vea --}}
+        <div class="card w-100 position-relative border-0 shadow-sm">
             <div class="card-body px-4 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-9">
@@ -41,7 +44,8 @@
 
                         <div class="col-md-3">
                             <label class="form-label fw-bold text-guinda2 small">Rol</label>
-                            <select class="form-select border-guinda" name="rol" onchange="this.form.submit()">
+                            {{-- 3. AJUSTE HTML: Agregué id="filtro_rol" --}}
+                            <select class="form-select border-guinda" name="rol" id="filtro_rol" onchange="this.form.submit()">
                                 <option value="Todos">Todos los roles</option>
                                 <option value="Administrador TI"
                                     {{ $request->rol == 'Administrador TI' ? 'selected' : '' }}>Administrador TI</option>
@@ -234,4 +238,92 @@
             </div>
         </div>
     </div>
+
+{{-- 4. SCRIPT (JS) --}}
+<script>
+    function convertirSelectABuscador(idSelect) {
+        const originalSelect = document.getElementById(idSelect);
+        if (!originalSelect) return;
+
+        const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
+        if (wrapperPrevio) wrapperPrevio.remove();
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'searchable-dropdown-wrapper';
+
+        const trigger = document.createElement('button');
+        trigger.className = 'form-select searchable-trigger border-guinda'; 
+        trigger.type = 'button';
+        
+        const selectedOption = originalSelect.options[originalSelect.selectedIndex];
+        trigger.textContent = selectedOption ? selectedOption.text : 'Seleccione una opción';
+
+        const menu = document.createElement('div');
+        menu.className = 'searchable-menu';
+
+        const inputSearch = document.createElement('input');
+        inputSearch.className = 'form-control mb-2';
+        inputSearch.type = 'text';
+        inputSearch.placeholder = 'Buscar...';
+        inputSearch.onclick = function(e) { e.stopPropagation(); };
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'searchable-options';
+
+        function poblarOpciones() {
+            optionsList.innerHTML = '';
+            Array.from(originalSelect.options).forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'searchable-option';
+                item.textContent = option.text;
+                
+                item.addEventListener('click', () => {
+                    originalSelect.value = option.value;
+                    trigger.textContent = option.text;
+                    menu.classList.remove('show');
+                    inputSearch.value = '';
+                    filtrarOpciones('');
+                    originalSelect.dispatchEvent(new Event('change')); 
+                });
+                optionsList.appendChild(item);
+            });
+        }
+        poblarOpciones();
+
+        function filtrarOpciones(texto) {
+            const items = optionsList.querySelectorAll('.searchable-option');
+            const filtro = texto.toLowerCase();
+            items.forEach(item => {
+                const coincide = item.textContent.toLowerCase().includes(filtro);
+                item.style.display = coincide ? 'block' : 'none';
+            });
+        }
+
+        inputSearch.addEventListener('keyup', (e) => filtrarOpciones(e.target.value));
+
+        trigger.addEventListener('click', (e) => {
+            document.querySelectorAll('.searchable-menu').forEach(m => { if(m !== menu) m.classList.remove('show'); });
+            menu.classList.toggle('show');
+            if(menu.classList.contains('show')) setTimeout(() => inputSearch.focus(), 100);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) menu.classList.remove('show');
+        });
+
+        menu.appendChild(inputSearch);
+        menu.appendChild(optionsList);
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(menu);
+
+        originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
+        originalSelect.style.display = 'none';
+    }
+
+    // INICIALIZACIÓN PARA EL CAMPO DE ROL
+    document.addEventListener("DOMContentLoaded", function() {
+        convertirSelectABuscador('filtro_rol');
+    });
+</script>
+
 @endsection

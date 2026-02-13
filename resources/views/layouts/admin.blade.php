@@ -126,7 +126,62 @@
         @media (min-width: 576px) {
             .app-title-text { display: block; }
         }
-    </style>
+        
+    /* Contenedor relativo para posicionar el dropdown */
+    .searchable-dropdown-wrapper {
+        position: relative;
+    }
+    
+    /* El input que simula ser el select */
+    .searchable-trigger {
+        text-align: left;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    /* La lista desplegable con el buscador */
+    .searchable-menu {
+        display: none; /* Oculto por defecto */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        padding: 0.5rem;
+        margin-top: 0.1rem;
+    }
+
+    .searchable-menu.show {
+        display: block;
+    }
+
+    /* Contenedor de las opciones con scroll */
+    .searchable-options {
+        max-height: 200px;
+        overflow-y: auto;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .searchable-option {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        display: block;
+        color: #212529;
+        text-decoration: none;
+    }
+
+    .searchable-option:hover {
+        background-color: #f8f9fa;
+        color: #1e2125;
+    }
+
+</style>
 
     <title>Sistema de Oficios</title>
 </head>
@@ -527,6 +582,125 @@
                 });
             });
         });
+    </script>
+    <script>
+        /**
+         * Convierte un SELECT normal en un Dropdown con Buscador.
+         * @param {string} idSelect - El ID del select original (ej: 'dependencia_id')
+         */
+        function convertirSelectABuscador(idSelect) {
+            const originalSelect = document.getElementById(idSelect);
+            if (!originalSelect) return;
+
+            // 1. Si ya existe un buscador previo para este select, lo borramos para regenerarlo
+            // (Esto es útil para cuando se actualiza vía AJAX)
+            const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
+            if (wrapperPrevio) {
+                wrapperPrevio.remove();
+                originalSelect.style.display = 'block'; // Reset temporal
+            }
+
+            // 2. Crear la estructura HTML del buscador
+            const wrapper = document.createElement('div');
+            wrapper.className = 'searchable-dropdown-wrapper';
+
+            // Botón que muestra la opción seleccionada
+            const trigger = document.createElement('button');
+            trigger.className = 'form-select searchable-trigger';
+            trigger.type = 'button'; // Importante para no enviar formulario al click
+            // Texto inicial: lo que tenga el select seleccionado o el placeholder
+            const selectedOption = originalSelect.options[originalSelect.selectedIndex];
+            trigger.textContent = selectedOption ? selectedOption.text : 'Seleccione una opción';
+
+            // Menú desplegable
+            const menu = document.createElement('div');
+            menu.className = 'searchable-menu';
+
+            // Input buscador
+            const inputSearch = document.createElement('input');
+            inputSearch.className = 'form-control mb-2';
+            inputSearch.type = 'text';
+            inputSearch.placeholder = 'Buscar...';
+
+            // Lista de opciones container
+            const optionsList = document.createElement('div');
+            optionsList.className = 'searchable-options';
+
+            // 3. Llenar la lista basándonos en el SELECT original
+            function poblarOpciones() {
+                optionsList.innerHTML = ''; // Limpiar
+                Array.from(originalSelect.options).forEach(option => {
+                    // Omitir la opción vacía de "Seleccione..." si no tiene valor
+                    if (option.value === "") return;
+
+                    const item = document.createElement('div');
+                    item.className = 'searchable-option';
+                    item.textContent = option.text;
+                    item.dataset.value = option.value;
+
+                    // Al hacer click en una opción
+                    item.addEventListener('click', () => {
+                        // Actualizar el SELECT original (OCULTO)
+                        originalSelect.value = option.value;
+                        
+                        // Disparar evento 'change' en el select original (CRUCIAL para tu AJAX)
+                        originalSelect.dispatchEvent(new Event('change'));
+
+                        // Actualizar visualmente el botón
+                        trigger.textContent = option.text;
+                        
+                        // Cerrar menú
+                        menu.classList.remove('show');
+                        inputSearch.value = ''; // Reset buscador
+                        filtrarOpciones(''); // Reset filtro
+                    });
+
+                    optionsList.appendChild(item);
+                });
+            }
+            poblarOpciones();
+
+            // 4. Lógica de Filtrado
+            function filtrarOpciones(texto) {
+                const items = optionsList.querySelectorAll('.searchable-option');
+                const filtro = texto.toLowerCase();
+                items.forEach(item => {
+                    const coincide = item.textContent.toLowerCase().includes(filtro);
+                    item.style.display = coincide ? 'block' : 'none';
+                });
+            }
+
+            inputSearch.addEventListener('keyup', (e) => {
+                filtrarOpciones(e.target.value);
+            });
+
+            // 5. Mostrar/Ocultar Menú
+            trigger.addEventListener('click', (e) => {
+                // Cerrar otros menús abiertos si los hubiera
+                document.querySelectorAll('.searchable-menu').forEach(m => {
+                    if(m !== menu) m.classList.remove('show');
+                });
+                menu.classList.toggle('show');
+                if(menu.classList.contains('show')) inputSearch.focus();
+            });
+
+            // Cerrar al hacer click fuera
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
+
+            // 6. Ensamblaje en el DOM
+            menu.appendChild(inputSearch);
+            menu.appendChild(optionsList);
+            wrapper.appendChild(trigger);
+            wrapper.appendChild(menu);
+
+            // Insertar el wrapper después del select y ocultar el select original
+            originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
+            originalSelect.style.display = 'none';
+        }
     </script>
 </body>
 </html>

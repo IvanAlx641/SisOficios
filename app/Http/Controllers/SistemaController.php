@@ -40,7 +40,8 @@ class SistemaController extends Controller
             }
         }
 
-        $sistemas = $query->orderBy('id', 'desc')->paginate(25);
+        $sistemas = $query->orderBy('nombre_sistema', 'asc')->paginate(10);
+
         return view('sistemas.index', compact('sistemas', 'request'));
     }
 

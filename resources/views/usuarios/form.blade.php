@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="card border-0 shadow-sm rounded-3">
+<div class="card border- shadow-sm rounded-3">
     
     <div class="card-header bg-light border-bottom-0 pt-4 px-4 ">
         <div>
@@ -118,19 +118,107 @@
     </div>
 </div>
 
+{{-- 2. SCRIPT INTEGRADO Y ADAPTADO --}}
 <script>
+    // --- LÓGICA DEL BUSCADOR ---
+    function convertirSelectABuscador(idSelect) {
+        const originalSelect = document.getElementById(idSelect);
+        if (!originalSelect) return;
+
+        const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
+        if (wrapperPrevio) wrapperPrevio.remove();
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'searchable-dropdown-wrapper';
+
+        const trigger = document.createElement('button');
+        trigger.className = 'form-select searchable-trigger'; 
+        trigger.type = 'button';
+        
+        const selectedOption = originalSelect.options[originalSelect.selectedIndex];
+        // Si el valor es vacío, mostramos el texto placeholder aunque tenga texto en el option
+        trigger.textContent = (originalSelect.value === "") ? 'Selecciona una unidad administrativa' : selectedOption.text;
+
+        const menu = document.createElement('div');
+        menu.className = 'searchable-menu';
+
+        const inputSearch = document.createElement('input');
+        inputSearch.className = 'form-control mb-2';
+        inputSearch.type = 'text';
+        inputSearch.placeholder = 'Buscar...';
+        inputSearch.onclick = function(e) { e.stopPropagation(); };
+
+        const optionsList = document.createElement('div');
+        optionsList.className = 'searchable-options';
+
+        function poblarOpciones() {
+            optionsList.innerHTML = '';
+            Array.from(originalSelect.options).forEach(option => {
+                // Omitir opciones vacías si quieres, o dejarlas
+                if (option.value === "") return; 
+
+                const item = document.createElement('div');
+                item.className = 'searchable-option';
+                item.textContent = option.text;
+                
+                item.addEventListener('click', () => {
+                    originalSelect.value = option.value;
+                    trigger.textContent = option.text;
+                    menu.classList.remove('show');
+                    inputSearch.value = '';
+                    filtrarOpciones('');
+                    originalSelect.dispatchEvent(new Event('change')); 
+                });
+                optionsList.appendChild(item);
+            });
+        }
+        poblarOpciones();
+
+        function filtrarOpciones(texto) {
+            const items = optionsList.querySelectorAll('.searchable-option');
+            const filtro = texto.toLowerCase();
+            items.forEach(item => {
+                const coincide = item.textContent.toLowerCase().includes(filtro);
+                item.style.display = coincide ? 'block' : 'none';
+            });
+        }
+
+        inputSearch.addEventListener('keyup', (e) => filtrarOpciones(e.target.value));
+
+        trigger.addEventListener('click', (e) => {
+            document.querySelectorAll('.searchable-menu').forEach(m => { if(m !== menu) m.classList.remove('show'); });
+            menu.classList.toggle('show');
+            if(menu.classList.contains('show')) setTimeout(() => inputSearch.focus(), 100);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) menu.classList.remove('show');
+        });
+
+        menu.appendChild(inputSearch);
+        menu.appendChild(optionsList);
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(menu);
+
+        originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
+        originalSelect.style.display = 'none';
+    }
+
+    // --- TU LÓGICA DE NEGOCIO (ADAPTADA) ---
     function toggleDependencia(rol) {
         const divDep = document.getElementById('divDependencia');
         const selectDep = document.getElementById('selectDependencia');
 
         if (rol === 'Administrador TI') {
-            // USAMOS VISIBILITY HIDDEN EN LUGAR DE DISPLAY NONE
-            // Esto oculta la Unidad Administrativa pero mantiene el "hueco"
-            // garantizando que el Switch DEBAJO no se mueva hacia arriba.
+            // Oculta el contenedor (incluyendo nuestro nuevo buscador)
             divDep.style.visibility = 'hidden'; 
-            
             selectDep.required = false;
             selectDep.value = ""; 
+            
+            // NUEVO: Reseteamos también el texto visual del buscador para que no se quede con el nombre anterior
+            const trigger = divDep.querySelector('.searchable-trigger');
+            if(trigger) trigger.textContent = 'Selecciona una unidad administrativa';
+            
         } else {
             divDep.style.visibility = 'visible';
             selectDep.required = true;
@@ -155,11 +243,18 @@
         }
     }
     
+    // INICIALIZACIÓN
     document.addEventListener("DOMContentLoaded", function() {
+        // 1. Primero convertimos el select en buscador
+        convertirSelectABuscador('selectDependencia');
+
+        // 2. Luego aplicamos la lógica del rol (esto ocultará el buscador si es Admin TI)
         const rolSeleccionado = document.querySelector('input[name="rol"]:checked');
         if (rolSeleccionado) {
             toggleDependencia(rolSeleccionado.value);
         }
+
+        // 3. Estatus
         if(document.getElementById('switchEstatus')) {
             toggleEstatus();
         }

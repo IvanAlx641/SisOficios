@@ -69,7 +69,7 @@ class UsuarioController extends Controller
             }
         }
 
-        $usuarios = $query->orderBy('id', 'desc')->paginate(25);
+        $usuarios = $query->orderBy('nombre', 'asc')->paginate(10);
         return view('usuarios.index', compact('usuarios', 'request'));
     }
 
