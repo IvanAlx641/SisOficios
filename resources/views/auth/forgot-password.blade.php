@@ -237,8 +237,7 @@
                         alt="Separador">
 
                     <div class="text-center mb-4">
-                        <h5 class="auth-header-title">¿Olvidaste tu contraseña?</h5>
-                        <p class="text-muted small">Ingresa tu correo y te enviaremos las instrucciones.</p>
+                        <p class="text-muted small">Ingresa tu correo y te enviaremos las instrucciones de recuperacion de contraseña.</p>
                     </div>
 
                     @if (session('status'))

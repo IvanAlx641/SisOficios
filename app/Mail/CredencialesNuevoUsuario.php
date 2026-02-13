@@ -28,7 +28,7 @@ class CredencialesNuevoUsuario extends Mailable
      */
     public function build()
     {
-        return $this->subject('Bienvenido al Sistema - Tus Credenciales de Acceso')
+        return $this->subject('Bienvenido al sistema, Credenciales de acceso')
                     ->view('emails.credenciales'); // Aquí le decimos qué vista usar
     }
 }

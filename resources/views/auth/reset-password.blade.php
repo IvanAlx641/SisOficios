@@ -128,7 +128,7 @@
         }
 
         .form-label-custom {
-            color: var(--guinda);
+            color: gray;
             font-weight: 700;
             font-size: 0.8rem;
             margin-bottom: 5px;
@@ -142,8 +142,8 @@
             font-size: 0.9rem;
         }
 
-        .btn-gold-action {
-            background-color: var(--dorado);
+        .btn-guinda-action {
+            background-color: var(--guinda);
             color: white;
             border-radius: 50px;
             padding: 12px 0;
@@ -197,8 +197,8 @@
                         alt="Pleca">
 
                     <div class="auth-header">
-                        <h4 class="auth-title">Crear Nueva Contraseña</h4>
-                        <p class="text-muted small">Introduce tus nuevas credenciales de acceso</p>
+                        <h4 class="auth-title">Restablecer contraseña</h4>
+                        <p class="text-muted small">Introduce tu nueva contraseña</p>
                     </div>
 
                     <form method="POST" action="{{ route('password.update') }}">
@@ -206,7 +206,7 @@
                         <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
                         <div class="mb-3">
-                            <label class="form-label-custom">CORREO ELECTRÓNICO</label>
+                            <label class="form-label-custom">Correo</label>
                             <input type="email" name="email" value="{{ old('email', request()->email) }}"
                                 class="form-control @error('email') is-invalid @enderror" readonly>
                             @error('email')
@@ -215,7 +215,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label-custom">NUEVA CONTRASEÑA</label>
+                            <label class="form-label-custom">Nueva contraseña</label>
                             <input type="password" name="password"
                                 class="form-control @error('password') is-invalid @enderror" autofocus>
                             @error('password')
@@ -224,12 +224,12 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label-custom">CONFIRMAR CONTRASEÑA</label>
+                            <label class="form-label-custom">Confirmar contraseña</label>
                             <input type="password" name="password_confirmation" class="form-control">
                         </div>
 
-                        <button type="submit" class="btn-gold-action">
-                            Restablecer Contraseña
+                        <button type="submit" class="btn-guinda-action">
+                            Restablecer contraseña
                         </button>
                     </form>
                 </div>

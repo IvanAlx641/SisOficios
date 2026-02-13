@@ -67,11 +67,11 @@
             font-size: 0.8rem; padding: 10px; border-radius: 4px; margin-bottom: 1.5rem;
         }
 
-        .form-label-custom { color: var(--guinda); font-weight: 700; font-size: 0.8rem; margin-bottom: 5px; display: block; }
+        .form-label-custom { color: gray; font-weight: 700; font-size: 0.8rem; margin-bottom: 5px; display: block; }
         .form-control { border-radius: 12px; padding: 12px; border: 1px solid #e0e0e0; }
         
-        .btn-gold-action {
-            background-color: var(--dorado); color: white; border-radius: 50px; padding: 12px 0;
+        .btn-guinda-action {
+            background-color: var(--guinda); color: white; border-radius: 50px; padding: 12px 0;
             font-weight: 700; width: 100%; border: none; margin-top: 10px; transition: 0.3s;
         }
         .btn-gold-action:hover { background-color: var(--dorado-oscuro); color: white; transform: translateY(-1px); }
@@ -100,8 +100,7 @@
                 <img src="{{ asset('materialpro/assets/images/morenaicons/pleca.png') }}" class="img-pleca" alt="Pleca">
 
                 <div class="auth-header">
-                    <h4 class="auth-title">Bienvenido</h4>
-                    <p class="text-muted small">Configuración Inicial de Seguridad</p>
+                    <p class="text-muted small">Configuración inicial</p>
                 </div>
 
                 <div class="alert alert-mini">
@@ -111,25 +110,18 @@
                 <form action="{{ route('password.update_initial') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label class="form-label-custom">NUEVA CONTRASEÑA</label>
+                        <label class="form-label-custom">Nueva contraseña</label>
                         <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Escribe tu nueva contraseña" required autofocus>
                         @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label-custom">CONFIRMAR CONTRASEÑA</label>
+                        <label class="form-label-custom">Confirmar contraseña</label>
                         <input type="password" name="password_confirmation" class="form-control" placeholder="Repite la contraseña" required>
                     </div>
 
-                    <button type="submit" class="btn-gold-action">Guardar y Acceder</button>
+                    <button type="submit" class="btn-guinda-action">Guardar</button>
                 </form>
-
-                <div class="text-center mt-4">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn-cancel">Cancelar y Cerrar Sesión</button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

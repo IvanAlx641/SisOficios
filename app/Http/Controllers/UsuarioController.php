@@ -143,15 +143,22 @@ class UsuarioController extends Controller
 
         if ($usuario->email_verified_at != null) {
             $token = Password::createToken($usuario);
-            Mail::to($usuario->email)->send(new RecuperarContrasena($token, $usuario->email));
+            
+            // --- CORRECCIÓN AQUÍ ---
+            // Agregamos $usuario como primer parámetro
+            Mail::to($usuario->email)->send(new RecuperarContrasena($usuario, $token, $usuario->email));
+            
             return redirect()->route('usuario.index')->with('success', 'Enlace de recuperación enviado.');
         } else {
+            // Esta parte estaba bien, pero revisa si CredencialesNuevoUsuario también pide el objeto usuario
             $passwordTemporal = Str::random(9);
             $usuario->update([
                 'password' => Hash::make($passwordTemporal),
                 'usuario_modificacion_id' => auth()->id()
             ]); 
+            
             Mail::to($usuario->email)->send(new CredencialesNuevoUsuario($usuario, $passwordTemporal));
+            
             return redirect()->route('usuario.index')->with('success', 'Credenciales temporales enviadas.');
         }
     }

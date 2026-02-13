@@ -8,7 +8,7 @@
         
         /* Encabezado Guinda */
         .header { background-color: #9D2449; padding: 30px 20px; text-align: center; }
-        .header h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: normal; text-transform: uppercase; letter-spacing: 1px; }
+        .header h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: normal; letter-spacing: 1px; }
         
         /* Contenido */
         .content { padding: 40px 30px; color: #333333; line-height: 1.6; }
@@ -48,14 +48,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Secretaría de la Contraloría</h1>
+            <h1>Inicio de sesión</h1>
         </div>
 
         <div class="content">
             <div class="greeting">Hola, {{ $usuario->nombre }}</div>
             
-            <p>Bienvenido al <strong>Sistema de Control de Oficios</strong>. Tu cuenta ha sido creada exitosamente por el administrador.</p>
-            <p>A continuación, encontrarás tus credenciales temporales para ingresar:</p>
+            <p>Bienvenido al <strong>Sistema de Control de Oficios</strong>. Tu cuenta ha sido creada</p>
+            <p>Estas son tus credenciales temporales para ingresar:</p>
             
             <div class="credentials-box">
                 <p><span class="label">Correo Electrónico:</span><br>
