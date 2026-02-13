@@ -7,7 +7,7 @@
 
         {{-- 2. AJUSTE HTML: Quité 'overflow-hidden' de esta clase para que el menú se vea --}}
         <div class="card w-100 position-relative border-0 shadow-sm">
-            <div class="card-body px-4 py-3 bg-light">
+            <div class="card-body pt-2 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-9">
                         <h4 class="fw-bold mb-0 text-guinda">Gestión de usuarios</h4>
