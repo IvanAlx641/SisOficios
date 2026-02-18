@@ -94,10 +94,10 @@
                                         <div class="d-flex align-items-center">
                                             <span
                                                 class="status-dot {{ $sistema->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}"></span>
-                                            <a href="{{ route('sistema.edit', $sistema->id) }}"
-                                                class="fs-4 fw-bold mb-0 name-link">
+                                            <a href="{{ route('sistema.edit', $sistema->id) }}" class="fw-bold mb-1 fs-3 link-oficio-gris">
                                                 {{ $sistema->nombre_sistema }}
                                             </a>
+
                                         </div>
                                     </td>
                                     <td class="text-center">

@@ -99,7 +99,7 @@
                                                 title="{{ $tipo->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
                                             </span>
                                             <a href="{{ route('tiporequerimiento.edit', $tipo->id) }}"
-                                                class="fs-4 fw-bold mb-0 name-link">
+                                                class="fw-bold mb-1 fs-3 link-oficio-gris">
                                                 {{ $tipo->tipo_requerimiento }}
                                             </a>
                                         </div>

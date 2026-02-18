@@ -136,7 +136,7 @@
                                             </span>
 
                                             <a href="{{ route('usuario.edit', $usuario->id) }}"
-                                                class="fs-4 fw-bold mb-0 name-link">
+                                                class="fw-bold mb-1 fs-3 link-oficio-gris">
                                                 {{ $usuario->nombre }}
                                             </a>
                                         </div>

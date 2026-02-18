@@ -295,3 +295,24 @@
 /* Helpers */
 .moon, .sun, .lang-flag { display: none !important; }
 .bg-morena-primary { background-color: var(--guinda-color) !important; }
+
+/* --- ESTILOS PARA EL LINK DEL OFICIO (GRIS -> GUINDA) --- */
+    .link-oficio-gris {
+        color: #727a82 !important; /* Gris oscuro */
+        text-decoration: none !important;
+        transition: color 0.3s ease;
+    }
+    .link-oficio-gris:hover {
+        color: #9D2449 !important; /* Guinda */
+        text-decoration: underline !important;
+    }
+
+    /* Estilos generales */
+    .text-guinda2 { color: #9D2449; }
+    .searchable-dropdown-wrapper { position: relative; }
+    .searchable-menu { 
+        display: none; position: absolute; top: 100%; left: 0; right: 0; 
+        background: white; border: 1px solid #dee2e6; border-radius: 0.375rem; 
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); padding: 0.5rem; 
+    }
+    .searchable-menu.show { display: block; }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-// use Illuminate\Database\Eloquent\Relations\HasMany; // Descomentar cuando exista SolicitanteOficio
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Solicitante extends Model
 {
@@ -32,6 +32,11 @@ class Solicitante extends Model
     ];
 
     // --- RELACIONES ACTIVAS (Modelos que YA existen) ---
+    public function oficios(): BelongsToMany
+    {
+        // Relación muchos a muchos con la tabla pivote
+        return $this->belongsToMany(Oficio::class, 'solicitantes_oficios', 'solicitante_id', 'oficio_id');
+    }
 
     public function dependencia(): BelongsTo
     {
@@ -72,4 +77,5 @@ class Solicitante extends Model
             ->prepend('Selecciona un solicitante', '')
             ->toArray();
     }
+    
 }

@@ -107,7 +107,7 @@
                                     <span class="status-dot {{ $solicitante->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}" 
                                         title="{{ $solicitante->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
                                     </span>
-                                    <a href="{{ route('solicitante.edit', $solicitante->id) }}" class="fw-bold mb-0 name-link">
+                                    <a href="{{ route('solicitante.edit', $solicitante->id) }}" class="fw-bold mb-1 fs-3 link-oficio-gris">
                                         {{ $solicitante->nombre }}
                                     </a>
                                 </div>

@@ -130,14 +130,14 @@ class SolicitanteController extends Controller
 
     public function destroy(Solicitante $solicitante): RedirectResponse
     {
-        // Validacion comentada (Esperando módulo de Oficios)
-        /*
-        if ($solicitante->solicitantesOficios()->count() > 0) {
+        // 1. VALIDACIÓN DE INTEGRIDAD
+        // Si el solicitante tiene oficios vinculados, NO se elimina.
+        if ($solicitante->oficios()->exists()) {
             return redirect()->route('solicitante.index')
-                ->with('error', 'El registro tiene información vinculada y no puede ser eliminado.');
+                ->with('error', 'El solicitante tiene oficios asignados.');
         }
-        */
 
+        // 2. Si está limpio, procedemos
         $solicitante->delete();
 
         return redirect()->route('solicitante.index')
@@ -154,4 +154,5 @@ class SolicitanteController extends Controller
 
         return response()->json($unidades);
     }
+    
 }

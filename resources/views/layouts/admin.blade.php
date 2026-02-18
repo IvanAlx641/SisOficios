@@ -272,7 +272,7 @@
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('oficio.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-plus"></i>
                                         <span class="hide-menu">Registro</span>
                                     </a>
@@ -462,7 +462,7 @@
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('oficio.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-plus"></i>
                                             <span class="hide-menu">Registro</span>
                                         </a>
