@@ -5,7 +5,7 @@
 <div class="card border-0 shadow-sm rounded-3">
     
     <div class="card-header bg-white border-bottom-0 pt-4 px-4">
-        <h4 class="fw-bold text-guinda mb-3">Editar Oficio: {{ $oficio->numero_oficio }}</h4>
+        <h4 class="fw-bold text-guinda mb-3">Oficio: {{ $oficio->numero_oficio }}</h4>
 
         <ul class="nav nav-tabs border-bottom-0">
             <li class="nav-item">
