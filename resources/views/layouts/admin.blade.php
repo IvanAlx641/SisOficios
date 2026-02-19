@@ -278,7 +278,7 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('turno.index') }}" class="sidebar-link">
                                         <i class="ti ti-tournament"></i>
                                         <span class="hide-menu">Turno</span>
                                     </a>
@@ -468,7 +468,7 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('turno.index') }}" class="sidebar-link">
                                             <i class="ti ti-tournament"></i>
                                             <span class="hide-menu">Turno</span>
                                         </a>

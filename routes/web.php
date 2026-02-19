@@ -10,6 +10,8 @@ use App\Http\Controllers\SistemaController;
 // --- IMPORTAMOS LOS CONTROLADORES DE OFICIOS ---
 use App\Http\Controllers\OficioController;
 use App\Http\Controllers\OficioSolicitanteController;
+use App\Http\Controllers\TurnoController;
+use App\Http\Controllers\ResponsableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,14 +62,23 @@ Route::middleware(['auth'])->group(function () {
         // --- MÓDULO OFICIOS (REGISTRO) ---
         // 1. Oficios Principal (CRUD)
         Route::resource('oficio', OficioController::class)
-            ->parameters(['oficio' => 'oficio']); // Asegura que la variable en la ruta sea {oficio}
+            ->parameters(['oficio' => 'oficio']);
 
         // 2. Sub-módulo Solicitantes del Oficio
-        // Como tu controlador usa session('oficio_id'), las rutas no necesitan pasar el ID en la URL
         Route::get('oficiosolicitante', [OficioSolicitanteController::class, 'index'])->name('oficiosolicitante.index');
         Route::post('oficiosolicitante', [OficioSolicitanteController::class, 'store'])->name('oficiosolicitante.store');
-        // Para eliminar si necesitamos el ID del solicitante específico
         Route::delete('oficiosolicitante/{id}', [OficioSolicitanteController::class, 'destroy'])->name('oficiosolicitante.destroy');
+
+        // --- MÓDULO TURNOS ---
+        Route::resource('turno', TurnoController::class)
+            ->parameters(['turno' => 'turno'])
+            ->names('turno')
+            ->only(['index', 'edit', 'update']);
+
+        // --- SUB-MÓDULO RESPONSABLES ---
+        Route::resource('responsable', ResponsableController::class)
+            ->parameters(['responsable' => 'responsable'])
+            ->names('responsable');
 
     });
 });

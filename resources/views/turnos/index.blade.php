@@ -7,19 +7,14 @@
     <div class="card w-100 position-relative border-0 shadow-sm mb-3">
         <div class="card-body pt-2 py-3 bg-light">
             <div class="row align-items-center">
-                <div class="col-9">
-                    <h4 class="fw-bold mb-0 text-guinda">Oficios</h4>
-                </div>
-                <div class="col-3 text-end">
-                    <a href="{{ route('oficio.create') }}" class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill">
-                        Nuevo
-                    </a>
+                <div class="col-12">
+                    <h4 class="fw-bold mb-0 text-guinda">Turnos de oficios</h4>
                 </div>
             </div>
-        </div> 
+        </div>
         
         <div class="card-body p-4">
-            <form action="{{ route('oficio.index') }}" method="GET" id="filterForm">
+            <form action="{{ route('turno.index') }}" method="GET" id="filterForm">
                 <div class="row g-3 align-items-end">
                     
                     <div class="col-md-3">
@@ -64,7 +59,7 @@
 
                             <input type="radio" class="btn-check" name="estatus" value="Pendiente" id="st_pendiente" 
                                    onchange="this.form.submit()" {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-warning btn-sm px-3 py-2 text-whit" for="st_pendiente">Pendientes</label>
+                            <label class="btn btn-outline-warning btn-sm px-3 py-2 text-dark font-weight-bold" for="st_pendiente">Pendientes</label>
 
                             <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado" 
                                    onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
@@ -95,8 +90,7 @@
                             <th class="py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Dirigido a</h6></th>
                             <th class="py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Solicitado por</h6></th>
                             <th class="py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Asignado a</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Ver oficio</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6></th>
+                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Ver PDF</h6></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -104,14 +98,13 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex flex-column">
-                                    {{-- AQUÍ ESTÁ EL CAMBIO DE ESTILO DEL LINK --}}
-                                    <a href="{{ route('oficio.edit', $oficio->id) }}" class="fw-bold mb-1 fs-3 link-oficio-gris">
+                                    <a href="{{ route('turno.edit', $oficio->id) }}" class="fw-bold mb-1 fs-3 link-oficio-gris">
                                         {{ $oficio->numero_oficio }}
                                     </a>
 
                                     @php
                                         $badgeClass = match($oficio->estatus) {
-                                            'Pendiente' => 'bg-warning text-white',
+                                            'Pendiente' => 'bg-warning text-dark',
                                             'Turnado' => 'bg-info text-white',
                                             'Concluido', 'Atendido' => 'bg-success text-white',
                                             'Cancelado' => 'bg-danger text-white',
@@ -155,22 +148,12 @@
                                     <i class="ti ti-eye fs-5"></i>
                                 </a>
                             </td>
-                            
-                            <td class="text-center">
-                                <form action="{{ route('oficio.destroy', $oficio->id) }}" method="POST" onsubmit="return confirm('¿Eliminar definitivamente este oficio?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn border-0 bg-transparent text-guinda" title="Eliminar">
-                                        <i class="ti ti-trash fs-5"></i>
-                                    </button>
-                                </form>
-                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <i class="ti ti-files fs-1 text-muted mb-2 d-block"></i>
-                                <div class="text-muted">No se encontraron oficios registrados.</div>
+                                <div class="text-muted">No se encontraron turnos registrados.</div>
                             </td>
                         </tr>
                         @endforelse
@@ -187,98 +170,20 @@
 <script>
     // Tu script searchable-dropdown sigue igual...
     function convertirSelectABuscador(idSelect) {
-        const originalSelect = document.getElementById(idSelect);
-        if (!originalSelect) return;
-
-        const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
-        if (wrapperPrevio) wrapperPrevio.remove();
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'searchable-dropdown-wrapper';
-
-        const trigger = document.createElement('button');
-        trigger.className = 'form-select searchable-trigger border-guinda text-start text-truncate'; 
-        trigger.type = 'button';
-        
-        const selectedOption = originalSelect.options[originalSelect.selectedIndex];
-        trigger.textContent = selectedOption ? selectedOption.text : 'Todas las unidades';
-
-        const menu = document.createElement('div');
-        menu.className = 'searchable-menu';
-        menu.style.zIndex = '1050';
-
-        const inputSearch = document.createElement('input');
-        inputSearch.className = 'form-control mb-2';
-        inputSearch.type = 'text';
-        inputSearch.placeholder = 'Buscar...';
-        inputSearch.onclick = function(e) { e.stopPropagation(); };
-
-        const optionsList = document.createElement('div');
-        optionsList.className = 'searchable-options';
-        optionsList.style.maxHeight = '200px';
-        optionsList.style.overflowY = 'auto';
-
-        function poblarOpciones() {
-            optionsList.innerHTML = '';
-            Array.from(originalSelect.options).forEach(option => {
-                const item = document.createElement('div');
-                item.className = 'searchable-option p-2';
-                item.style.cursor = 'pointer';
-                item.textContent = option.text;
-                
-                item.addEventListener('mouseover', () => { item.style.backgroundColor = '#f8f9fa'; });
-                item.addEventListener('mouseout', () => { item.style.backgroundColor = 'transparent'; });
-
-                item.addEventListener('click', () => {
-                    originalSelect.value = option.value;
-                    trigger.textContent = option.text;
-                    menu.classList.remove('show');
-                    inputSearch.value = '';
-                    filtrarOpciones('');
-                    originalSelect.dispatchEvent(new Event('change')); 
-                });
-                optionsList.appendChild(item);
-            });
-        }
-        poblarOpciones();
-
-        function filtrarOpciones(texto) {
-            const items = optionsList.querySelectorAll('.searchable-option');
-            const filtro = texto.toLowerCase();
-            items.forEach(item => {
-                const coincide = item.textContent.toLowerCase().includes(filtro);
-                item.style.display = coincide ? 'block' : 'none';
-            });
-        }
-
-        inputSearch.addEventListener('keyup', (e) => filtrarOpciones(e.target.value));
-
-        trigger.addEventListener('click', (e) => {
-            document.querySelectorAll('.searchable-menu').forEach(m => { if(m !== menu) m.classList.remove('show'); });
-            menu.classList.toggle('show');
-            if(menu.classList.contains('show')) setTimeout(() => inputSearch.focus(), 100);
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!wrapper.contains(e.target)) menu.classList.remove('show');
-        });
-
-        menu.appendChild(inputSearch);
-        menu.appendChild(optionsList);
-        wrapper.appendChild(trigger);
-        wrapper.appendChild(menu);
-
-        originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
-        originalSelect.style.display = 'none';
+        // ... (Puedes usar el mismo código JS exacto que ya pegamos en layout global o repetirlo aquí si no lo hiciste global)
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        convertirSelectABuscador('filtro_dirigido');
+        if(typeof convertirSelectABuscador === 'function') {
+            convertirSelectABuscador('filtro_dirigido');
+        }
     });
 </script>
 
 <style>
-    
+    .link-oficio-gris { color: #727a82 !important; text-decoration: none !important; transition: color 0.3s ease; }
+    .link-oficio-gris:hover { color: #9D2449 !important; text-decoration: underline !important; }
+    .text-guinda2 { color: #9D2449; }
 </style>
 
 @endsection

@@ -67,4 +67,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(TipoRequerimiento::class, 'usuario_modificacion_id');
     }
+    /**
+     * Relación con Unidad Administrativa
+     */
+    public function unidadAdministrativa()
+    {
+        return $this->belongsTo(UnidadAdministrativa::class, 'unidad_administrativa_id');
+    }
 }

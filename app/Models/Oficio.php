@@ -52,4 +52,14 @@ class Oficio extends Model
         return $this->belongsToMany(Solicitante::class, 'solicitantes_oficios', 'oficio_id', 'solicitante_id')
                     ->withPivot('id'); // Importante para el delete específico
     }
+    // --- NUEVAS RELACIONES FALTANTES ---
+    public function sistema()
+    {
+        return $this->belongsTo(Sistema::class, 'sistema_id');
+    }
+
+    public function tipoRequerimiento()
+    {
+        return $this->belongsTo(TipoRequerimiento::class, 'tipo_requerimiento_id');
+    }
 }
