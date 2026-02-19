@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="col-md-12 mt-4">
-                            <label class="form-label fw-bold text-secondary">Cambiar al estatus: <span
+                            <label class="form-label fw-bold text-guinda2">Cambiar al estatus: <span
                                     class="text-danger">*</span></label>
                             <div class="mt-1 mb-3">
 
