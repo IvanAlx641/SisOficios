@@ -86,10 +86,11 @@
                     @csrf
                     @method('PUT')
 
-                    <div >
+                    <div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-guinda2">Sistema <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold text-guinda2">Sistema <span
+                                    class="text-danger">*</span></label>
                             <select name="sistema_id" id="sistema_id"
                                 class="form-select border-guinda @error('sistema_id') is-invalid @enderror" required>
                                 <option value="0">Seleccione un sistema...</option>
@@ -109,7 +110,8 @@
                             <label class="form-label fw-bold text-guinda2">Tipo de requerimiento <span
                                     class="text-danger">*</span></label>
                             <select name="tipo_requerimiento_id" id="tipo_requerimiento_id"
-                                class="form-select border-guinda @error('tipo_requerimiento_id') is-invalid @enderror" required>
+                                class="form-select border-guinda @error('tipo_requerimiento_id') is-invalid @enderror"
+                                required>
                                 <option value="0">Seleccione un tipo...</option>
                                 @foreach ($tiposRequerimientos as $id => $nombre)
                                     <option value="{{ $id }}"
@@ -124,26 +126,33 @@
                         </div>
 
                         <div class="col-md-12 mt-4">
-                            <label class="form-label fw-bold text-guinda2 d-block">Cambiar al estatus: <span
+                            <label class="form-label fw-bold text-secondary">Cambiar al estatus: <span
                                     class="text-danger">*</span></label>
+                            <div class="mt-1 mb-3">
 
-                            <div class="d-flex flex-wrap gap-2">
-                                <input type="radio" class="btn-check" name="estatus" value="Turnado" id="estatus_turnado"
-                                    {{ old('estatus', $oficio->estatus) == 'Turnado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-info px-4 rounded-pill fw-semibold"
-                                    for="estatus_turnado">Turnado</label>
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="estatus" value="Turnado"
+                                        id="estatus_turnado"
+                                        {{ old('estatus', $oficio->estatus) == 'Turnado' ? 'checked' : '' }} required>
+                                    <label class="btn btn-outline-info px-4" for="estatus_turnado">Turnado</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="estatus_cancelado"
-                                    {{ old('estatus', $oficio->estatus) == 'Cancelado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-danger px-4 rounded-pill fw-semibold"
-                                    for="estatus_cancelado">Cancelado</label>
+                                    <input type="radio" class="btn-check" name="estatus" value="Cancelado"
+                                        id="estatus_cancelado"
+                                        {{ old('estatus', $oficio->estatus) == 'Cancelado' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-danger px-4" for="estatus_cancelado">Cancelado</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Atendido" id="estatus_atendido"
-                                    {{ old('estatus', $oficio->estatus) == 'Atendido' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-success px-4 rounded-pill fw-semibold"
-                                    for="estatus_atendido">Atendido</label>
+                                    <input type="radio" class="btn-check" name="estatus" value="Atendido"
+                                        id="estatus_atendido"
+                                        {{ old('estatus', $oficio->estatus) == 'Atendido' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-success px-4" for="estatus_atendido">Atendido</label>
+                                </div>
+
+                                @error('estatus')
+                                    <span class="text-danger ms-2 align-middle"
+                                        style="font-size: 0.875em;">{{ $message }}</span>
+                                @enderror
+
                             </div>
-
                             @error('estatus')
                                 <div class="invalid-feedback d-block mt-2 fw-semibold">{{ $message }}</div>
                             @enderror
