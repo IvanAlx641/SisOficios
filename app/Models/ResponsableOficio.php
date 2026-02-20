@@ -32,4 +32,10 @@ class ResponsableOficio extends Model
     {
         return $this->belongsTo(User::class, 'responsable_id');
     }
+    // --- NUEVA RELACIÓN PARA EL TIMELINE ---
+    public function seguimientos()
+    {
+        // Un responsable en un oficio puede registrar muchos avances/seguimientos
+        return $this->hasMany(Seguimiento::class, 'responsable_oficio_id')->orderBy('fecha_seguimiento', 'desc');
+    }
 }

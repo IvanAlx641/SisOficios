@@ -67,7 +67,7 @@
 
                             <input type="radio" class="btn-check" name="estatus" value="Concluido" id="st_concluido" 
                                    onchange="this.form.submit()" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-success btn-sm px-3 py-2" for="st_concluido">Atendidos</label>
+                            <label class="btn btn-outline-success btn-sm px-3 py-2" for="st_concluido">Concluidos</label>
 
                             <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado" 
                                    onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
@@ -118,7 +118,7 @@
                             </td>
                             
                             <td>
-                                <div class="text-dark fs-5">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</div>
+                                <div class="text-center text-muted small">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</div>
                             </td>
 
                             <td>

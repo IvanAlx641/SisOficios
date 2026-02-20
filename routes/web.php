@@ -12,6 +12,7 @@ use App\Http\Controllers\OficioController;
 use App\Http\Controllers\OficioSolicitanteController;
 use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\ResponsableController;
+use App\Http\Controllers\SeguimientoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,5 +81,14 @@ Route::middleware(['auth'])->group(function () {
             ->parameters(['responsable' => 'responsable'])
             ->names('responsable');
 
+            // --- MÓDULO SEGUIMIENTO (TIMELINE Y CONCLUSIÓN) ---
+        // 1. Index principal
+        Route::get('seguimiento', [SeguimientoController::class, 'index'])->name('seguimiento.index');
+        
+        // 2. Guardar nuevo avance en el timeline (Recibe el ID del responsable_oficio)
+        Route::post('seguimiento/{responsableOficioId}/avance', [SeguimientoController::class, 'storeAvance'])->name('seguimiento.avance.store');
+        
+        // 3. Concluir el Oficio
+        Route::post('seguimiento/{oficio}/concluir', [SeguimientoController::class, 'concluir'])->name('seguimiento.concluir');
     });
 });
