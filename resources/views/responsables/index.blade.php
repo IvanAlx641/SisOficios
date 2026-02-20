@@ -91,7 +91,7 @@
 
             <div class="d-flex justify-content-end mb-4">
                 <button class="btn btn-guinda rounded-pill px-4 shadow-sm" data-bs-toggle="modal"
-                    data-bs-target="#modalresponsable" onclick="abrirModalCrear()"style="text-transform: none;">
+                    data-bs-target="#modalResponsable" onclick="abrirModalCrear()"style="text-transform: none;">
                     Agregar responsable
                 </button>
             </div>

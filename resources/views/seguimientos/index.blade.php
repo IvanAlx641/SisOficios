@@ -123,7 +123,7 @@
                                 @endif
                             </td>
 
-                            <td class="text-center text-muted small">{{ optional($oficio->fecha_turno)->format('d/m/Y') ?? '-' }}</td>
+                            <td class="text-center text-muted small">{{ !empty($oficio->fecha_turno) ? \Carbon\Carbon::parse($oficio->fecha_turno)->format('d/m/Y') : 'Pendiente' }}</td>
                             <td class="text-center text-muted small">{{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</td>
                             <td class="small text-muted">{{ $oficio->tipoRequerimiento->nombre ?? 'Cambios menores' }}</td>
                             

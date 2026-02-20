@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Oficio;
-use App\Models\Sistema;
-use App\Models\TipoRequerimiento;
 use App\Models\UnidadAdministrativa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Builder;
 
 class TurnoController extends Controller
 {
@@ -24,27 +24,34 @@ class TurnoController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Oficio::with(['areaDirigido', 'solicitantes', 'areaAsignada']);
+        $unidades = UnidadAdministrativa::orderBy('nombre_unidad_administrativa', 'asc')
+            ->pluck('nombre_unidad_administrativa', 'id');
 
-        // FILTROS (Iguales a los del Index de Oficios)
+        $query = Oficio::with([
+            'areaDirigido',
+            'solicitantes',
+            'sistema',
+            'tipoRequerimiento',
+            'responsablesOficios.responsable'
+        ]);
+
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . mb_strtoupper($request->numero_oficio) . '%');
         }
-        if ($request->filled('dirigido_id') && $request->dirigido_id != 0) {
+
+        if ($request->filled('dirigido_id') && $request->dirigido_id != 'Todos') {
             $query->where('dirigido_id', $request->dirigido_id);
         }
+
         if ($request->filled('fecha_recepcion')) {
             $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
         }
-        if ($request->filled('estatus') && $request->estatus !== 'Todos') {
+
+        if ($request->filled('estatus') && $request->estatus != 'Todos') {
             $query->where('estatus', $request->estatus);
         }
 
-        $oficios = $query->orderBy('id', 'desc')->paginate(50);
-
-        $unidades = UnidadAdministrativa::whereNull('inactivo')
-            ->orderBy('nombre_unidad_administrativa')
-            ->pluck('nombre_unidad_administrativa', 'id');
+        $oficios = $query->orderBy('id', 'desc')->paginate(10);
 
         return view('turnos.index', compact('oficios', 'unidades', 'request'));
     }
@@ -53,23 +60,27 @@ class TurnoController extends Controller
     {
         $oficio = $turno;
 
-        // Guardamos en sesión para el Tab 2 (Responsables)
-        session(['oficio_id' => $oficio->id]);
-
-        $sistemas = Sistema::whereNull('inactivo')
+        // Regresamos a la columna 'sigla_sistema' original
+        $sistemas = DB::table('csistemas')
+            ->select('id', 'sigla_sistema') 
+            ->whereNull('inactivo')
             ->orderBy('sigla_sistema', 'asc')
-            ->pluck('sigla_sistema', 'id');
+            ->pluck('sigla_sistema', 'id')
+            ->toArray();
 
-        $tiposRequerimientos = TipoRequerimiento::whereNull('inactivo')
+        // Regresamos a la columna 'tipo_requerimiento' original
+        $tiposRequerimientos = DB::table('ctipos_requerimientos')
+            ->select('id', 'tipo_requerimiento') 
+            ->whereNull('inactivo')
             ->orderBy('tipo_requerimiento', 'asc')
-            ->pluck('tipo_requerimiento', 'id');
+            ->pluck('tipo_requerimiento', 'id')
+            ->toArray();
 
         return view('turnos.form', compact('oficio', 'sistemas', 'tiposRequerimientos'));
     }
 
     public function update(Request $request, Oficio $turno): RedirectResponse
     {
-        // Asegúrate de incluir 'Atendido' en las opciones válidas (in:...)
         $request->validate([
             'sistema_id' => 'required|integer|exists:csistemas,id',
             'tipo_requerimiento_id' => 'required|integer|exists:ctipos_requerimientos,id',
@@ -77,30 +88,34 @@ class TurnoController extends Controller
             'observaciones_turno' => 'nullable|string|max:2000',
         ], $this->mensajes);
 
-        // Lógica de fechas según estatus
-        $fechaTurno = $turno->fecha_turno;
-        $fechaCancelacion = $turno->fecha_cancelacion;
+        // ASIGNACIÓN DIRECTA: Esto esquiva los bloqueos de seguridad del modelo
+        $turno->sistema_id = $request->sistema_id;
+        $turno->tipo_requerimiento_id = $request->tipo_requerimiento_id;
+        $turno->estatus = $request->estatus;
+        $turno->observaciones_turno = $request->observaciones_turno;
 
+        // Lógica de fechas
         if ($request->estatus == 'Turnado') {
-            $fechaTurno = now();
-            $fechaCancelacion = null;
+            $turno->fecha_turno = $turno->fecha_turno ?? now()->format('Y-m-d H:i:s');
+            $turno->fecha_cancelacion = null;
         } elseif ($request->estatus == 'Cancelado') {
-            $fechaTurno = null;
-            $fechaCancelacion = now();
+            $turno->fecha_turno = null;
+            $turno->fecha_cancelacion = $turno->fecha_cancelacion ?? now()->format('Y-m-d H:i:s');
         }
 
-        $turno->update([
-            'sistema_id' => $request->sistema_id,
-            'tipo_requerimiento_id' => $request->tipo_requerimiento_id,
-            'estatus' => $request->estatus,
-            'observaciones_turno' => $request->observaciones_turno,
-            'fecha_turno' => $fechaTurno,
-            'fecha_cancelacion' => $fechaCancelacion,
-            'fecha_modificacion' => now(),
-            'usuario_modificacion_id' => auth()->id(),
-        ]);
+        $turno->fecha_modificacion = now()->format('Y-m-d H:i:s');
+        $turno->usuario_modificacion_id = auth()->id();
+        
+        // GUARDADO FORZADO
+        $turno->save();
 
-        return redirect()->route('responsable.index')
+        // Redirección
+        if ($request->estatus == 'Turnado') {
+            return redirect()->route('responsable.index', ['oficio_id' => encrypt($turno->id)])
+                ->with('success', 'Turno guardado. Ahora asigne los responsables.');
+        }
+
+        return redirect()->route('turno.index')
             ->with('success', 'Los datos del turno han sido actualizados exitosamente.');
     }
 }

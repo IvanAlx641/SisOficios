@@ -8,97 +8,66 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ResponsableController extends Controller
 {
-    public function index(Request $request): View|RedirectResponse
+    public function index(Request $request): View
     {
-        // 1. Obtener y validar Oficio de la Sesión
-        // El controlador anterior permitía recibir por request o por sesión
         if ($request->has('oficio_id')) {
-            // Asumo que el desencriptado es necesario si vienes de un link antiguo,
-            // pero si mantienes el estándar, puedes pasar solo el ID.
-            try {
-                $oficio_id = decrypt($request->oficio_id);
-            } catch (\Exception $e) {
-                $oficio_id = $request->oficio_id; // Fallback por si no viene encriptado
-            }
-            session(['oficio_id' => $oficio_id]);
+            session(['oficio_id' => decrypt($request->oficio_id)]);
         }
 
         $oficioId = session('oficio_id');
-        if (!$oficioId) {
-            return redirect()->route('turno.index')->withErrors('Oficio no seleccionado.');
-        }
 
-        $oficio = Oficio::with(['areaDirigido', 'solicitantes', 'areaAsignada', 'sistema', 'tipoRequerimiento'])
+        $oficio = Oficio::with(['areaDirigido', 'solicitantes', 'sistema', 'tipoRequerimiento'])
             ->findOrFail($oficioId);
 
-        // 2. Cargar Responsables Asignados
-        $responsablesOficios = ResponsableOficio::with(['responsable.unidadAdministrativa'])
+        // Obtenemos los responsables activos
+        $responsablesQuery = User::select('id', 'nombre')
+            ->whereNull('inactivo')
+            ->where('rol', 'Responsable'); 
+            
+        if (auth()->user()->rol == 'Titular') {
+            $responsablesQuery->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id);
+        }
+
+        $responsables = $responsablesQuery->orderBy('nombre', 'asc')
+            ->pluck('nombre', 'id')
+            ->toArray();
+
+        $responsablesOficios = ResponsableOficio::with('responsable.unidadAdministrativa')
             ->where('oficio_id', $oficioId)
             ->get();
 
-        // 3. Catálogo para el Modal (Usuarios Responsables)
-        $queryResponsables = User::whereNull('inactivo')->where('rol', 'Responsable');
-        
-        // Regla: Si es Titular, solo ve los de su unidad
-        if (auth()->user()->rol == 'Titular') {
-            $queryResponsables->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id);
-        }
-        $responsables = $queryResponsables->orderBy('nombre', 'asc')->pluck('nombre', 'id');
-
-        // 4. Estadística Amarilla
-        $estadisticaRespuestas = ResponsableOficio::selectRaw('responsable_id, users.nombre, genera_respuesta, COUNT(*) as total')
+        // AQUÍ RECUPERAMOS LA ESTADÍSTICA QUE FALTABA
+        $estadisticaRespuestas = ResponsableOficio::selectRaw('responsable_id, nombre, genera_respuesta, COUNT(*) as total')
             ->leftJoin('users', 'responsables_oficios.responsable_id', '=', 'users.id')
             ->whereNotNull('genera_respuesta')
-            ->groupBy('responsable_id', 'users.nombre', 'genera_respuesta')
+            ->groupBy('responsable_id', 'nombre', 'genera_respuesta')
             ->get();
 
-        return view('responsables.index', compact('oficio', 'responsablesOficios', 'responsables', 'estadisticaRespuestas'));
+        // LA AGREGAMOS AL COMPACT PARA MANDARLA A LA VISTA
+        return view('responsables.index', compact('oficio', 'responsables', 'responsablesOficios', 'estadisticaRespuestas'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $oficioId = session('oficio_id');
-        $generaRespuesta = $request->has('genera_respuesta') ? 'X' : null;
-
-        $request->validate([
-            'responsable_id' => 'required|integer|exists:users,id',
-        ], ['responsable_id.required' => 'Seleccione un responsable.']);
-
-        // A. Validar Duplicado en el Oficio
-        if (ResponsableOficio::where('oficio_id', $oficioId)->where('responsable_id', $request->responsable_id)->exists()) {
-            return redirect()->back()->with('error', 'Este responsable ya está asignado.');
-        }
-
-        // B. Validar Respuesta Única
-        if ($generaRespuesta == 'X') {
-            $yaHayRespondedor = ResponsableOficio::where('oficio_id', $oficioId)->whereNotNull('genera_respuesta')->exists();
-            if ($yaHayRespondedor) {
-                return redirect()->back()->with('error', 'Solo un responsable puede elaborar respuesta para este oficio.');
-            }
-        }
+        $this->validarResponsable($request)->validate();
 
         ResponsableOficio::create([
-            'oficio_id' => $oficioId,
+            'oficio_id' => session('oficio_id'),
             'responsable_id' => $request->responsable_id,
-            'genera_respuesta' => $generaRespuesta,
-            'fecha_creacion' => now(),
+            'genera_respuesta' => $request->has('genera_respuesta') ? 'X' : null,
             'usuario_creacion_id' => auth()->id(),
+            'fecha_creacion' => now(),
         ]);
 
-        return redirect()->route('responsable.index')->with('success', 'Responsable agregado exitosamente.');
+        return redirect()->route('responsable.index')
+            ->with('success', 'Responsable asignado exitosamente.');
     }
 
-    public function destroy(ResponsableOficio $responsable): RedirectResponse
-    {
-        $responsable->delete();
-        return redirect()->route('responsable.index')->with('success', 'Responsable eliminado.');
-    }
-
-    // Método AJAX para llenar el modal de Editar
     public function edit(ResponsableOficio $responsable)
     {
         return response()->json($responsable);
@@ -106,28 +75,65 @@ class ResponsableController extends Controller
 
     public function update(Request $request, ResponsableOficio $responsable): RedirectResponse
     {
-        $oficioId = session('oficio_id');
-        $generaRespuesta = $request->has('genera_respuesta') ? 'X' : null;
-
-        // Validar si quiere ser el que responde, que no haya otro (excluyéndose a sí mismo)
-        if ($generaRespuesta == 'X') {
-            $yaHayRespondedor = ResponsableOficio::where('oficio_id', $oficioId)
-                ->where('id', '!=', $responsable->id)
-                ->whereNotNull('genera_respuesta')
-                ->exists();
-
-            if ($yaHayRespondedor) {
-                return redirect()->back()->with('error', 'Solo un responsable puede elaborar respuesta. Desmarque al anterior primero.');
-            }
-        }
+        $this->validarResponsable($request, $responsable->id)->validate();
 
         $responsable->update([
             'responsable_id' => $request->responsable_id,
-            'genera_respuesta' => $generaRespuesta,
-            'fecha_modificacion' => now(),
+            'genera_respuesta' => $request->has('genera_respuesta') ? 'X' : null,
             'usuario_modificacion_id' => auth()->id(),
+            'fecha_modificacion' => now(),
         ]);
 
-        return redirect()->route('responsable.index')->with('success', 'Responsable actualizado.');
+        return redirect()->route('responsable.index')
+            ->with('success', 'Responsable actualizado exitosamente.');
+    }
+
+    public function destroy(ResponsableOficio $responsable): RedirectResponse
+    {
+        $responsable->delete();
+        
+        return redirect()->route('responsable.index')
+            ->with('success', 'El responsable ha sido eliminado.');
+    }
+
+    /**
+     * Validador personalizado para asegurar que solo haya un responsable de respuesta
+     */
+    protected function validarResponsable(Request $request, int $id = 0)
+    {
+        $oficio_id = session('oficio_id');
+        
+        // Regla única combinada (Evitar que asignen a la misma persona dos veces al mismo oficio)
+        $uniqueRule = Rule::unique('responsables_oficios', 'responsable_id')
+            ->where('oficio_id', $oficio_id);
+            
+        if ($id > 0) {
+            $uniqueRule->ignore($id);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'responsable_id' => ['required', 'integer', 'exists:users,id', $uniqueRule],
+        ], [
+            'responsable_id.required' => 'Debe seleccionar un responsable.',
+            'responsable_id.unique' => 'Este usuario ya fue asignado a este oficio.',
+        ]);
+
+        // Validación para que solo 1 persona pueda tener "genera_respuesta" = 'X'
+        $validator->after(function ($validator) use ($request, $id, $oficio_id) {
+            if ($request->has('genera_respuesta')) {
+                $query = ResponsableOficio::where('oficio_id', $oficio_id)
+                    ->whereNotNull('genera_respuesta');
+                    
+                if ($id > 0) {
+                    $query->where('id', '!=', $id);
+                }
+                
+                if ($query->exists()) {
+                    $validator->errors()->add('genera_respuesta', 'Solo un responsable puede elaborar la respuesta para este oficio.');
+                }
+            }
+        });
+
+        return $validator;
     }
 }
