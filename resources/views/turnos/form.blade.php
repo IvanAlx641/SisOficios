@@ -141,10 +141,10 @@
                                         {{ old('estatus', $oficio->estatus) == 'Cancelado' ? 'checked' : '' }}>
                                     <label class="btn btn-outline-danger px-4" for="estatus_cancelado">Cancelado</label>
 
-                                    <input type="radio" class="btn-check" name="estatus" value="Atendido"
-                                        id="estatus_atendido"
-                                        {{ old('estatus', $oficio->estatus) == 'Atendido' ? 'checked' : '' }}>
-                                    <label class="btn btn-outline-success px-4" for="estatus_atendido">Atendido</label>
+                                    <input type="radio" class="btn-check" name="estatus" value="Eliminado"
+                                        id="estatus_eliminado"
+                                        {{ old('estatus', $oficio->estatus) == 'Eliminado' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-gold px-4" for="estatus_eliminado">Eliminado</label>
                                 </div>
 
                                 @error('estatus')
@@ -192,6 +192,11 @@
             color: #9D2449;
             border-color: transparent;
         }
+        .btn-primary {
+    background-color: blue !important;
+    border-color: blue !important;
+    .btn- 
+}
     </style>
 
     <script>

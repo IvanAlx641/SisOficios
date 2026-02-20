@@ -15,6 +15,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
     <style>
+        :root {
+            /* Sobrescribimos el color PRIMARIO de Bootstrap (el azul por defecto) */
+            --bs-primary: #9D2449; 
+            --bs-primary-rgb: 177, 38, 49; /* Necesario para las opacidades de Bootstrap */
+            
+            /* Color secundario (Dorado suave) */
+            --bs-secondary: #BC955C;
+            --bs-secondary-rgb: 188, 149, 92;
+
+            /* Opcional: Ajustar el color de los enlaces */
+            --bs-link-color: #9D2449;
+            --bs-link-hover-color: #801B24;
+        }
         /* --- 1. MEJORA VISUAL (Fuentes) --- */
         body {
             -webkit-font-smoothing: antialiased;

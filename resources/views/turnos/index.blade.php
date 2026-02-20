@@ -69,9 +69,9 @@
                                     onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Concluido" id="st_concluido"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-success btn-sm px-3 py-2" for="st_concluido">Atendidos</label>
+                                <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminado</label>
 
                                 <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado"
                                     onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
@@ -124,12 +124,12 @@
                                     <td class="ps-4">
                                         <div class="d-flex flex-column">
                                             <a href="{{ route('turno.edit', $oficio->id) }}"
-                                                class="fw-bold mb-1 fs-3 link-oficio-gris">
+                                                class="fw-bold mb-1 fs-4 link-oficio-gris">
                                                 {{ $oficio->numero_oficio }}
                                             </a>
                                             @php
                                                 $badgeClass = match ($oficio->estatus) {
-                                                    'Pendiente' => 'bg-warning text-dark',
+                                                    'Pendiente' => 'bg-warning text-white',
                                                     'Turnado' => 'bg-info text-white',
                                                     'Concluido', 'Atendido' => 'bg-success text-white',
                                                     'Cancelado' => 'bg-danger text-white',
@@ -248,6 +248,11 @@
         .text-guinda2 {
             color: #9D2449;
         }
+        .btn-primary {
+    background-color: blue !important;
+    border-color: blue !important;
+    .btn- 
+}
     </style>
 
 @endsection

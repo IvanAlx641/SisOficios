@@ -81,19 +81,21 @@
                         @forelse ($oficios as $oficio)
                         <tr>
                             <td class="ps-4">
-                                <a href="#timelineOficio{{ $oficio->id }}" data-bs-toggle="offcanvas" class="fw-bold fs-4 link-oficio-guinda d-block mb-1">
-                                    {{ $oficio->numero_oficio }}
-                                </a>
-                                @php
-                                    $badgeClass = match($oficio->estatus) {
-                                        'Pendiente' => 'bg-warning text-dark',
-                                        'Turnado' => 'bg-info text-white',
-                                        'Concluido', 'Atendido' => 'bg-success text-white',
-                                        'Cancelado' => 'bg-danger text-white',
-                                        default => 'bg-secondary text-white',
-                                    };
-                                @endphp
-                                <span class="badge {{ $badgeClass }} rounded-pill px-3">{{ $oficio->estatus }}</span>
+                                <div class="d-flex flex-column">
+                                    <a href="#timelineOficio{{ $oficio->id }}" data-bs-toggle="offcanvas" class="fw-bold fs-4 link-oficio-guinda mb-1">
+                                        {{ $oficio->numero_oficio }}
+                                    </a>
+                                    @php
+                                        $badgeClass = match($oficio->estatus) {
+                                            'Pendiente' => 'bg-warning text-dark',
+                                            'Turnado' => 'bg-info text-white',
+                                            'Concluido', 'Atendido' => 'bg-success text-white',
+                                            'Cancelado' => 'bg-danger text-white',
+                                            default => 'bg-secondary text-white',
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $badgeClass }} rounded-pill px-3"style=" font-size: 0.75rem;">{{ $oficio->estatus }}</span>
+                                </div>
                             </td>
                             
                             <td class="text-center text-muted small">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</td>

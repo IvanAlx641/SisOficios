@@ -74,6 +74,10 @@
                                    onchange="this.form.submit()" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
                             <label class="btn btn-outline-success btn-sm px-3 py-2" for="st_concluido">Concluidos</label>
 
+                            <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado" 
+                                   onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
+                            <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminados</label>
+
                             <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado" 
                                    onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
                             <label class="btn btn-outline-danger btn-sm px-3 py-2" for="st_cancelado">Cancelados</label>
@@ -105,7 +109,7 @@
                             <td class="ps-4">
                                 <div class="d-flex flex-column">
                                     {{-- AQUÍ ESTÁ EL CAMBIO DE ESTILO DEL LINK --}}
-                                    <a href="{{ route('oficio.edit', $oficio->id) }}" class="fw-bold mb-1 fs-3 link-oficio-gris">
+                                    <a href="{{ route('oficio.edit', $oficio->id) }}" class="fw-bold mb-1 fs-4 link-oficio-gris">
                                         {{ $oficio->numero_oficio }}
                                     </a>
 
