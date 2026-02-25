@@ -129,7 +129,7 @@
                 <div class="col-12 mb-2 d-flex align-items-center">
                     <span class="text-muted small fw-semibold me-2">Soporte documental:</span> 
                     @if($oficio->soporte_documental)
-                        <a href="{{ asset('storage/'.$oficio->soporte_documental) }}" target="_blank" class="text-guinda fs-5" title="Ver soporte"><i class="ti ti-eye"></i></a>
+                        <a href="{{ asset($oficio->soporte_documental) }}" target="_blank" class="text-guinda fs-5" title="Ver soporte"><i class="ti ti-eye"></i></a>
                     @else
                         <span class="text-muted small"><i class="ti ti-eye-off"></i></span>
                     @endif
@@ -151,7 +151,7 @@
                         <div class="mb-2 d-flex align-items-center">
                             <span class="text-muted small fw-semibold me-2">Ver acuse de respuesta:</span> 
                             @if($respuesta->url_oficio_respuesta)
-                                <a href="{{ asset('storage/'.$respuesta->url_oficio_respuesta) }}" target="_blank" class="text-guinda fs-5"><i class="ti ti-eye"></i></a>
+                                <a href="{{ asset($respuesta->url_oficio_respuesta) }}" target="_blank" class="text-guinda fs-5"><i class="ti ti-eye"></i></a>
                             @else
                                 <span class="text-muted small"><i class="ti ti-eye-off"></i></span>
                             @endif

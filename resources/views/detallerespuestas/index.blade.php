@@ -71,7 +71,9 @@
                             @forelse ($oficio->respuestasOficios as $respuesta)
                                 <tr>
                                     <td class="ps-4">
-                                        <span class="fw-bold fs-4 text-secondary">{{ $respuesta->numero_oficio_respuesta }}</span>
+                                        <a href="#" class="fw-bold fs-4 text-guinda text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalEditarRespuesta{{ $respuesta->id }}" title="Editar respuesta">
+                                            {{ $respuesta->numero_oficio_respuesta }}
+                                        </a>
                                     </td>
                                     <td class="text-center text-muted small">
                                         {{ $respuesta->fecha_respuesta ? $respuesta->fecha_respuesta->format('d/m/Y') : '-' }}
@@ -100,7 +102,83 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @empty
+
+                                <div class="modal fade" id="modalEditarRespuesta{{ $respuesta->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                        <div class="modal-content border-0 shadow">
+                                            <div class="modal-header bg-white border-bottom-0 pb-0">
+                                                <h5 class="modal-title fw-bold text-guinda">Editar Respuesta</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body p-4 bg-white">
+                                                <form action="{{ route('respuestas.update', $respuesta->id) }}" method="POST" novalidate>
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="row g-3">
+                                                        <div class="col-md-4">
+                                                            <label class="form-label fw-bold small">Fecha de la respuesta:</label>
+                                                            <input type="date" name="fecha_respuesta"
+                                                                value="{{ old('fecha_respuesta', $respuesta->fecha_respuesta ? $respuesta->fecha_respuesta->format('Y-m-d') : '') }}"
+                                                                class="form-control border-guinda @error('fecha_respuesta') is-invalid @enderror">
+                                                        </div>
+
+                                                        <div class="col-md-8">
+                                                            <label class="form-label fw-bold small">Núm. de oficio de respuesta:</label>
+                                                            <input type="text" name="numero_oficio_respuesta"
+                                                                value="{{ old('numero_oficio_respuesta', $respuesta->numero_oficio_respuesta) }}"
+                                                                class="form-control border-guinda @error('numero_oficio_respuesta') is-invalid @enderror"
+                                                                placeholder="Ej. 21808000020000L-001/2026">
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-bold small">Dirigido a:</label>
+                                                            <select name="dirigido_a_id" class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
+                                                                <option value="">Seleccione a quién va dirigido...</option>
+                                                                @foreach ($usuarios as $id => $nombre)
+                                                                    <option value="{{ $id }}" {{ old('dirigido_a_id', $respuesta->dirigido_a_id) == $id ? 'selected' : '' }}>
+                                                                        {{ mb_strtoupper($nombre) }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="form-label fw-bold small">Firmado por:</label>
+                                                            <select name="firmado_por_id" class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
+                                                                <option value="">Seleccione quién firma...</option>
+                                                                @foreach ($usuarios as $id => $nombre)
+                                                                    <option value="{{ $id }}" {{ old('firmado_por_id', $respuesta->firmado_por_id) == $id ? 'selected' : '' }}>
+                                                                        {{ mb_strtoupper($nombre) }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <label class="form-label fw-bold small">URL del documento de respuesta (Opcional):</label>
+                                                            <input type="url" name="url_oficio_respuesta"
+                                                                value="{{ old('url_oficio_respuesta', $respuesta->url_oficio_respuesta) }}"
+                                                                class="form-control border-guinda @error('url_oficio_respuesta') is-invalid @enderror"
+                                                                placeholder="https://...">
+                                                        </div>
+
+                                                        <div class="col-md-12 mb-2">
+                                                            <label class="form-label fw-bold small">Descripción de la respuesta:</label>
+                                                            <textarea name="descripción_respuesta_oficio" rows="5"
+                                                                placeholder="Escriba la descripción de la respuesta aquí..."
+                                                                class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio', $respuesta->descripción_respuesta_oficio) }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center pt-3 border-top mt-3">
+                                                        <button type="submit" class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Actualizar</button>
+                                                        <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @empty
                                 <tr>
                                     <td colspan="7" class="text-center py-5">
                                         <i class="ti ti-file-off fs-1 text-muted d-block mb-2"></i>
@@ -119,7 +197,7 @@
         <div class="modal-dialog modal-dialog-scrollable modal-lg">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-white border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold text-guinda">Respuesta</h5>
+                    <h5 class="modal-title fw-bold text-guinda">Agregar Respuesta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4 bg-white">
@@ -154,88 +232,86 @@
                     <form action="{{ route('respuestas.store', $oficio->id) }}" method="POST" id="formRespuesta" novalidate>
                         @csrf
                         <div class="row g-3">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold  small">Fecha de la respuesta:</label>
-                                    <input type="date" name="fecha_respuesta"
-                                        value="{{ old('fecha_respuesta', date('Y-m-d')) }}"
-                                        class="form-control border-guinda @error('fecha_respuesta') is-invalid @enderror">
-                                    @error('fecha_respuesta')
-                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-8">
-                                    <label class="form-label fw-bold  small">Núm. de oficio de respuesta:</label>
-                                    <input type="text" name="numero_oficio_respuesta"
-                                        value="{{ old('numero_oficio_respuesta') }}"
-                                        class="form-control border-guinda @error('numero_oficio_respuesta') is-invalid @enderror"
-                                        placeholder="Ej. 21808000020000L-001/2026">
-                                    @error('numero_oficio_respuesta')
-                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small">Dirigido a:</label>
-                                    <select name="dirigido_a_id"
-                                        class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
-                                        <option value="">Seleccione a quién va dirigido...</option>
-                                        @foreach ($usuarios as $id => $nombre)
-                                            <option value="{{ $id }}"
-                                                {{ old('dirigido_a_id') == $id ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($nombre) }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('dirigido_a_id')
-                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small">Firmado por:</label>
-                                    <select name="firmado_por_id"
-                                        class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
-                                        <option value="">Seleccione quién firma...</option>
-                                        @foreach ($usuarios as $id => $nombre)
-                                            <option value="{{ $id }}"
-                                                {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($nombre) }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('firmado_por_id')
-                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-12">
-                                    <label class="form-label fw-bold small">URL del documento de respuesta
-                                        (Opcional):</label>
-                                    <input type="url" name="url_oficio_respuesta"
-                                        value="{{ old('url_oficio_respuesta') }}"
-                                        class="form-control border-guinda @error('url_oficio_respuesta') is-invalid @enderror"
-                                        placeholder="https://...">
-                                    @error('url_oficio_respuesta')
-                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-12 mb-2">
-                                    <label class="form-label fw-bold  small">Descripción de la respuesta:</label>
-                                    <textarea name="descripción_respuesta_oficio" rows="5"
-                                        placeholder="Escriba la descripción de la respuesta aquí..."
-                                        class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio') }}</textarea>
-                                    @error('descripción_respuesta_oficio')
-                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold small">Fecha de la respuesta:</label>
+                                <input type="date" name="fecha_respuesta"
+                                    value="{{ old('fecha_respuesta', date('Y-m-d')) }}"
+                                    class="form-control border-guinda @error('fecha_respuesta') is-invalid @enderror">
+                                @error('fecha_respuesta')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="d-flex align-items-center pt-3 border-top mt-2">
-                                <button type="submit"
-                                    class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar
-                                </button>
-                                <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
+
+                            <div class="col-md-8">
+                                <label class="form-label link-hover-guinda fw-bold small">Núm. de oficio de respuesta:</label>
+                                <input type="text" name="numero_oficio_respuesta"
+                                    value="{{ old('numero_oficio_respuesta') }}"
+                                    class="form-control border-guinda @error('numero_oficio_respuesta') is-invalid @enderror"
+                                    placeholder="Ej. 21808000020000L-001/2026">
+                                @error('numero_oficio_respuesta')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
                             </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Dirigido a:</label>
+                                <select name="dirigido_a_id"
+                                    class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
+                                    <option value="">Seleccione a quién va dirigido...</option>
+                                    @foreach ($usuarios as $id => $nombre)
+                                        <option value="{{ $id }}"
+                                            {{ old('dirigido_a_id') == $id ? 'selected' : '' }}>
+                                            {{ mb_strtoupper($nombre) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('dirigido_a_id')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">Firmado por:</label>
+                                <select name="firmado_por_id"
+                                    class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
+                                    <option value="">Seleccione quién firma...</option>
+                                    @foreach ($usuarios as $id => $nombre)
+                                        <option value="{{ $id }}"
+                                            {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
+                                            {{ mb_strtoupper($nombre) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('firmado_por_id')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold small">URL del documento de respuesta
+                                    (Opcional):</label>
+                                <input type="url" name="url_oficio_respuesta"
+                                    value="{{ old('url_oficio_respuesta') }}"
+                                    class="form-control border-guinda @error('url_oficio_respuesta') is-invalid @enderror"
+                                    placeholder="https://...">
+                                @error('url_oficio_respuesta')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label fw-bold small">Descripción de la respuesta:</label>
+                                <textarea name="descripción_respuesta_oficio" rows="5"
+                                    placeholder="Escriba la descripción de la respuesta aquí..."
+                                    class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio') }}</textarea>
+                                @error('descripción_respuesta_oficio')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center pt-3 border-top mt-2">
+                            <button type="submit"
+                                class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar
+                            </button>
+                            <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -243,10 +319,12 @@
         </div>
     </div>
 
-    @if($errors->any())
+    @if($errors->any() && request()->isMethod('post'))
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 setTimeout(function() {
+                    // Por simplicidad, este script abre el modal de agregar si hay errores en el POST (creación).
+                    // Si requieres que abra el de edición al fallar el PUT, requerirías enviar una variable de sesión.
                     if (typeof jQuery !== 'undefined') {
                         $('#modalAgregarRespuesta').modal('show');
                     } else {
@@ -259,13 +337,13 @@
     @endif
 
     <style>
-        .bg-guinda { background-color: #9D2449 !important; }
-        .border-guinda { border-color: #9D2449 !important; }
-        .text-guinda { color: #9D2449 !important; }
-        .text-guinda2 { color: #9D2449 !important; }
-        
-        .btn-guinda { background-color: #9D2449; color: white; border: none; font-weight: 600; }
-        .btn-guinda:hover { background-color: #7a1c38; color: white; }
+        .link-hover-guinda {
+            color: grey !important;
+            /* Negro/Gris muy oscuro por defecto */
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
 
         .btn-guardar-modal { background-color: #9D2449; color: white; border: none; font-weight: 600; transition: all 0.2s ease; }
         .btn-guardar-modal:hover { background-color: #7a1c38; color: white; }

@@ -52,7 +52,7 @@ class TurnoController extends Controller
             // Manejar la dualidad Concluido/Atendido si es necesario en tu lógica
             if ($request->estatus == 'Concluido') {
                 // Si en BD es Atendido o Concluido, los traemos ambos
-                $query->whereIn('estatus', ['Concluido', 'Atendido']);
+                $query->whereIn('estatus', ['Concluido']);
             } else {
                 $query->where('estatus', $request->estatus);
             }

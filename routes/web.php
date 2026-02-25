@@ -104,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/respuestas/{respuesta}', [RespuestaController::class, 'destroy'])->name('respuestas.destroy');
 
         Route::get('/detallerespuestas/{oficio}', [RespuestaController::class, 'show'])->name('detallerespuestas.index');
+        Route::put('/respuestas/{respuesta}', [RespuestaController::class, 'update'])->name('respuestas.update');
 
         Route::get('/buscador', [BuscadorController::class, 'index'])->name('buscador.index');
         Route::get('/buscador/{id}', [BuscadorController::class, 'show'])->name('buscador.show');

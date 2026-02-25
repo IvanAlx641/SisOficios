@@ -28,13 +28,15 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
-                            <select name="dirigido_id" class="form-select border-guinda">
-                                <option value="">Todos</option>
+                       <div class="col-md-3">
+                            <label class="form-label text-guinda2 small fw-bold">Dirigido a:</label>
+                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda text-secondary"
+                                onchange="this.form.submit()">
+                                <option value="Todos">Todos</option>
                                 @foreach ($unidades as $id => $nombre)
                                     <option value="{{ $id }}"
-                                        {{ $request->dirigido_id == $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                        {{ request('dirigido_id') == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -99,6 +101,7 @@
                             @forelse ($oficios as $oficio)
                                 <tr>
                                     <td class="ps-4">
+                                        <div class="d-flex flex-column">
                                         @if ($oficio->solicitud_conjunta === 'X')
                                             <a href="{{ route('detallerespuestas.index', $oficio->id) }}"
                                                 class="fw-bold fs-4 link-oficio-guinda mb-1 d-block">
@@ -118,8 +121,9 @@
                                                 default => 'bg-secondary text-white',
                                             };
                                         @endphp
-                                        <span class="badge {{ $badgeClass }} rounded-pill px-3"
-                                            style="font-size: 0.75rem;">{{ $oficio->estatus }}</span>
+                                        <span class="badge {{ $badgeClass }} rounded-pill w-auto"
+                                            style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
+                                        </div>
                                     </td>
 
                                     <td class="text-center text-muted small">
@@ -166,36 +170,29 @@
 
                                     <td class="text-center">
                                         @if ($oficio->respuestasOficios && $oficio->respuestasOficios->count() > 0)
-                                            <div class="custom-hover-wrapper position-relative d-inline-block">
-                                                <div style="cursor: pointer;">
-                                                    <i class="ti ti-file-text text-success fs-4"></i> <span
-                                                        class="badge bg-success rounded-circle"
-                                                        style="font-size:0.6rem;">{{ $oficio->respuestasOficios->count() }}</span>
-                                                </div>
-                                                <div class="custom-hover-card shadow-lg border rounded bg-white text-start"
-                                                    style="right: 0; left: auto;">
-                                                    <div
-                                                        class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
-                                                        Respuestas Emitidas</div>
-                                                    <div class="px-3 py-2 text-muted small">
-                                                        <ul class="list-unstyled mb-0">
-                                                            @foreach ($oficio->respuestasOficios as $resp)
-                                                                <li class="mb-1">
-                                                                    <a href="{{ $resp->url_oficio_respuesta ?? '#' }}"
-                                                                        target="_blank"
-                                                                        class="text-decoration-none text-secondary hover-guinda">
-                                                                        <i class="ti ti-file-text text-guinda"></i>
-                                                                        {{ $resp->numero_oficio_respuesta }} <small
-                                                                            class="text-muted">({{ $resp->fecha_respuesta->format('d/m/Y') }})</small>
-                                                                    </a>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @php
+                                                $popoverHtml = "<ul class='list-unstyled mb-0 text-start'>";
+                                                foreach ($oficio->respuestasOficios as $resp) {
+                                                    $fecha = $resp->fecha_respuesta
+                                                        ? \Carbon\Carbon::parse($resp->fecha_respuesta)->format('d/m/Y')
+                                                        : 'S/F';
+                                                    $url = $resp->url_oficio_respuesta
+                                                        ? asset($resp->url_oficio_respuesta)
+                                                        : '#';
+                                                    $popoverHtml .= "<li class='mb-2 pb-1 border-bottom'><a href='{$url}' target='_blank' class='text-guinda fw-bold text-decoration-none'><i class='ti ti-file-text me-1'></i>{$resp->numero_oficio_respuesta}</a><br><small class='text-muted'>({$fecha})</small></li>";
+                                                }
+                                                $popoverHtml .= '</ul>';
+                                            @endphp
+
+                                            <button type="button" class="btn border-0 text-guinda p-0"
+                                                data-bs-toggle="popover" data-bs-trigger="focus"
+                                                title="Oficios de respuesta" data-bs-html="true"
+                                                data-bs-content="{{ $popoverHtml }}">
+                                                <i class="ti ti-file-text fs-4"></i> <i
+                                                    class="ti ti-arrow-down small"></i>
+                                            </button>
                                         @else
-                                            <span class="text-muted small"><i class="ti ti-minus"></i></span>
+                                            <span class="text-muted"><i class="ti ti-minus"></i></span>
                                         @endif
                                     </td>
                                 </tr>
@@ -375,7 +372,7 @@
             </script>
         @endif
     @endforeach
-
+    
     <style>
         .border-guinda {
             border-color: #9D2449 !important;
@@ -442,4 +439,135 @@
             margin-top: 5px;
         }
     </style>
+    <script>
+        // 1. POPOVERS DE BOOTSTRAP
+        document.addEventListener("DOMContentLoaded", function() {
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl);
+            });
+        });
+
+        // 2. BUSCADOR INTELIGENTE EN SELECTS (JS Seguro)
+        function convertirSelectABuscador(idSelect) {
+            const originalSelect = document.getElementById(idSelect);
+            if (!originalSelect) return;
+
+            const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
+            if (wrapperPrevio) wrapperPrevio.remove();
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'searchable-dropdown-wrapper position-relative w-100';
+
+            const trigger = document.createElement('button');
+            // Le agregamos text-secondary para que la letra base sea gris oscuro igual a todos los inputs
+            trigger.className =
+                'form-select searchable-trigger border-guinda text-start text-truncate bg-white w-100 text-secondary';
+            trigger.type = 'button';
+
+            const selectedOption = originalSelect.options[originalSelect.selectedIndex];
+            trigger.textContent = selectedOption && selectedOption.value !== "" ? selectedOption.text : 'Seleccione...';
+
+            const menu = document.createElement('div');
+            menu.className = 'searchable-menu bg-white border border-guinda rounded shadow-sm p-2 w-100';
+            menu.style.position = 'absolute';
+            menu.style.top = '100%';
+            menu.style.left = '0';
+            menu.style.zIndex = '1050';
+            menu.style.display = 'none';
+            menu.style.marginTop = '4px';
+
+            const inputSearch = document.createElement('input');
+            inputSearch.className = 'form-control mb-2 border-guinda custom-search-input text-secondary';
+            inputSearch.type = 'text';
+            inputSearch.placeholder = 'Buscar...';
+            inputSearch.autocomplete = 'off';
+            inputSearch.onclick = function(e) {
+                e.stopPropagation();
+            };
+            inputSearch.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') e.preventDefault();
+            });
+
+            const optionsList = document.createElement('div');
+            optionsList.className = 'searchable-options';
+            optionsList.style.maxHeight = '200px';
+            optionsList.style.overflowY = 'auto';
+
+            function poblarOpciones() {
+                optionsList.innerHTML = '';
+                Array.from(originalSelect.options).forEach(option => {
+                    if (option.value === "") return;
+                    const item = document.createElement('div');
+                    item.className = 'searchable-option p-2 rounded text-secondary small';
+                    item.style.cursor = 'pointer';
+                    item.textContent = option.text;
+
+                    item.addEventListener('mouseover', () => {
+                        item.style.backgroundColor = '#F8E8EC';
+                        item.style.color = '#9D2449';
+                    });
+                    item.addEventListener('mouseout', () => {
+                        item.style.backgroundColor = 'transparent';
+                        item.style.color = '#6c757d';
+                    });
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        originalSelect.value = option.value;
+                        trigger.textContent = option.text;
+                        menu.style.display = 'none';
+                        inputSearch.value = '';
+                        filtrarOpciones('');
+                        originalSelect.dispatchEvent(new Event('change'));
+                    });
+                    optionsList.appendChild(item);
+                });
+            }
+            poblarOpciones();
+
+            function normalizarTexto(texto) {
+                return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            }
+
+            function filtrarOpciones(texto) {
+                const items = optionsList.querySelectorAll('.searchable-option');
+                const filtro = normalizarTexto(texto);
+                items.forEach(item => {
+                    const coincide = normalizarTexto(item.textContent).includes(filtro);
+                    item.style.display = coincide ? 'block' : 'none';
+                });
+            }
+            inputSearch.addEventListener('keyup', (e) => filtrarOpciones(e.target.value));
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isShowing = menu.style.display === 'block';
+                document.querySelectorAll('.searchable-menu').forEach(m => m.style.display = 'none');
+                if (!isShowing) {
+                    menu.style.display = 'block';
+                    setTimeout(() => inputSearch.focus(), 100);
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) menu.style.display = 'none';
+            });
+
+            menu.appendChild(inputSearch);
+            menu.appendChild(optionsList);
+            wrapper.appendChild(trigger);
+            wrapper.appendChild(menu);
+            originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
+            originalSelect.style.display = 'none';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // AHORA APLICAMOS EL BUSCADOR A LOS 5 SELECTORES
+            convertirSelectABuscador('filtro_dirigido');
+            convertirSelectABuscador('filtro_solicitado');
+            convertirSelectABuscador('filtro_estatus');
+            convertirSelectABuscador('filtro_sistema');
+            convertirSelectABuscador('filtro_requerimiento');
+        });
+    </script>
 @endsection

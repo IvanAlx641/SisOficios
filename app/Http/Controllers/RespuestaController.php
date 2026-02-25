@@ -34,7 +34,7 @@ class RespuestaController extends Controller
         }
 
         // NUEVO: Filtro "Dirigido a"
-        if ($request->filled('dirigido_id')) {
+        if ($request->filled('dirigido_id') && $request->dirigido_id !== 'Todos') {
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
@@ -88,7 +88,7 @@ class RespuestaController extends Controller
     }
     public function store(Request $request, Oficio $oficio): RedirectResponse
     {
-        $rules=[
+        $rules = [
             'fecha_respuesta' => 'required|date',
             'numero_oficio_respuesta' => 'required|string|max:255',
             'firmado_por_id' => 'required|exists:users,id',
@@ -141,5 +141,34 @@ class RespuestaController extends Controller
         return redirect()->route('respuestas.index')
             ->with('success', '¡Respuesta registrada exitosamente! El oficio ha sido Atendido.');
         return redirect()->back()->with('success', '¡Respuesta registrada exitosamente!');
+    }
+    public function update(Request $request, $id)
+    {
+        // 1. Validar los datos que vienen del formulario del modal
+        $request->validate([
+            'fecha_respuesta'              => 'required|date',
+            'numero_oficio_respuesta'      => 'required|string|max:255',
+            'dirigido_a_id'                => 'required|exists:users,id', // Asumiendo que va a la tabla de usuarios
+            'firmado_por_id'               => 'required|exists:users,id',
+            'url_oficio_respuesta'         => 'nullable|url',
+            'descripción_respuesta_oficio' => 'required|string',
+        ]);
+
+        // 2. Buscar el registro en la base de datos
+        // NOTA: Cambia "RespuestaOficio" por el nombre real de tu modelo si se llama distinto (ej. "Respuesta")
+        $respuesta = \App\Models\RespuestaOficio::findOrFail($id);
+
+        // 3. Actualizar la información
+        $respuesta->update([
+            'fecha_respuesta'              => $request->fecha_respuesta,
+            'numero_oficio_respuesta'      => $request->numero_oficio_respuesta,
+            'dirigido_a_id'                => $request->dirigido_a_id,
+            'firmado_por_id'               => $request->firmado_por_id,
+            'url_oficio_respuesta'         => $request->url_oficio_respuesta,
+            'descripción_respuesta_oficio' => $request->descripción_respuesta_oficio,
+        ]);
+
+        // 4. Regresar a la vista anterior con un mensaje de éxito
+        return back()->with('success', 'La respuesta se ha actualizado correctamente.');
     }
 }
