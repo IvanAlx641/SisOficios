@@ -13,7 +13,8 @@ use App\Http\Controllers\OficioSolicitanteController;
 use App\Http\Controllers\TurnoController;
 use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\SeguimientoController;
-
+use App\Http\Controllers\RespuestaController;
+use App\Http\Controllers\BuscadorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,7 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['force.change'])->group(function () {
 
         // Dashboard
-        Route::get('/', function () { return view('dashboard'); })->name('dashboard');
+        Route::get('/', function () {
+            return view('dashboard');
+        })->name('dashboard');
 
         // MÓDULO USUARIOS
         Route::post('/usuarios/{usuario}/notificacion', [UsuarioController::class, 'notificacion'])->name('usuario.notificacion');
@@ -81,14 +84,28 @@ Route::middleware(['auth'])->group(function () {
             ->parameters(['responsable' => 'responsable'])
             ->names('responsable');
 
-            // --- MÓDULO SEGUIMIENTO (TIMELINE Y CONCLUSIÓN) ---
+        // --- MÓDULO SEGUIMIENTO (TIMELINE Y CONCLUSIÓN) ---
         // 1. Index principal
         Route::get('seguimiento', [SeguimientoController::class, 'index'])->name('seguimiento.index');
-        
+
         // 2. Guardar nuevo avance en el timeline (Recibe el ID del responsable_oficio)
         Route::post('seguimiento/{responsableOficioId}/avance', [SeguimientoController::class, 'storeAvance'])->name('seguimiento.avance.store');
-        
+
         // 3. Concluir el Oficio
         Route::post('seguimiento/{oficio}/concluir', [SeguimientoController::class, 'concluir'])->name('seguimiento.concluir');
+        // --- MÓDULO RESPUESTAS ---
+        // 1. Index principal
+        Route::get('/respuestas', [RespuestaController::class, 'index'])->name('respuestas.index');
+
+        // 2. Guardar nueva respuesta (Recibe el ID del Oficio para asociarlo)
+        Route::post('/respuestas/{oficio}', [RespuestaController::class, 'store'])->name('respuestas.store');
+
+        // 3. Eliminar respuesta (si ya tienes el método en el controlador)
+        Route::delete('/respuestas/{respuesta}', [RespuestaController::class, 'destroy'])->name('respuestas.destroy');
+
+        Route::get('/detallerespuestas/{oficio}', [RespuestaController::class, 'show'])->name('detallerespuestas.index');
+
+        Route::get('/buscador', [BuscadorController::class, 'index'])->name('buscador.index');
+        Route::get('/buscador/{id}', [BuscadorController::class, 'show'])->name('buscador.show');
     });
 });

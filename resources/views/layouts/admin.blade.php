@@ -303,13 +303,13 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('respuestas.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-symlink"></i>
                                         <span class="hide-menu">Respuesta</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('buscador.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-search"></i>
                                         <span class="hide-menu">Buscador</span>
                                     </a>
@@ -493,13 +493,13 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('respuestas.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-symlink"></i>
                                             <span class="hide-menu">Respuesta</span>
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('buscador.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-search"></i>
                                             <span class="hide-menu">Buscador</span>
                                         </a>

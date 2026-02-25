@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-// use Illuminate\Database\Eloquent\Relations\HasMany; // Descomentar cuando existan Oficio y Detalle
+use Illuminate\Database\Eloquent\Relations\HasMany; // Descomentar cuando existan Oficio y Detalle
 
 class TipoRequerimiento extends Model
 {
@@ -51,10 +51,10 @@ class TipoRequerimiento extends Model
     {
         return $this->hasMany(DetalleActividad::class, 'tipo_requerimiento_id');
     }
-
+*/
     public function oficios(): HasMany
     {
         return $this->hasMany(Oficio::class, 'tipo_requerimiento_id');
     }
-    */
+    
 }

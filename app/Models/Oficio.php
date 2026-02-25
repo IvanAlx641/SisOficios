@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RespuestaOficio;
 
 class Oficio extends Model
 {
@@ -17,19 +18,19 @@ class Oficio extends Model
         'numero_oficio',
         'fecha_recepcion',
         'dirigido_id',
-        'descripción_oficio', 
+        'descripción_oficio',
         'url_oficio',
         'solicitud_conjunta',
         'area_asignada_id',
         'sistema_id',
         'tipo_requerimiento_id',
-        
+
         // --- CAMPOS DE CONCLUSIÓN QUE FALTABAN ---
         'fecha_conclusion',
         'soporte_documental',
         'propuesta_respuesta',
         'alcance_otro_oficio',
-        
+
         // --- AUDITORÍA ---
         'fecha_creacion',
         'usuario_creacion_id',
@@ -42,6 +43,7 @@ class Oficio extends Model
         'fecha_conclusion' => 'datetime', // Importante para que la vista lo formatee bien
         'fecha_creacion' => 'datetime',
         'fecha_modificacion' => 'datetime',
+        'fecha_turno' => 'datetime',
     ];
 
     // Relaciones
@@ -59,7 +61,7 @@ class Oficio extends Model
     {
         // Relación muchos a muchos a través de 'solicitantes_oficios'
         return $this->belongsToMany(Solicitante::class, 'solicitantes_oficios', 'oficio_id', 'solicitante_id')
-                    ->withPivot('id'); // Importante para el delete específico
+            ->withPivot('id'); // Importante para el delete específico
     }
     // --- NUEVAS RELACIONES FALTANTES ---
     public function sistema()
@@ -81,5 +83,14 @@ class Oficio extends Model
     public function oficiosVinculados()
     {
         return $this->belongsToMany(Oficio::class, 'oficios_vinculados', 'oficio_id', 'oficio_vinculado_id');
+    }
+    public function respuestasOficios()
+    {
+        return $this->hasMany(RespuestaOficio::class, 'oficio_id');
+    }
+    public function usuarioDirigido()
+    {
+        // Conectamos dirigido_id con la tabla de usuarios
+        return $this->belongsTo(User::class, 'dirigido_id');
     }
 }

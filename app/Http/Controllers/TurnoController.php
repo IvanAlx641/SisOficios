@@ -39,7 +39,7 @@ class TurnoController extends Controller
             $query->where('numero_oficio', 'like', '%' . mb_strtoupper($request->numero_oficio) . '%');
         }
 
-        if ($request->filled('dirigido_id') && $request->dirigido_id != 'Todos') {
+        if ($request->filled('dirigido_id') && $request->dirigido_id != '0') { // Asegurarnos de que no sea '0' (Todas las unidades)
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
@@ -47,8 +47,15 @@ class TurnoController extends Controller
             $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
         }
 
-        if ($request->filled('estatus') && $request->estatus != 'Todos') {
-            $query->where('estatus', $request->estatus);
+        // --- FILTRO DE ESTATUS MEJORADO ---
+        if ($request->filled('estatus') && $request->estatus !== 'Todos') {
+            // Manejar la dualidad Concluido/Atendido si es necesario en tu lógica
+            if ($request->estatus == 'Concluido') {
+                // Si en BD es Atendido o Concluido, los traemos ambos
+                $query->whereIn('estatus', ['Concluido', 'Atendido']);
+            } else {
+                $query->where('estatus', $request->estatus);
+            }
         }
 
         $oficios = $query->orderBy('id', 'desc')->paginate(10);
@@ -62,7 +69,7 @@ class TurnoController extends Controller
 
         // Regresamos a la columna 'sigla_sistema' original
         $sistemas = DB::table('csistemas')
-            ->select('id', 'sigla_sistema') 
+            ->select('id', 'sigla_sistema')
             ->whereNull('inactivo')
             ->orderBy('sigla_sistema', 'asc')
             ->pluck('sigla_sistema', 'id')
@@ -70,7 +77,7 @@ class TurnoController extends Controller
 
         // Regresamos a la columna 'tipo_requerimiento' original
         $tiposRequerimientos = DB::table('ctipos_requerimientos')
-            ->select('id', 'tipo_requerimiento') 
+            ->select('id', 'tipo_requerimiento')
             ->whereNull('inactivo')
             ->orderBy('tipo_requerimiento', 'asc')
             ->pluck('tipo_requerimiento', 'id')
@@ -105,7 +112,7 @@ class TurnoController extends Controller
 
         $turno->fecha_modificacion = now()->format('Y-m-d H:i:s');
         $turno->usuario_modificacion_id = auth()->id();
-        
+
         // GUARDADO FORZADO
         $turno->save();
 

@@ -55,27 +55,30 @@
                             <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
 
                             <div class="btn-group shadow-sm flex-wrap" role="group">
-                                <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
-                                    onchange="this.form.submit()"
-                                    {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
-                                <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
+                                <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos" 
+                                   onchange="this.form.submit()" {{ ($request->estatus == 'Todos' || !$request->filled('estatus')) ? 'checked' : '' }}>
+                            <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Pendiente" id="st_pendiente"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-warning btn-sm px-3 py-2 text-dark font-weight-bold"
-                                    for="st_pendiente">Pendientes</label>
+                            <input type="radio" class="btn-check" name="estatus" value="Pendiente" id="st_pendiente" 
+                                   onchange="this.form.submit()" {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
+                            <label class="btn btn-outline-warning btn-sm px-3 py-2 text-whit" for="st_pendiente">Pendientes</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
+                            <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado" 
+                                   onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
+                            <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminado</label>
+                            <input type="radio" class="btn-check" name="estatus" value="Concluido" id="st_concluido" 
+                                   onchange="this.form.submit()" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
+                            <label class="btn btn-outline-success btn-sm px-3 py-2" for="st_concluido">Concluidos</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-danger btn-sm px-3 py-2" for="st_cancelado">Cancelados</label>
+                            <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado" 
+                                   onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
+                            <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminados</label>
+
+                            <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado" 
+                                   onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
+                            <label class="btn btn-outline-danger btn-sm px-3 py-2" for="st_cancelado">Cancelados</label>
+                        </div>
                             </div>
                         </div>
                     </div>
@@ -90,31 +93,31 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Número de oficio</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Número de oficio</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Fecha recepción</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Fecha recepción</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Dirigido a</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Dirigido a</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Solicitado por</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Solicitado por</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Fecha de turno</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Fecha de turno</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Sistema</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Sistema</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Tipo de requerimiento</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Responsables</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Responsables</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Ver PDF</h6>
+                                    <h6 class="fs-4 fw-bold mb-0 text-white">Ver PDF</h6>
                                 </th>
                             </tr>
                         </thead>
