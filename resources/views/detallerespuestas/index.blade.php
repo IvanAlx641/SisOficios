@@ -69,7 +69,7 @@
                             @forelse ($oficio->respuestasOficios as $respuesta)
                                 <tr>
                                     <td class="ps-4">
-                                        <a href="#" class="fw-bold fs-4 text-guinda text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalEditarRespuesta{{ $respuesta->id }}" title="Editar respuesta">
+                                        <a href="#" class="fw-bold fs-4 link-oficio-gris text-guinda text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalEditarRespuesta{{ $respuesta->id }}" title="Editar respuesta">
                                             {{ $respuesta->numero_oficio_respuesta }}
                                         </a>
                                     </td>
@@ -128,7 +128,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <small class="text-muted d-block mb-1">Número de oficio:</small>
-                                <span class="text-guinda fw-bold">{{ $oficio->numero_oficio }}</span>
+                                <span class="text-guinda link-oficio-guinda fw-bold">{{ $oficio->numero_oficio }}</span>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <small class="text-muted d-block mb-1">Fecha de recepción:</small>
@@ -214,7 +214,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center pt-3 border-top mt-4">
-                            <button type="submit" class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar Respuesta</button>
+                            <button type="submit" class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar</button>
                             <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
@@ -346,15 +346,14 @@
     @endif
 
     <style>
-        .border-guinda { border-color: #9D2449 !important; }
-        .text-guinda { color: #9D2449 !important; }
-        .text-guinda2 { color: #9D2449 !important; }
-        .btn-guinda { background-color: #9D2449; color: white; border: none; font-weight: 600; transition: all 0.2s ease; }
-        .btn-guinda:hover { background-color: #7a1c38; color: white; }
-        .link-hover-guinda { color: grey !important; text-decoration: none; transition: all 0.2s ease; }
         .btn-guardar-modal { background-color: #9D2449; color: white; border: none; font-weight: 600; transition: all 0.2s ease; }
         .btn-guardar-modal:hover { background-color: #7a1c38; color: white; }
         .btn-cancelar { background: transparent; border: none; color: #6c757d; font-weight: 600; padding: 0; transition: all 0.2s ease; }
         .btn-cancelar:hover { color: #9D2449; text-decoration: underline; }
+        .link-oficio-guinda {
+            color: grey;
+            text-decoration: none;
+            transition: 0.2s;
+        }
     </style>
 @endsection
