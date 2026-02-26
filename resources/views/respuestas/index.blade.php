@@ -263,7 +263,7 @@
                             @csrf
                             <input type="hidden" name="oficio_id" value="{{ $oficio->id }}">
 
-                            <div class="row g-3">
+                            
                                 <div class="row g-3">
                                     <div class="col-md-4">
                                         <label class="form-label fw-bold text-guinda2 small">Fecha de la respuesta:</label>

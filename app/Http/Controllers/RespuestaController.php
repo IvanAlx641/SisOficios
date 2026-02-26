@@ -117,7 +117,7 @@ class RespuestaController extends Controller
             'numero_oficio_respuesta' => $request->numero_oficio_respuesta,
             'firmado_por_id' => $request->firmado_por_id,
             'dirigido_a_id' => $request->dirigido_a_id,
-            'url_oficio_respuesta' => $request->url_oficio_respuesta ?? null,
+            'url_oficio_respuesta' => $request->url_oficio_respuesta ?? '',
             'descripción_respuesta_oficio' => $request->descripción_respuesta_oficio,
             'fecha_creacion' => now(),
             'usuario_creacion_id' => auth()->id(),
@@ -164,7 +164,7 @@ class RespuestaController extends Controller
             'numero_oficio_respuesta'      => $request->numero_oficio_respuesta,
             'dirigido_a_id'                => $request->dirigido_a_id,
             'firmado_por_id'               => $request->firmado_por_id,
-            'url_oficio_respuesta'         => $request->url_oficio_respuesta,
+            'url_oficio_respuesta'         => $request->url_oficio_respuesta ?? '',
             'descripción_respuesta_oficio' => $request->descripción_respuesta_oficio,
         ]);
 
