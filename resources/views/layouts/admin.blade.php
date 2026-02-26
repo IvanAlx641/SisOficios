@@ -324,9 +324,9 @@
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('actividad.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-like"></i>
-                                        <span class="hide-menu">Bitacora</span>
+                                        <span class="hide-menu">Registro</span>
                                     </a>
                                 </li>
                             </ul>
@@ -514,9 +514,9 @@
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('actividad.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-like"></i>
-                                            <span class="hide-menu">Bitacora</span>
+                                            <span class="hide-menu">Registro</span>
                                         </a>
                                     </li>
                                 </ul>

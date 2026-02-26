@@ -10,17 +10,17 @@
                 <h3 class="fw-bold mb-0 text-guinda">Actividades</h3>
                 <div class="d-flex gap-2">
                     <a href="{{ route('actividad.index') }}" class="btn btn-outline-guinda rounded-pill px-4 shadow-sm fw-bold">
-                        <i class="ti ti-arrow-left me-1"></i> Regresar al listado
+                        <i class="ti ti-arrow-left me-1"></i>
                     </a>
                     <button type="button" class="btn btn-guinda rounded-pill px-4 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#modalDetalleActividad" id="btnNuevoDetalle">
-                        <i class="ti ti-plus"></i> Agregar Tarea
+                         Agregar
                     </button>
                 </div>
             </div>
 
             <ul class="nav nav-custom-tabs border-bottom mb-4">
                 <li class="nav-item">
-                    <a class="nav-link text-secondary" href="{{ route('actividad.edit', $actividad->id) }}">
+                    <a class="nav-link" href="{{ route('actividad.edit', $actividad->id) }}">
                         <i class="ti ti-file me-1"></i> Datos generales
                     </a>
                 </li>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-md-4 mb-2 mb-md-0">
                     <span class="text-muted small fw-semibold">Responsable:</span><br>
-                    <span class="text-guinda fw-bold">{{ mb_strtoupper($actividad->responsable->nombre ?? 'N/A') }}</span>
+                    <span class="text-dark">{{ mb_strtoupper($actividad->responsable->nombre ?? 'N/A') }}</span>
                 </div>
                 <div class="col-md-4">
                     <span class="text-muted small fw-semibold">Sistema:</span><br>
@@ -51,33 +51,33 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card task-card h-100 border-0 shadow-sm position-relative rounded-3 border-top border-4 border-guinda">
                             
-                            <div class="task-card-header text-center py-3 px-3 bg-white border-bottom">
+                            <div class="custom-card-header text-center py-3 px-3  bg-white border-bottom">
                                 <span class="badge {{ $detalle->estatus == 'Atendida' ? 'bg-success text-white' : 'bg-warning text-dark' }} rounded-pill px-3 py-1 fw-bold shadow-sm mb-2" style="font-size: 0.7rem;">
                                     {{ $detalle->estatus }}
                                 </span>
-                                <h6 class="text-guinda fw-bold mb-0 text-uppercase text-truncate d-block" style="font-size: 0.85rem;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}">
+                                <h6 class="text-white fw-bold mb-0 text-uppercase text-truncate d-block" style="font-size: 0.85rem;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}">
                                     {{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}
                                 </h6>
                             </div>
 
-                            <div class="card-body bg-light pt-3 pb-3">
-                                <small class="text-muted d-block fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">Descripción:</small>
-                                <div class="text-secondary custom-scrollbar bg-white p-2 border rounded" style="font-size: 0.85rem; max-height: 120px; overflow-y: auto;line-height: 1.4;">
+                            <div class="card-body bg-white pt-3 pb-3">
+                                <small class="text-dark d-block fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">Descripción:</small>
+                                
                                     {!! $detalle->descripcion_actividad !!}
-                                </div>
+                                
                             </div>
 
                             <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center rounded-bottom">
-                                <small class="text-muted fw-bold" style="font-size: 0.75rem;">ID: #{{ $detalle->id }}</small>
+                              
                                 
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary border-0 btn-editar-detalle" data-url="{{ route('detalleactividad.edit', $detalle->id) }}" data-action="{{ route('detalleactividad.update', $detalle->id) }}" title="Editar Tarea">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary text-guinda border-0 btn-editar-detalle" data-url="{{ route('detalleactividad.edit', $detalle->id) }}" data-action="{{ route('detalleactividad.update', $detalle->id) }}" title="Editar Tarea">
                                         <i class="ti ti-pencil fs-5"></i>
                                     </button>
                                     
                                     <form action="{{ route('detalleactividad.destroy', $detalle->id) }}" method="POST" onsubmit="return confirm('¿Eliminar este detalle de tarea?');">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="btn btn-sm text-danger border-0" title="Eliminar"><i class="ti ti-trash fs-5"></i></button>
+                                        <button type="submit" class="btn btn-sm text-guinda border-0" title="Eliminar"><i class="ti ti-trash fs-5"></i></button>
                                     </form>
                                 </div>
                             </div>
@@ -105,12 +105,12 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow">
             
-            <div class="modal-header bg-white border-bottom-0 pb-0">
-                <h5 class="modal-title fw-bold text-guinda" id="modalDetalleTitle">Agregar Detalle de Tarea</h5>
+            <div class="modal-header bg-light border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-guinda" id="modalDetalleTitle">Detalle de tarea</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
-            <div class="modal-body p-4 bg-light">
+            <div class="modal-body p-4 bg-white">
                 <form action="{{ route('detalleactividad.store') }}" method="POST" id="formDetalle" novalidate>
                     @csrf
                     <div id="methodContainer"></div>
@@ -119,7 +119,7 @@
                     <div class="row g-3 mb-4">
                         <div class="col-md-8">
                             <label class="form-label fw-bold text-guinda2 small">Tipo de requerimiento: <span class="text-danger">*</span></label>
-                            <select name="tipo_requerimiento_id" id="modal_tipo_req" class="form-select bg-white border-guinda text-secondary @error('tipo_requerimiento_id') is-invalid @enderror" required>
+                            <select name="tipo_requerimiento_id" id="modal_tipo_req" class="form-select bg-white border-guinda @error('tipo_requerimiento_id') is-invalid @enderror" required>
                                 <option value="">Seleccione...</option>
                                 @foreach($tipoRequerimiento as $id => $nombre)
                                     <option value="{{ $id }}" {{ old('tipo_requerimiento_id') == $id ? 'selected' : '' }}>{{ $nombre }}</option>
@@ -167,8 +167,7 @@
 
 <style>
     /* Paleta Institucional */
-    .text-guinda { color: #9D2449 !important; }
-    .text-guinda2 { color: #9D2449 !important; }
+    
     .bg-guinda { background-color: #9D2449 !important; }
     .border-guinda { border-color: #9D2449 !important; }
     
@@ -190,8 +189,19 @@
     }
 
     /* Estilo de la Tarea en Card Unificada */
-    .task-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .task-card:hover { transform: translateY(-3px); box-shadow: 0 .4rem 1rem rgba(0,0,0,.15)!important; }
+     .custom-card {
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .custom-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    .custom-card-header {
+        background: linear-gradient(135deg, #9D2449 0%, #c4305c 100%);
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
 
     /* Quill */
     .ql-toolbar.ql-snow { border: none !important; border-bottom: 1px solid #9D2449 !important; background-color: #f8f9fa; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; }

@@ -9,7 +9,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="fw-bold mb-0 text-guinda">Actividades</h3>
                 <a href="{{ route('actividad.index') }}" class="btn btn-outline-guinda rounded-pill px-4 shadow-sm fw-bold">
-                    <i class="ti ti-arrow-left me-1"></i> Regresar al listado
+                    <i class="ti ti-arrow-left me-1"></i>
                 </a>
             </div>
 
@@ -49,7 +49,7 @@
                     <div class="row g-4 mb-5">
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-guinda2 small">Fecha: <span class="text-danger">*</span></label>
-                            <input type="date" name="fecha_actividad" class="form-control border-guinda text-secondary @error('fecha_actividad') is-invalid @enderror" value="{{ old('fecha_actividad', optional($actividad->fecha_actividad)->format('Y-m-d') ?? date('Y-m-d')) }}" required>
+                            <input type="date" name="fecha_actividad" class="form-control border-guinda  @error('fecha_actividad') is-invalid @enderror" value="{{ old('fecha_actividad', optional($actividad->fecha_actividad)->format('Y-m-d') ?? date('Y-m-d')) }}" required>
                             @error('fecha_actividad')
                                 <span class="invalid-feedback fw-bold">{{ $message }}</span>
                             @enderror
@@ -57,7 +57,7 @@
 
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-guinda2 small">Responsable: <span class="text-danger">*</span></label>
-                            <select name="responsable_id" class="form-select border-guinda text-secondary @error('responsable_id') is-invalid @enderror" required {{ isset($isResponsable) && $isResponsable ? 'readonly' : '' }}>
+                            <select name="responsable_id" class="form-select border-guinda @error('responsable_id') is-invalid @enderror" required {{ isset($isResponsable) && $isResponsable ? 'readonly' : '' }}>
                                 @if(!isset($isResponsable) || !$isResponsable)
                                     <option value="">Seleccione un responsable...</option>
                                 @endif
@@ -72,7 +72,7 @@
 
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-guinda2 small">Sistema: <span class="text-danger">*</span></label>
-                            <select name="sistema_id" class="form-select border-guinda text-secondary @error('sistema_id') is-invalid @enderror" required>
+                            <select name="sistema_id" class="form-select border-guinda @error('sistema_id') is-invalid @enderror" required>
                                 <option value="">Seleccione un sistema...</option>
                                 @foreach($sistemas as $id => $sigla)
                                     <option value="{{ $id }}" {{ old('sistema_id', $actividad->sistema_id) == $id ? 'selected' : '' }}>{{ mb_strtoupper($sigla) }}</option>
@@ -98,9 +98,7 @@
 </div>
 
 <style>
-    /* Paleta Institucional */
-    .text-guinda { color: #9D2449 !important; }
-    .text-guinda2 { color: #9D2449 !important; }
+   
     .bg-guinda { background-color: #9D2449 !important; }
     .border-guinda { border-color: #9D2449 !important; }
     

@@ -5,9 +5,9 @@
     
     <div class="card w-100 position-relative border-0 shadow-sm mb-5">
         <div class="card-body pt-3 pb-2 bg-light border-bottom d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold mb-0 text-guinda">Registro de Actividades</h4>
+            <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
             <a href="{{ route('actividad.create') }}" class="btn btn-guinda rounded-pill px-4 shadow-sm fw-bold">
-                <i class="ti ti-plus"></i> Nueva Actividad
+                Nueva
             </a>
         </div>
 
@@ -39,9 +39,6 @@
                         <label class="form-label text-guinda2 small fw-bold">Sistema:</label>
                         <select name="sistema_id" id="filtro_sistema" class="form-select border-guinda text-secondary" onchange="this.form.submit()">
                             <option value="Todos">Todos</option>
-                            @foreach($sistemas as $id => $sigla)
-                                <option value="{{ $id }}" {{ request('sistema_id') == $id ? 'selected' : '' }}>{{ mb_strtoupper($sigla) }}</option>
-                            @endforeach
                         </select>
                     </div>
 
@@ -78,7 +75,7 @@
                         <h4 class="text-white fw-bold mb-0 text-uppercase text-truncate" title="{{ $actividad->sistema->sigla_sistema ?? 'N/A' }}">
                             {{ $actividad->sistema->sigla_sistema ?? 'N/A' }}
                         </h4>
-                        <span class="badge bg-white text-guinda rounded-pill mt-2 shadow-sm">ID: #{{ $actividad->id }}</span>
+                       
                     </div>
 
                     <div class="card-body bg-white pt-4 pb-2">
@@ -106,12 +103,12 @@
                             </span>
                             
                             <div class="d-flex gap-1">
-                                <a href="{{ route('actividad.edit', $actividad->id) }}" class="btn btn-sm btn-light border rounded-circle text-secondary shadow-sm" title="Editar"><i class="ti ti-pencil"></i></a>
+                                <a href="{{ route('actividad.edit', $actividad->id) }}" class="btn btn-sm btn-light border rounded-circle text-guinda shadow-sm" title="Editar"><i class="ti ti-pencil"></i></a>
                                 <a href="{{ route('detalleactividad.index', ['actividad_id' => encrypt($actividad->id)]) }}" class="btn btn-sm btn-light border rounded-circle text-guinda shadow-sm" title="Añadir/Gestionar Tareas"><i class="ti ti-plus"></i></a>
                                 
                                 <form action="{{ route('actividad.destroy', $actividad->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de querer eliminar esta actividad?');">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light border rounded-circle text-danger shadow-sm" {{ $actividad->detalle_actividades_count > 0 ? 'disabled' : '' }} title="Eliminar"><i class="ti ti-trash"></i></button>
+                                    <button type="submit" class="btn btn-sm btn-light border rounded-circle text-guinda shadow-sm" {{ $actividad->detalle_actividades_count > 0 ? 'disabled' : '' }} title="Eliminar"><i class="ti ti-trash"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -132,7 +129,6 @@
                                             <span class="badge {{ $detalle->estatus == 'Atendida' ? 'bg-success' : 'bg-warning text-dark' }} px-2 py-1" style="font-size: 0.65rem;">
                                                 {{ $detalle->estatus }}
                                             </span>
-                                            <small class="text-muted" style="font-size: 0.7rem;">ID: {{ $detalle->id }}</small>
                                         </div>
                                         <h6 class="fw-bold text-dark text-truncate mb-1" style="font-size: 0.85rem;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}">
                                             {{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}
@@ -195,7 +191,7 @@
         border-radius: 50%;
     }
     .btn-more-info {
-        background-color: #F8E8EC; color: #9D2449;
+         color: #9D2449;
         border: 1px solid #9D2449; transition: all 0.3s ease;
     }
     .btn-more-info:hover {
