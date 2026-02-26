@@ -52,7 +52,7 @@
                 </div>
                 <div class="col-12 mb-4">
                     <span class="text-muted small fw-semibold">Solicitud conjunta:</span> 
-                    <span class="text-dark small">{{ $oficio->solicitud_conjunta == 'Sí' ? 'Sí' : 'No' }}</span>
+                    <span class="text-dark small">{{ $oficio->solicitud_conjunta == 'X' ? 'Sí' : 'No' }}</span>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                 <div class="col-12 mb-2 d-flex align-items-center">
                     <span class="text-muted small fw-semibold me-2">Soporte documental:</span> 
                     @if($oficio->soporte_documental)
-                        <a href="{{ asset($oficio->soporte_documental) }}" target="_blank" class="text-guinda fs-5" title="Ver soporte"><i class="ti ti-eye"></i></a>
+                    <a href="{{ asset('storage/' . $oficio->soporte_documental) }}" target="_blank" class="text-guinda fs-5" title="Ver soporte"><i class="ti ti-eye"></i></a>
                     @else
                         <span class="text-muted small"><i class="ti ti-eye-off"></i></span>
                     @endif

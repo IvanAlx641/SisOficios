@@ -15,7 +15,6 @@ class SeguimientoController extends Controller
 {
     public function index(Request $request): View
     {
-        // 1. Cargamos TODAS las relaciones (incluyendo oficiosVinculados para que no falle al recuperarlos)
         $query = Oficio::with([
             'areaDirigido', 
             'solicitantes', 
@@ -24,7 +23,7 @@ class SeguimientoController extends Controller
             'tipoRequerimiento',
             'responsablesOficios.responsable',
             'responsablesOficios.seguimientos',
-            'oficiosVinculados' // <--- SUPER IMPORTANTE PARA QUE LA VISTA LOS VEA
+            'oficiosVinculados'
         ]);
 
         if ($request->filled('numero_oficio')) {
@@ -51,7 +50,6 @@ class SeguimientoController extends Controller
             ->orderBy('nombre_unidad_administrativa')
             ->pluck('nombre_unidad_administrativa', 'id');
 
-        // Catálogo de oficios para el buscador
         $listaOficios = Oficio::orderBy('numero_oficio')->pluck('numero_oficio', 'id');
 
         return view('seguimientos.index', compact('oficios', 'request', 'unidades', 'listaOficios'));
@@ -59,9 +57,13 @@ class SeguimientoController extends Controller
 
     public function storeAvance(Request $request, $responsableOficioId): RedirectResponse
     {
+        // Validación con mensajes en español
         $request->validate([
             'estatus' => 'required|in:Pendiente,En Desarrollo,En validación,Publicado',
             'observaciones' => 'required|string|max:2000',
+        ], [
+            'observaciones.required' => 'El campo observaciones es obligatorio.',
+            'estatus.required' => 'El campo estatus es obligatorio.'
         ]);
 
         Seguimiento::create([
@@ -78,7 +80,18 @@ class SeguimientoController extends Controller
 
     public function concluir(Request $request, Oficio $oficio): RedirectResponse
     {
-        // Actualizamos los datos generales
+        // 1. REAGREGAMOS LA VALIDACIÓN AQUÍ
+        $request->validate([
+            'fecha_conclusion' => 'required|date',
+            'propuesta_respuesta' => 'required|string',
+            'soporte_documental' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480',
+        ], [
+            'fecha_conclusion.required' => 'El campo fecha de conclusión es obligatorio.',
+            'propuesta_respuesta.required' => 'El campo texto de la propuesta es obligatorio.',
+            'soporte_documental.mimes' => 'El soporte documental debe ser un archivo de tipo: pdf, jpg, jpeg, png, doc, docx.',
+            'soporte_documental.max' => 'El soporte documental no debe pesar más de 20MB.'
+        ]);
+
         $dataUpdate = [
             'estatus' => 'Concluido',
             'fecha_conclusion' => $request->fecha_conclusion,
@@ -88,7 +101,6 @@ class SeguimientoController extends Controller
             'usuario_modificacion_id' => auth()->id(),
         ];
 
-        // Guardamos archivo si existe
         if ($request->hasFile('soporte_documental')) {
             $path = $request->file('soporte_documental')->store('soportes', 'public');
             $dataUpdate['soporte_documental'] = $path;
@@ -96,20 +108,10 @@ class SeguimientoController extends Controller
 
         $oficio->update($dataUpdate);
 
-        // -------------------------------------------------------------
-        // LA MAGIA A PRUEBA DE BALAS PARA LOS OFICIOS VINCULADOS
-        // -------------------------------------------------------------
         if ($request->has('alcance_otro_oficio')) {
-            
-            // Forzamos a Laravel a leer el arreglo de los inputs ocultos.
-            // Si por alguna razón no viene, le pasamos un arreglo vacío [] por defecto.
             $vinculados = $request->input('oficios_vinculados', []);
-            
-            // Sync sincroniza automáticamente la base de datos con este arreglo
             $oficio->oficiosVinculados()->sync($vinculados);
-            
         } else {
-            // Si el checkbox se desmarca, limpiamos todas las relaciones
             $oficio->oficiosVinculados()->detach();
         }
 

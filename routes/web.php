@@ -15,6 +15,11 @@ use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\SeguimientoController;
 use App\Http\Controllers\RespuestaController;
 use App\Http\Controllers\BuscadorController;
+
+// --- IMPORTAMOS LOS NUEVOS CONTROLADORES DE ACTIVIDADES ---
+use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\DetalleActividadController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
 
         // 3. Concluir el Oficio
         Route::post('seguimiento/{oficio}/concluir', [SeguimientoController::class, 'concluir'])->name('seguimiento.concluir');
+        
         // --- MÓDULO RESPUESTAS ---
         // 1. Index principal
         Route::get('/respuestas', [RespuestaController::class, 'index'])->name('respuestas.index');
@@ -100,13 +106,24 @@ Route::middleware(['auth'])->group(function () {
         // 2. Guardar nueva respuesta (Recibe el ID del Oficio para asociarlo)
         Route::post('/respuestas/{oficio}', [RespuestaController::class, 'store'])->name('respuestas.store');
 
-        // 3. Eliminar respuesta (si ya tienes el método en el controlador)
+        // 3. Eliminar respuesta
         Route::delete('/respuestas/{respuesta}', [RespuestaController::class, 'destroy'])->name('respuestas.destroy');
 
         Route::get('/detallerespuestas/{oficio}', [RespuestaController::class, 'show'])->name('detallerespuestas.index');
         Route::put('/respuestas/{respuesta}', [RespuestaController::class, 'update'])->name('respuestas.update');
 
+        // --- MÓDULO BUSCADOR ---
         Route::get('/buscador', [BuscadorController::class, 'index'])->name('buscador.index');
         Route::get('/buscador/{id}', [BuscadorController::class, 'show'])->name('buscador.show');
+
+        // ==========================================
+        // --- NUEVO MÓDULO ACTIVIDADES ---
+        // ==========================================
+        Route::resource('actividad', ActividadController::class)
+            ->parameters(['actividad' => 'actividad']);
+
+        Route::resource('detalleactividad', DetalleActividadController::class)
+            ->parameters(['detalleactividad' => 'detalleactividad'])
+            ->except(['create', 'show']); // Excluimos las que no usamos para no hacer ruido
     });
 });

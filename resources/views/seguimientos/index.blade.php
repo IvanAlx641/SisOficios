@@ -132,9 +132,9 @@
                             <td class="small fw-semibold text-muted">
                                 @if($oficio->responsablesOficios->count() > 1)
                                     <div class="custom-hover-wrapper position-relative d-inline-block">
-                                        <div class="d-flex align-items-center" style="cursor: pointer;
+                                        <div class="d-flex align-items-center" style="cursor: pointer;">
                                             {{ mb_strtoupper($oficio->responsablesOficios->first()->responsable->nombre ?? 'USUARIO') }}
-                                            
+                                            <i class="ti ti-arrow-down fw-bold ms-1"></i>
                                         </div>
                                         <div class="custom-hover-card shadow-lg border rounded bg-white text-start">
                                             <div class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
@@ -151,7 +151,6 @@
                                     </div>
                                 @elseif($oficio->responsablesOficios->count() == 1)
                                     <div class="d-flex align-items-center">
-                                        
                                         {{ mb_strtoupper($oficio->responsablesOficios->first()->responsable->nombre ?? 'USUARIO') }}
                                     </div>
                                 @else
@@ -211,9 +210,9 @@
         <div class="offcanvas-body p-0 bg-light">
             <div class="p-4 bg-white border-bottom">
                 <p class="text-muted small mb-1">Descripción del requerimiento:</p>
-                <p class="text-guinda fw-semibold small mb-3">{{ $oficio->descripción_oficio }}</p>
+                <p class="text-dark  small mb-3">{{ $oficio->descripción_oficio }}</p>
                 <p class="text-muted small mb-1">Sistema:</p>
-                <p class="text-guinda fw-semibold small mb-3">{{ $oficio->sistema->nombre_sistema ?? 'N/A' }}</p>
+                <p class="text-dark  small mb-3">{{ $oficio->sistema->nombre_sistema ?? 'N/A' }}</p>
                 <p class="text-muted small mb-1">Responsables:</p>
                 @foreach($oficio->responsablesOficios as $resp)
                     <p class="text-dark small mb-0"><i class="ti ti-check text-success me-1"></i> {{ $resp->responsable->nombre ?? 'Usuario' }}</p>
@@ -350,19 +349,21 @@
     </div>
 
     @if($oficio->responsablesOficios->count() > 0)
-        @php $responsableBaseId = $oficio->responsablesOficios->first()->id; @endphp
-        <div class="modal fade" id="modalAddAvance{{ $responsableBaseId }}" tabindex="-1" aria-hidden="true" style="z-index: 1060;">
+        @php 
+            $responsableBaseId = $oficio->responsablesOficios->first()->id; 
+            $modalAddId = 'modalAddAvance' . $responsableBaseId;
+        @endphp
+        <div class="modal fade" id="{{ $modalAddId }}" tabindex="-1" aria-hidden="true" style="z-index: 1060;">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-white border-bottom-0 pb-0">
+                    <div class="modal-header bg-light border-bottom-0 pb-0">
                         <h5 class="modal-title fw-bold text-guinda">Nuevo Seguimiento</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body p-4 bg-light">
-                        <form action="{{ route('seguimiento.avance.store', $responsableBaseId) }}" method="POST">
+                    <div class="modal-body p-4 bg-white">
+                        <form action="{{ route('seguimiento.avance.store', $responsableBaseId) }}" method="POST" novalidate>
                             @csrf
-                            <p class="text-guinda fw-semibold small mb-4">{{ \Illuminate\Support\Str::limit($oficio->descripción_oficio, 100) }}</p>
-
+                            <input type="hidden" name="error_modal_id" value="{{ $modalAddId }}">
                             <div class="row g-3 mb-3">
                                 <div class="col-6">
                                     <label class="form-label fw-bold text-guinda2 small">Fecha de seguimiento:</label>
@@ -381,7 +382,11 @@
 
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-guinda2 small">Observaciones:</label>
-                                <textarea name="observaciones" class="form-control bg-white border-guinda" rows="3" required></textarea>
+                                @php $hasObsError = old('error_modal_id') == $modalAddId && $errors->has('observaciones'); @endphp
+                                <textarea name="observaciones" class="form-control bg-white border-guinda {{ $hasObsError ? 'is-invalid' : '' }}" rows="3" required>{{ old('observaciones') }}</textarea>
+                                @if($hasObsError)
+                                    <span class="invalid-feedback fw-bold mt-1">{{ $errors->first('observaciones') }}</span>
+                                @endif
                             </div>
 
                             <div class="d-flex align-items-center pt-3 border-top">
@@ -395,22 +400,28 @@
         </div>
     @endif
 
-    <div class="modal fade" id="modalConcluir{{ $oficio->id }}" tabindex="-1" aria-hidden="true">
+    @php $modalConcluirId = 'modalConcluir' . $oficio->id; @endphp
+    <div class="modal fade" id="{{ $modalConcluirId }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-white border-bottom-0 pb-0">
                     <h5 class="modal-title fw-bold text-guinda">
-                        {{ $oficio->estatus == 'Turnado' ? 'Concluir Oficio:' : 'Editar Conclusión:' }} <span class="text-secondary">{{ $oficio->numero_oficio }}</span>
+                        {{ $oficio->estatus == 'Turnado' ? 'Concluir Oficio:' : 'Editar Conclusión:' }} <span class="text-dark">{{ $oficio->numero_oficio }}</span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form action="{{ route('seguimiento.concluir', $oficio->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('seguimiento.concluir', $oficio->id) }}" method="POST" enctype="multipart/form-data" novalidate>
                         @csrf
+                        <input type="hidden" name="error_modal_id" value="{{ $modalConcluirId }}">
                         
                         <div class="mb-3">
                             <label class="form-label fw-bold text-guinda2 small">Fecha de conclusión:</label>
-                            <input type="date" name="fecha_conclusion" class="form-control border-guinda" value="{{ $oficio->fecha_conclusion ? $oficio->fecha_conclusion->format('Y-m-d') : date('Y-m-d') }}" required>
+                            @php $hasFechaError = old('error_modal_id') == $modalConcluirId && $errors->has('fecha_conclusion'); @endphp
+                            <input type="date" name="fecha_conclusion" class="form-control border-guinda {{ $hasFechaError ? 'is-invalid' : '' }}" value="{{ old('fecha_conclusion', $oficio->fecha_conclusion ? $oficio->fecha_conclusion->format('Y-m-d') : date('Y-m-d')) }}" required>
+                            @if($hasFechaError)
+                                <span class="invalid-feedback fw-bold mt-1">{{ $errors->first('fecha_conclusion') }}</span>
+                            @endif
                         </div>
 
                         <div class="mb-3">
@@ -423,7 +434,11 @@
                                 </div>
                                 <small class="text-muted d-block mb-1">Si sube un nuevo archivo, reemplazará al actual.</small>
                             @endif
-                            <input type="file" name="soporte_documental" class="form-control border-guinda" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" {{ $oficio->soporte_documental ? '' : 'required' }}>
+                            @php $hasDocError = old('error_modal_id') == $modalConcluirId && $errors->has('soporte_documental'); @endphp
+                            <input type="file" name="soporte_documental" class="form-control border-guinda {{ $hasDocError ? 'is-invalid' : '' }}" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" {{ $oficio->soporte_documental ? '' : 'required' }}>
+                            @if($hasDocError)
+                                <span class="invalid-feedback fw-bold mt-1">{{ $errors->first('soporte_documental') }}</span>
+                            @endif
                         </div>
 
                         <div class="mb-3">
@@ -432,7 +447,11 @@
                                 <span>Normal <i class="ti ti-chevron-down ms-1"></i></span>
                                 <i class="ti ti-bold"></i> <i class="ti ti-italic"></i> <i class="ti ti-underline"></i>
                             </div>
-                            <textarea name="propuesta_respuesta" class="form-control border-guinda rounded-bottom border-top-0" rows="5" required>{{ $oficio->propuesta_respuesta }}</textarea>
+                            @php $hasPropError = old('error_modal_id') == $modalConcluirId && $errors->has('propuesta_respuesta'); @endphp
+                            <textarea name="propuesta_respuesta" class="form-control border-guinda rounded-bottom border-top-0 {{ $hasPropError ? 'is-invalid' : '' }}" rows="5" required>{{ old('propuesta_respuesta', $oficio->propuesta_respuesta) }}</textarea>
+                            @if($hasPropError)
+                                <span class="invalid-feedback fw-bold mt-1">{{ $errors->first('propuesta_respuesta') }}</span>
+                            @endif
                         </div>
                         
                         <div class="form-check mt-4 mb-3 d-flex align-items-center gap-2">
@@ -488,8 +507,6 @@
 
 <style>
     /* Estilos base de la paleta Guinda */
-    .text-guinda { color: #9D2449 !important; }
-    .text-guinda2 { color: #9D2449 !important; }
     .border-guinda { border-color: #9D2449 !important; }
     .btn-guinda-light { background-color: #F8E8EC; color: #9D2449; border: none; font-weight: bold; }
     .btn-guinda-light:hover { background-color: #9D2449; color: white; }
@@ -567,6 +584,35 @@
 </style>
 
 <script>
+    // -----------------------------------------------------------------
+    // MAGIA PARA REABRIR EL MODAL QUE TIENE ERRORES DE VALIDACIÓN
+    // -----------------------------------------------------------------
+    document.addEventListener("DOMContentLoaded", function() {
+        @if(old('error_modal_id'))
+            var errorModalId = "{{ old('error_modal_id') }}";
+            var modalElement = document.getElementById(errorModalId);
+            if (modalElement) {
+                var myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
+            }
+        @endif
+    });
+    var todosLosModales = document.querySelectorAll('.modal');
+    todosLosModales.forEach(function(modal) {
+        modal.addEventListener('hidden.bs.modal', function () {
+            var form = this.querySelector('form');
+            if (form) {
+                var inputsInvalidos = form.querySelectorAll('.is-invalid');
+                inputsInvalidos.forEach(input => input.classList.remove('is-invalid'));
+                
+                var mensajesError = form.querySelectorAll('.invalid-feedback');
+                mensajesError.forEach(msg => msg.remove());
+                
+                form.reset();
+            }
+        });
+    });
+
     // 1. SCRIPT DEL BUSCADOR JS 
     function convertirSelectABuscador(idSelect) {
         const originalSelect = document.getElementById(idSelect);
