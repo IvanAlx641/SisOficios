@@ -39,7 +39,7 @@ class OficioController extends Controller
         if ($request->filled('fecha_recepcion')) {
             $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
         }
-
+        $query->where('estatus', '!=', 'Atendido');
         // 4. Estatus (Si es 'Todos', no filtramos nada)
         if ($request->filled('estatus') && $request->estatus !== 'Todos') {
             $query->where('estatus', $request->estatus);

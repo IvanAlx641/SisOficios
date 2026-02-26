@@ -46,7 +46,7 @@ class TurnoController extends Controller
         if ($request->filled('fecha_recepcion')) {
             $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
         }
-
+        $query->where('estatus', '!=', 'Atendido');
         // --- FILTRO DE ESTATUS MEJORADO ---
         if ($request->filled('estatus') && $request->estatus !== 'Todos') {
             // Manejar la dualidad Concluido/Atendido si es necesario en tu lógica

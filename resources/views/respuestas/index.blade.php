@@ -117,7 +117,8 @@
                                         @php
                                             $badgeClass = match ($oficio->estatus) {
                                                 'Turnado' => 'bg-info text-white',
-                                                'Concluido', 'Atendido' => 'bg-success text-white',
+                                                'Concluido'=> 'bg-success text-white',
+                                                'Atendido'=> 'bg-primary text-white',
                                                 default => 'bg-secondary text-white',
                                             };
                                         @endphp
@@ -437,6 +438,11 @@
             visibility: visible;
             opacity: 1;
             margin-top: 5px;
+        }
+        .bg-primary {
+        background-color: blue !important;
+        border-color: blue !important;
+        
         }
     </style>
     <script>

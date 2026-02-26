@@ -251,11 +251,11 @@
         .text-guinda2 {
             color: #9D2449;
         }
-        .btn-primary {
-    background-color: blue !important;
-    border-color: blue !important;
-    .btn- 
-}
+        .bg-primary {
+        background-color: blue !important;
+        border-color: blue !important;
+        
+        }
     </style>
 
 @endsection

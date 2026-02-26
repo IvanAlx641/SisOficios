@@ -154,7 +154,8 @@
                                             $badgeClass = match ($oficio->estatus ?? 'Atendido') {
                                                 'Pendiente' => 'bg-warning text-white',
                                                 'Turnado' => 'bg-info text-white',
-                                                'Concluido', 'Atendido' => 'bg-success text-white',
+                                                'Concluido' => 'bg-success text-white',
+                                                'Atendido' => 'bg-primary text-white',
                                                 'Cancelado' => 'bg-danger text-white',
                                                 default => 'bg-secondary text-white',
                                             };
@@ -295,6 +296,11 @@
             visibility: visible;
             opacity: 1;
             margin-top: 5px;
+        }
+        .bg-primary {
+        background-color: blue !important;
+        border-color: blue !important;
+        
         }
     </style>
 
