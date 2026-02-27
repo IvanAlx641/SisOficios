@@ -24,7 +24,7 @@
                     @else
                         <a class="nav-link disabled text-muted" href="#" tabindex="-1" aria-disabled="true"
                             title="El oficio debe estar en estatus 'Turnado'">
-                            <i class="ti ti-users me-1"></i> Responsables <small>(Requiere Turnar)</small>
+                            <i class="ti ti-users me-1"></i> Responsables
                         </a>
                     @endif
                 </li>
@@ -38,7 +38,7 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <p class="mb-1 small text-muted">Número de oficio:</p>
-                        <p class="fw-bold fs-5 text-dark mb-0">
+                        <p class=" fs-4 text-dark  small mb-0">
                             {{ $oficio->numero_oficio }}
                             <a href="{{ $oficio->url_oficio }}" target="_blank"
                                 class="ms-2 btn btn-sm btn-outline-guinda py-0 px-2 rounded-pill">
@@ -49,12 +49,12 @@
 
                     <div class="col-md-6">
                         <p class="mb-1 small text-muted">Fecha de recepción:</p>
-                        <p class="fw-semibold text-dark mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</p>
+                        <p class=" text-dark mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</p>
                     </div>
 
                     <div class="col-md-12">
                         <p class="mb-1 small text-muted">Dirigido a:</p>
-                        <p class="fw-semibold text-dark mb-0">
+                        <p class=" text-dark mb-0">
                             {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}</p>
                     </div>
 

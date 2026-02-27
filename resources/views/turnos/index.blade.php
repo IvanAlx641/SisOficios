@@ -251,11 +251,6 @@
         .text-guinda2 {
             color: #9D2449;
         }
-        .bg-primary {
-        background-color: blue !important;
-        border-color: blue !important;
-        
-        }
     </style>
 
 @endsection

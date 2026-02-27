@@ -17,16 +17,17 @@
                                 value="{{ request('numero_oficio') }}">
                         </div>
 
-                        <div class="col-md-2">
-                            <label class="form-label text-guinda2 small fw-bold">Fecha de recepción del:</label>
-                            <input type="date" name="fecha_del" class="form-control border-guinda "
-                                value="{{ request('fecha_del') }}">
-                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
+                            <div class="input-group">
+                                <input type="date" name="fecha_del" class="form-control border-guinda"
+                                    value="{{ request('fecha_del') }}">
 
-                        <div class="col-md-2">
-                            <label class="form-label text-guinda2 small fw-bold">al:</label>
-                            <input type="date" name="fecha_al" class="form-control border-guinda "
-                                value="{{ request('fecha_al') }}">
+                                <span class="input-group-text bg-white border-guinda text-gray small ">al:</span>
+
+                                <input type="date" name="fecha_al" class="form-control border-guinda"
+                                    value="{{ request('fecha_al') }}">
+                            </div>
                         </div>
 
                         <div class="col-md-3">
@@ -146,22 +147,22 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div class="d-flex flex-column">
-                                        <a href="{{ route('buscador.show', $oficio->id) }}"
-                                            class="link-hover-guinda text-muted fw-bold d-block mb-1">
-                                            {{ $oficio->numero_oficio }}
-                                        </a>
-                                        @php
-                                            $badgeClass = match ($oficio->estatus ?? 'Atendido') {
-                                                'Pendiente' => 'bg-warning text-white',
-                                                'Turnado' => 'bg-info text-white',
-                                                'Concluido' => 'bg-success text-white',
-                                                'Atendido' => 'bg-primary text-white',
-                                                'Cancelado' => 'bg-danger text-white',
-                                                default => 'bg-secondary text-white',
-                                            };
-                                        @endphp
-                                         <span class="badge {{ $badgeClass }} rounded-pill w-auto"
-                                            style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
+                                            <a href="{{ route('buscador.show', $oficio->id) }}"
+                                                class="link-hover-guinda text-muted fw-bold d-block mb-1">
+                                                {{ $oficio->numero_oficio }}
+                                            </a>
+                                            @php
+                                                $badgeClass = match ($oficio->estatus ?? 'Atendido') {
+                                                    'Pendiente' => 'bg-warning text-white',
+                                                    'Turnado' => 'bg-info text-white',
+                                                    'Concluido' => 'bg-success text-white',
+                                                    'Atendido' => 'bg-primary text-white',
+                                                    'Cancelado' => 'bg-danger text-white',
+                                                    default => 'bg-secondary text-white',
+                                                };
+                                            @endphp
+                                            <span class="badge {{ $badgeClass }} rounded-pill w-auto"
+                                                style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
                                         </div>
                                     </td>
 
@@ -297,10 +298,11 @@
             opacity: 1;
             margin-top: 5px;
         }
+
         .bg-primary {
-        background-color: blue !important;
-        border-color: blue !important;
-        
+            background-color: blue !important;
+            border-color: blue !important;
+
         }
     </style>
 
