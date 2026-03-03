@@ -393,11 +393,11 @@
                                     <li class="nav-item dropdown position-relative">
                                         <a class="nav-link d-flex align-items-center p-0" href="javascript:void(0)"
                                             id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span class="d-none d-lg-block text-nowrap text-white fw-medium me-3">
+                                            <span class="d-none d-lg-block text-nowrap text-white small me-3">
                                                 {{ Auth::user()->nombre ?? 'Usuario' }}
                                             </span>
 
-                                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center small"
                                                 style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
                                                 {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
                                             </div>

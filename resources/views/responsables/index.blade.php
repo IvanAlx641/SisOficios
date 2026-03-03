@@ -24,67 +24,79 @@
 
         <div class="card-body p-4 bg-light">
             <div class="bg-white p-4 rounded-3 shadow-sm border mb-4">
-            <h5 class="fw-bold text-guinda mb-3 border-bottom pb-2">Contexto del oficio</h5>
+                <h5 class="fw-bold text-guinda mb-3 border-bottom pb-2">Contexto</h5>
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <p class="mb-1 small text-muted">Número de oficio:</p>
-                    <p class="fw-bold fs-5 text-dark mb-0">
-                        {{ $oficio->numero_oficio }}
-                        <a href="{{ $oficio->url_oficio }}" target="_blank"
-                            class="ms-2 btn btn-sm btn-outline-guinda py-0 px-2 rounded-pill">
-                            <i class="ti ti-eye"></i> Ver oficio
-                        </a>
-                    </p>
-                </div>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted me-2">Número de oficio:</span>
+                            <span class="small text-dark small mb-0">{{ $oficio->numero_oficio }}</span>
+                            <a href="{{ $oficio->url_oficio }}" target="_blank"
+                                class="ms-3 btn btn-sm btn-outline-guinda py-0 px-2 rounded-pill">
+                                <i class="ti ti-eye"></i> Ver oficio
+                            </a>
+                        </div>
+                    </div>
 
-                <div class="col-md-6">
-                    <p class="mb-1 small text-muted">Fecha de recepción:</p>
-                    <p class="fw-semibold text-dark mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</p>
-                </div>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted me-2">Fecha de recepción:</span>
+                            <span class="small text-dark mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</span>
+                        </div>
+                    </div>
 
-                <div class="col-md-12">
-                    <p class="mb-1 small text-muted">Dirigido a:</p>
-                    <p class="fw-semibold text-dark mb-0">
-                        {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}</p>
-                </div>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted me-2">Dirigido a:</span>
+                            <span class="small text-dark mb-0">
+                                {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}
+                            </span>
+                        </div>
+                    </div>
 
-                <div class="col-md-12">
-                    <p class="mb-1 small text-muted">Descripción del requerimiento:</p>
-                    <p class="text-dark bg-light p-2 rounded border">{{ $oficio->descripción_oficio }}</p>
-                </div>
+                    <div class="col-12">
+                        <p class="mb-1 small text-muted">Descripción del requerimiento:</p>
+                        <div class="text-dark small bg-white p-2 rounded border mb-0">
+                            {{ $oficio->descripción_oficio }}
+                        </div>
+                    </div>
 
-                <div class="col-md-12">
-                    <p class="mb-1 small text-muted">Solicitantes:</p>
-                    @if ($oficio->solicitantes->count() > 0)
-                        <ul class="list-unstyled mb-0 bg-light p-2 rounded border">
-                            @foreach ($oficio->solicitantes as $solicitante)
-                                <li>
-                                    <i class="ti ti-user text-guinda me-1"></i>
-                                    <span class="fw-bold">{{ $solicitante->nombre }}</span>
-                                    <span class="text-muted small">({{ $solicitante->cargo }})</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-muted fst-italic mb-0">Sin solicitantes asignados.</p>
-                    @endif
+                    <div class="col-12">
+                        <div class="d-flex align-items-start">
+                            <span class="small text-muted me-2 pt-2">Solicitantes:</span>
+                            <div class="flex-grow-1">
+                                @if ($oficio->solicitantes->count() > 0)
+                                    <ul class="list-unstyled mb-0 bg-light p-2 rounded border">
+                                        @foreach ($oficio->solicitantes as $solicitante)
+                                            <li>
+                                                <i class="ti ti-user text-guinda me-1"></i>
+                                                <span class="fw-bold">{{ $solicitante->nombre }}</span>
+                                                <span class="text-muted small">({{ $solicitante->cargo }})</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p class="text-muted fst-italic mb-0 pt-2">Sin solicitantes asignados.</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
             <div class="bg-white p-3 rounded-3 shadow-sm border mb-4">
                 <div class="row text-sm">
                     <div class="col-md-3 border-end">
                         <span class="text-muted d-block small">Número:</span>
-                        <strong class="text-dark">{{ $oficio->numero_oficio }}</strong>
+                        <strong class="text-dark small">{{ $oficio->numero_oficio }}</strong>
                     </div>
                     <div class="col-md-3 border-end">
                         <span class="text-muted d-block small">Sistema:</span>
-                        <strong class="text-guinda">{{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</strong>
+                        <strong class="text-dark small">{{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</strong>
                     </div>
                     <div class="col-md-6">
-                        <span class="text-muted d-block small">Tipo requerimiento:</span>
-                        <strong class="text-dark">{{ $oficio->tipoRequerimiento->tipo_requerimiento ?? 'N/A' }}</strong>
+                        <span class="text-muted d-block small">Tipo de requerimiento:</span>
+                        <strong
+                            class="text-dark small">{{ $oficio->tipoRequerimiento->tipo_requerimiento ?? 'N/A' }}</strong>
                     </div>
                 </div>
             </div>
@@ -96,25 +108,26 @@
                 </button>
             </div>
 
-            <div class="row g-3">
+            <div class="row g-3 align-items-stretch">
                 @forelse ($responsablesOficios as $ro)
                     <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body position-relative">
+                        <div class="card h-100 border-0 shadow-sm w-100">
+                            <div class="card-body d-flex flex-column position-relative p-4">
 
-                                <h6 class="fw-bold text-guinda pe-5">
-                                    {{ $ro->responsable->nombre ?? 'Usuario Desconocido' }}</h6>
+                                <h6 class="fw-bold text-guinda pe-4 mb-2">
+                                    {{ $ro->responsable->nombre ?? 'Usuario Desconocido' }}
+                                </h6>
                                 <hr class="opacity-25 my-2 border-guinda">
 
-                                <p class="small text-muted mb-0">Unidad administrativa:</p>
-                                <p class="fw-semibold small text-dark mb-3">
-                                    {{ $ro->responsable->unidadAdministrativa->nombre_unidad_administrativa ?? 'N/A' }}</p>
-
+                                <p class="small text-muted mb-1">Unidad administrativa:</p>
+                                <p class="fw-semibold small text-dark mb-3 text-wrap">
+                                    {{ $ro->responsable->unidadAdministrativa->nombre_unidad_administrativa ?? 'N/A' }}
+                                </p>
 
                                 <div class="d-flex align-items-center justify-content-end gap-2 mt-auto pt-3">
 
                                     @if ($ro->genera_respuesta == 'X')
-                                        <div class="text-success fs-4 me-1" title="Elabora Respuesta">
+                                        <div class="text-success fs-4 me-auto" title="Elabora Respuesta">
                                             <i class="ti ti-check fw-bold"></i>
                                         </div>
                                     @endif
@@ -137,15 +150,26 @@
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="col-12 text-center py-5">
-                            <h5 class="text-muted">No hay responsables asignados.</h5>
-                        </div>
+                    </div>
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <h5 class="text-muted">No hay responsables asignados.</h5>
+                    </div>
                 @endforelse
+                @if ($errors->any())
+        <div class="alert alert-danger p-2 mb-3 small border-0 shadow-sm rounded">
+            <ul class="mb-0 ps-3">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
             </div>
 
-            <div class="mt-4 pt-3 border-top">
-                <a href="{{ route('turno.index') }}" class="btn-cancelar">Finalizar</a>
+
+         <div class="mt-4 pt-3 border-top">
+               <a href="{{ route('turno.index') }}" class="btn-cancelar">Finalizar</a>
             </div>
         </div>
     </div>
@@ -195,10 +219,12 @@
                             </div>
                         @endif
 
-                        <div class="text-end">
-                            <button type="button" class="btn btn-light text-danger me-2 fw-bold"
-                                data-bs-dismiss="modal">Cancelar</button>
+                        <div class="text-left">
+
                             <button type="submit" class="btn btn-guinda">Guardar</button>
+                            <button type="button" class="btn btn-cancelar  me-2 fw-bold"
+                                data-bs-dismiss="modal">Cancelar</button>
+
                         </div>
                     </form>
                 </div>

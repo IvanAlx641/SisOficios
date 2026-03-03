@@ -8,7 +8,7 @@
             <div class="card-body pt-2 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-12">
-                        <h4 class="fw-bold mb-0 text-guinda">Turnos de oficios</h4>
+                        <h4 class="fw-bold mb-0 text-guinda">Turno</h4>
                     </div>
                 </div>
             </div>
@@ -55,177 +55,178 @@
                             <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
 
                             <div class="btn-group shadow-sm flex-wrap" role="group">
-                                <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos" 
-                                   onchange="this.form.submit()" {{ ($request->estatus == 'Todos' || !$request->filled('estatus')) ? 'checked' : '' }}>
-                            <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
+                                <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
+                                    onchange="this.form.submit()"
+                                    {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
+                                <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
 
-                            <input type="radio" class="btn-check" name="estatus" value="Pendiente" id="st_pendiente" 
-                                   onchange="this.form.submit()" {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-warning btn-sm px-3 py-2 text-whit" for="st_pendiente">Pendientes</label>
+                                <input type="radio" class="btn-check" name="estatus" value="Pendiente" id="st_pendiente"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-warning btn-sm px-3 py-2 text-whit"
+                                    for="st_pendiente">Pendientes</label>
 
-                            <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado" 
-                                   onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
+                                <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
 
-                            <input type="radio" class="btn-check" name="estatus" value="Concluido" id="st_concluido" 
-                                   onchange="this.form.submit()" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-success btn-sm px-3 py-2" for="st_concluido">Concluidos</label>
+                             
 
-                            <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado" 
-                                   onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminados</label>
+                                <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminados</label>
 
-                            <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado" 
-                                   onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
-                            <label class="btn btn-outline-danger btn-sm px-3 py-2" for="st_cancelado">Cancelados</label>
-                        </div>
+                                <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-danger btn-sm px-3 py-2" for="st_cancelado">Cancelados</label>
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
+            </form>
         </div>
+    </div>
 
-        <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm mt-3">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead class="bg-guinda text-white">
+    <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm mt-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-guinda text-white">
+                        <tr>
+                            <th class="ps-4 py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Número de oficio</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Fecha recepción</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Dirigido a</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Solicitado por</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Fecha de turno</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Sistema</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6>
+                            </th>
+                            <th class="py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Responsables</h6>
+                            </th>
+                            <th class="text-center py-3">
+                                <h6 class="fs-4 fw-bold mb-0 text-white">Ver PDF</h6>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($oficios as $oficio)
                             <tr>
-                                <th class="ps-4 py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Número de oficio</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Fecha recepción</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Dirigido a</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Solicitado por</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Fecha de turno</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Sistema</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6>
-                                </th>
-                                <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Responsables</h6>
-                                </th>
-                                <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Ver PDF</h6>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($oficios as $oficio)
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex flex-column">
-                                            <a href="{{ route('turno.edit', $oficio->id) }}"
-                                                class="fw-bold mb-1 fs-4 link-oficio-gris">
-                                                {{ $oficio->numero_oficio }}
-                                            </a>
-                                            @php
-                                                $badgeClass = match ($oficio->estatus) {
-                                                    'Pendiente' => 'bg-warning text-white',
-                                                    'Turnado' => 'bg-info text-white',
-                                                    'Concluido', 'Atendido' => 'bg-success text-white',
-                                                    'Cancelado' => 'bg-danger text-white',
-                                                    default => 'bg-secondary text-white',
-                                                };
-                                            @endphp
-                                            <span class="badge {{ $badgeClass }} rounded-pill w-auto"
-                                                style="width: fit-content; font-size: 0.75rem;">
-                                                {{ $oficio->estatus }}
-                                            </span>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="text-center text-muted small">
-                                            {{ optional($oficio->fecha_recepcion)->format('d/m/Y') ?? 'N/A' }}</div>
-                                    </td>
-
-                                    <td>
-                                        <div class="small text-truncate" style="max-width: 150px;"
-                                            title="{{ optional($oficio->areaDirigido)->nombre_unidad_administrativa }}">
-                                            {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        @if (isset($oficio->solicitantes) && $oficio->solicitantes->count() > 0)
-                                            @foreach ($oficio->solicitantes as $sol)
-                                                <div class="small text-muted mb-1">•
-                                                    {{ \Illuminate\Support\Str::limit($sol->nombre, 20) }}</div>
-                                            @endforeach
-                                        @else
-                                            <span class="text-muted small fst-italic">Sin asignar</span>
-                                        @endif
-                                    </td>
-
-                                    <td>
-                                        <div class="small text-muted">
-                                            {{ !empty($oficio->fecha_turno) ? \Carbon\Carbon::parse($oficio->fecha_turno)->format('d/m/Y') : 'Pendiente' }}
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="small text-muted mb-1 style="max-width: 120px;"
-                                            title="{{ optional($oficio->sistema)->sigla_sistema }}">
-                                            {{ optional($oficio->sistema)->sigla_sistema ?? 'Sin asignar' }}
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="small text-muted mb-1" style="max-width: 120px;"
-                                            title="{{ optional($oficio->tipoRequerimiento)->tipo_requerimiento }}">
-                                            {{ optional($oficio->tipoRequerimiento)->tipo_requerimiento ?? 'Sin asignar' }}
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        @if (isset($oficio->responsablesOficios) && $oficio->responsablesOficios->count() > 0)
-                                            @foreach ($oficio->responsablesOficios as $ro)
-                                                <div class="small text-muted text-truncate mb-1" style="max-width: 150px;"
-                                                    title="{{ optional($ro->responsable)->nombre }}">
-                                                    • {{ optional($ro->responsable)->nombre ?? 'Desconocido' }}
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <span class="text-muted small fst-italic">Sin responsables</span>
-                                        @endif
-                                    </td>
-
-                                    <td class="text-center">
-                                        <a href="{{ $oficio->url_oficio }}" target="_blank"
-                                            class="btn btn-outline-guinda border-0 bg-transparent"
-                                            title="Ver documento PDF">
-                                            <i class="ti ti-eye fs-5"></i>
+                                <td class="ps-4">
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ route('turno.edit', $oficio->id) }}"
+                                            class="fw-bold mb-1 fs-4 link-oficio-gris">
+                                            {{ $oficio->numero_oficio }}
                                         </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="text-center py-5">
-                                        <i class="ti ti-files fs-1 text-muted mb-2 d-block"></i>
-                                        <div class="text-muted">No se encontraron turnos registrados.</div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-4 px-4 pb-3 d-flex justify-content-end">
-                    {!! $oficios->appends($request->all())->links() !!}
-                </div>
+                                        @php
+                                            $badgeClass = match ($oficio->estatus) {
+                                                'Pendiente' => 'bg-warning text-white',
+                                                'Turnado' => 'bg-info text-white',
+                                                'Concluido', 'Atendido' => 'bg-success text-white',
+                                                'Cancelado' => 'bg-danger text-white',
+                                                default => 'bg-secondary text-white',
+                                            };
+                                        @endphp
+                                        <span class="badge {{ $badgeClass }} rounded-pill w-auto"
+                                            style="width: fit-content; font-size: 0.75rem;">
+                                            {{ $oficio->estatus }}
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="text-center text-muted small">
+                                        {{ optional($oficio->fecha_recepcion)->format('d/m/Y') ?? 'N/A' }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="small text-wrap"
+                                        title="{{ optional($oficio->areaDirigido)->nombre_unidad_administrativa }}">
+                                        {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @if (isset($oficio->solicitantes) && $oficio->solicitantes->count() > 0)
+                                        @foreach ($oficio->solicitantes as $sol)
+                                            <div class="small text-muted text-wrap mb-1">
+                                                • {{ $sol->nombre }}
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted small fst-italic">Sin asignar</span>
+                                    @endif
+                                </td>
+
+                                <td>
+                                    <div class="small text-muted">
+                                        {{ !empty($oficio->fecha_turno) ? \Carbon\Carbon::parse($oficio->fecha_turno)->format('d/m/Y') : 'Pendiente' }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="small text-muted text-wrap mb-1"
+                                        title="{{ optional($oficio->sistema)->sigla_sistema }}">
+                                        {{ optional($oficio->sistema)->sigla_sistema ?? 'Sin asignar' }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="small text-muted text-wrap mb-1"
+                                        title="{{ optional($oficio->tipoRequerimiento)->tipo_requerimiento }}">
+                                        {{ optional($oficio->tipoRequerimiento)->tipo_requerimiento ?? 'Sin asignar' }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @if (isset($oficio->responsablesOficios) && $oficio->responsablesOficios->count() > 0)
+                                        @foreach ($oficio->responsablesOficios as $ro)
+                                            <div class="small text-muted text-wrap mb-1"
+                                                title="{{ optional($ro->responsable)->nombre }}">
+                                                • {{ optional($ro->responsable)->nombre ?? 'Desconocido' }}
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted small fst-italic">Sin responsables</span>
+                                    @endif
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="{{ $oficio->url_oficio }}" target="_blank"
+                                        class="btn btn-outline-guinda border-0 bg-transparent" title="Ver documento PDF">
+                                        <i class="ti ti-eye fs-5"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center py-5">
+                                    <i class="ti ti-files fs-1 text-muted mb-2 d-block"></i>
+                                    <div class="text-muted">No se encontraron turnos registrados.</div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 px-4 pb-3 d-flex justify-content-end">
+                {!! $oficios->appends($request->all())->links() !!}
             </div>
         </div>
+    </div>
     </div>
 
     <script>

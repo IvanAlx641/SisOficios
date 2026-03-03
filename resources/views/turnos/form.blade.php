@@ -33,54 +33,65 @@
 
         <div class="card-body p-4 bg-light">
             <div class="bg-white p-4 rounded-3 shadow-sm border mb-4">
-                <h5 class="fw-bold text-guinda mb-3 border-bottom pb-2">Contexto del oficio</h5>
+                <h5 class="fw-bold text-guinda mb-3 border-bottom pb-2">Contexto</h5>
 
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <p class="mb-1 small text-muted">Número de oficio:</p>
-                        <p class=" fs-4 text-dark  small mb-0">
-                            {{ $oficio->numero_oficio }}
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted me-2">Número de oficio:</span>
+                            <span class=" text-dark small mb-0">{{ $oficio->numero_oficio }}</span>
                             <a href="{{ $oficio->url_oficio }}" target="_blank"
-                                class="ms-2 btn btn-sm btn-outline-guinda py-0 px-2 rounded-pill">
+                                class="ms-3 btn btn-sm btn-outline-guinda py-0 px-2 rounded-pill">
                                 <i class="ti ti-eye"></i> Ver oficio
                             </a>
-                        </p>
+                        </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <p class="mb-1 small text-muted">Fecha de recepción:</p>
-                        <p class=" text-dark mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</p>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted me-2">Fecha de recepción:</span>
+                            <span class="text-dark small mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</span>
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <p class="mb-1 small text-muted">Dirigido a:</p>
-                        <p class=" text-dark mb-0">
-                            {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}</p>
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted me-2">Dirigido a:</span>
+                            <span class="text-dark small mb-0">
+                                {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}
+                            </span>
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-12">
                         <p class="mb-1 small text-muted">Descripción del requerimiento:</p>
-                        <p class="text-dark bg-light p-2 rounded border">{{ $oficio->descripción_oficio }}</p>
+                        <div class="text-dark bg-white small p-2 rounded border mb-0">
+                            {{ $oficio->descripción_oficio }}
+                        </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <p class="mb-1 small text-muted">Solicitantes:</p>
-                        @if ($oficio->solicitantes->count() > 0)
-                            <ul class="list-unstyled mb-0 bg-light p-2 rounded border">
-                                @foreach ($oficio->solicitantes as $solicitante)
-                                    <li>
-                                        <i class="ti ti-user text-guinda me-1"></i>
-                                        <span class="fw-bold">{{ $solicitante->nombre }}</span>
-                                        <span class="text-muted small">({{ $solicitante->cargo }})</span>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <p class="text-muted fst-italic mb-0">Sin solicitantes asignados.</p>
-                        @endif
+                    <div class="col-12">
+                        <div class="d-flex align-items-start">
+                            <span class="small text-muted me-2 pt-2">Solicitantes:</span>
+                            <div class="flex-grow-1">
+                                @if ($oficio->solicitantes->count() > 0)
+                                    <ul class="list-unstyled mb-0 bg-light p-2 rounded border">
+                                        @foreach ($oficio->solicitantes as $solicitante)
+                                            <li>
+                                                <i class="ti ti-user text-guinda me-1"></i>
+                                                <span class="fw-bold">{{ $solicitante->nombre }}</span>
+                                                <span class="text-muted small">({{ $solicitante->cargo }})</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p class="text-muted fst-italic mb-0 pt-2">Sin solicitantes asignados.</p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <h4 class="fw-bold mb-3 mt-5">Turno</h4>
+                <h4 class="mb-3 mt-5">Turno</h4>
 
                 <form action="{{ route('turno.update', $oficio->id) }}" method="POST" novalidate>
                     @csrf
@@ -89,7 +100,7 @@
                     <div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-guinda2">Sistema <span
+                            <label class="form-label fw-bold text-guinda2">Sistema: <span
                                     class="text-danger">*</span></label>
                             <select name="sistema_id" id="sistema_id"
                                 class="form-select border-guinda @error('sistema_id') is-invalid @enderror" required>
@@ -107,7 +118,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-guinda2">Tipo de requerimiento <span
+                            <label class="form-label fw-bold text-guinda2">Tipo de requerimiento:<span
                                     class="text-danger">*</span></label>
                             <select name="tipo_requerimiento_id" id="tipo_requerimiento_id"
                                 class="form-select border-guinda @error('tipo_requerimiento_id') is-invalid @enderror"
@@ -192,11 +203,12 @@
             color: #9D2449;
             border-color: transparent;
         }
+
         .btn-primary {
-    background-color: blue !important;
-    border-color: blue !important;
-    .btn- 
-}
+            background-color: blue !important;
+            border-color: blue !important;
+            .btn-
+        }
     </style>
 
     <script>
