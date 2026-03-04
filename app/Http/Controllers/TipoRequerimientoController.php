@@ -14,8 +14,8 @@ class TipoRequerimientoController extends Controller
         'tipo_requerimiento.required' => 'El campo tipo de requerimiento es requerido.',
         'tipo_requerimiento.unique' => 'Este tipo de requerimiento ya se encuentra registrado.',
         'tipo_requerimiento.max' => 'El campo tipo de requerimiento no debe exceder de 255 caracteres.',
-        'requerimiento_oficio.required_without' => 'Debes seleccionar al menos una opción (Oficios o Actividades).',
-        'requerimiento_actividad.required_without' => 'Debes seleccionar al menos una opción (Oficios o Actividades).',
+        'requerimiento_oficio.required_without' => 'Debes seleccionar al menos una opción.',
+        'requerimiento_actividad.required_without' => 'Debes seleccionar al menos una opción.',
     ];
 
     public function __construct()
@@ -107,18 +107,22 @@ class TipoRequerimientoController extends Controller
     }
 
     public function destroy(TipoRequerimiento $tiporequerimiento): RedirectResponse
-    {
-        // PENDIENTE: Descomentar cuando existan los modelos Oficio y DetalleActividad
-        /*
-        if ($tiporequerimiento->oficios()->count() > 0 || $tiporequerimiento->detalleActividades()->count() > 0) {
-            return redirect()->route('tiporequerimiento.index')
-                ->with('error', 'El registro tiene información vinculada y no puede ser eliminado.');
-        }
-        */
-
-        $tiporequerimiento->delete();
-
+{
+    // 1. Verificamos si tiene oficios asociados
+    // count() es eficiente porque solo hace un SELECT COUNT(*)
+    if ($tiporequerimiento->oficios()->count() > 0) {
         return redirect()->route('tiporequerimiento.index')
-            ->with('success', 'El registro ha sido eliminado.');
+            ->with('error', 'No se puede eliminar: Este tipo de requerimiento ya está siendo utilizado en uno o más oficios.');
     }
+
+    // 2. Si pasa la validación, eliminamos
+    try {
+        $tiporequerimiento->delete();
+        return redirect()->route('tiporequerimiento.index')
+            ->with('success', 'El registro ha sido eliminado exitosamente.');
+    } catch (\Exception $e) {
+        return redirect()->route('tiporequerimiento.index')
+            ->with('error', 'Ocurrió un error al intentar eliminar el registro.');
+    }
+}
 } 

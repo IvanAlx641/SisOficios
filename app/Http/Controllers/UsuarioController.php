@@ -34,13 +34,13 @@ class UsuarioController extends Controller
 
     // --- MENSAJES AJUSTADOS AL FORMATO DE LA IMAGEN ---
     protected $mensajes = [
-        'nombre.required' => 'El campo nombre completo es requerido.',
+        'nombre.required' => 'El campo nombre completo es obligatorio.',
         'nombre.min' => 'El campo nombre completo debe tener al menos 5 caracteres.',
-        'email.required' => 'El campo correo electrónico es requerido.',
+        'email.required' => 'El campo correo electrónico es obligatorio.',
         'email.email' => 'El campo correo electrónico debe ser válido.',
         'email.unique' => 'Este correo electrónico ya está registrado.',
-        'rol.required' => 'El campo rol es requerido.',
-        'unidad_administrativa_id.required_unless' => 'El campo unidad administrativa es requerido a menos que rol se encuentre en Administrador TI.',
+        'rol.required' => 'El campo rol es obligatorio.',
+        'unidad_administrativa_id.required_unless' => 'El campo unidad administrativa es obligatorio',
     ];
 
     public function __construct()
@@ -179,9 +179,27 @@ class UsuarioController extends Controller
 
     public function destroy(User $usuario)
     {
+        // 1. Autorización de Laravel
         $this->authorize('delete', $usuario);
-        if ($usuario->id == auth()->id()) return redirect()->route('usuario.index')->with('error', 'No puedes eliminarte a ti mismo.');
+
+        // 2. Regla: No puedes eliminarte a ti mismo
+        if ($usuario->id == auth()->id()) {
+            return redirect()->route('usuario.index')->with('error', 'No puedes eliminar tu propio usuario mientras estás en sesión.');
+        }
+
+        // 3. Regla: Verificar si tiene Actividades asignadas
+        if ($usuario->responsablesActividades()->exists()) {
+            return redirect()->route('usuario.index')->with('error', 'El usuario no se puede eliminar porque tiene Actividades registradas asociadas a él.');
+        }
+
+        // 4. Regla: Verificar si tiene Oficios asignados
+        if ($usuario->responsablesOficios()->exists()) {
+            return redirect()->route('usuario.index')->with('error', 'El usuario no se puede eliminar porque es Responsable de uno o más Oficios en el sistema.');
+        }
+
+        // 5. Si pasa todas las validaciones, lo eliminamos
         $usuario->delete();
-        return redirect()->route('usuario.index')->with('success', 'Usuario eliminado.');
+        
+        return redirect()->route('usuario.index')->with('success', 'Usuario eliminado correctamente del sistema.');
     }
 }

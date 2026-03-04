@@ -29,13 +29,13 @@
                 <div class="row g-3 align-items-end">
                     
                     <div class="col-md-4">
-                        <label class="form-label fw-bold text-guinda2 small">Nombre</label>
+                        <label class="form-label fw-bold text-guinda2 me-3 mb-0">Nombre:</label>
                         <input type="text" name="nombre" class="form-control border-guinda" 
                             placeholder="Buscar por nombre..." value="{{ $request->nombre }}">
                     </div>
 
                     <div class="col-md-5">
-                        <label class="form-label">Dependencia</label>
+                        <label class="form-label fw-bold text-guinda2 me-3 mb-0">Dependencia:</label>
                         {{-- 
                            AQUÍ ESTÁ EL CAMBIO: 
                            1. Agregué id="filtro_dependencia"
@@ -60,7 +60,7 @@
 
                 <div class="row mt-4">
                     <div class="col-md-8 d-flex align-items-center flex-wrap">
-                        <label class="form-label fw-bold text-guinda me-3 mb-0">Estatus:</label>
+                        <label class="fform-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
                         
                         <div class="btn-group me-4 shadow-sm" role="group">
                             <input type="radio" class="btn-check" name="inactivo" value="Todas" id="st_all" 
@@ -76,7 +76,7 @@
                             <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                         </div>
                         
-                        <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary-subtle">
+                        <div class="d-flex align-items-center gap-3  ps-3 border-secondary-subtle">
                             <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small class="text-muted fw-semibold">Activo</small></div>
                             <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small class="text-muted fw-semibold">Inactivo</small></div>
                         </div>
@@ -92,11 +92,11 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-guinda text-white">
                         <tr>
-                            <th class="text-center ps-4 py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Nombre</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Dependencia</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Unidad administrativa</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Cargo</h6></th>
-                            <th class="text-center py-3"><h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6></th>
+                            <th class="text-center ps-4 py-3"><h6 class="text-white text-center form-label fw-bold small">Nombre</h6></th>
+                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Dependencia</h6></th>
+                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Unidad administrativa</h6></th>
+                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Cargo</h6></th>
+                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Eliminar</h6></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,9 +112,21 @@
                                     </a>
                                 </div>
                             </td>
-                            <td>{{ $solicitante->dependencia->nombre_dependencia ?? 'N/A' }}</td>
-                            <td>{{ $solicitante->unidadAdministrativa->nombre_unidad_administrativa ?? 'N/A' }}</td>
-                            <td>{{ $solicitante->cargo }}</td>
+                            <td>
+                                <span class="text-wrap small">
+                                    {{ $solicitante->dependencia->nombre_dependencia ?? 'N/A' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-wrap small">
+                                    {{ $solicitante->unidadAdministrativa->nombre_unidad_administrativa ?? 'N/A' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-wrap small">
+                                    {{ $solicitante->cargo }}
+                                </span>
+                            </td>
                             
                             <td class="text-center">
                                 <form action="{{ route('solicitante.destroy', $solicitante->id) }}" method="POST" onsubmit="return confirm('¿Eliminar registro?');">

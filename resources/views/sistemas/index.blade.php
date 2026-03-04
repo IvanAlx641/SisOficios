@@ -19,15 +19,15 @@
                 <form action="{{ route('sistema.index') }}" method="GET" id="filterForm">
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label class="form-label fw-bold text-guinda2 small">Nombre del sistema</label>
+                            <label class="form-label fw-bold text-guinda2 small">Nombre del sistema:</label>
                             <div class="input-group">
                                 <input type="text" name="nombre_sistema" class="form-control border-guinda"
                                     placeholder="Buscar..." value="{{ $request->nombre_sistema }}">
-                            </div>
+                            </div>  
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label fw-bold text-guinda2small">Siglas</label>
+                            <label class="form-label fw-bold text-guinda2 small">Siglas:</label>
                             <div class="input-group">
                                 <input type="text" name="sigla_sistema" class="form-control border-guinda"
                                     placeholder="Ej. SAM" value="{{ $request->sigla_sistema }}">
@@ -58,7 +58,7 @@
                                     onchange="this.form.submit()" {{ $request->inactivo == 'Inactivas' ? 'checked' : '' }}>
                                 <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                             </div>
-                            <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary-subtle">
+                            <div class="d-flex align-items-center gap-3  ps-3 border-secondary-subtle">
                                 <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small
                                         class="text-muted fw-semibold">Activo</small></div>
                                 <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small
@@ -77,13 +77,13 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Nombre del sistema</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Nombre del sistema</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Siglas</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Siglas</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -102,7 +102,7 @@
                                     </td>
                                     <td class="text-center">
                                         <span
-                                            class="badge badge-guinda-subtle fw-semibold fs-2">{{ $sistema->sigla_sistema }}</span>
+                                            class="text-wrap small">{{ $sistema->sigla_sistema }}</span>
                                     </td>
                                     <td class="text-center">
                                         <form action="{{ route('sistema.destroy', $sistema->id) }}" method="POST"

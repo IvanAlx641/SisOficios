@@ -26,14 +26,14 @@
             <div class="row g-4">
                 
                 <div class="col-md-12">
-                    <label class="form-label">Nombre completo <span class="text-danger">*</span></label>
+                    <label class="form-label">Nombre: <span class="text-danger">*</span></label>
                     <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" 
                            value="{{ old('nombre', $solicitante->nombre) }}" required>
                     @error('nombre') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Dependencia u organismo auxiliar <span class="text-danger">*</span></label>
+                    <label class="form-label">Dependencia u organismo auxiliar: <span class="text-danger">*</span></label>
                     <select name="dependencia_id" id="dependencia_id" class="form-select @error('dependencia_id') is-invalid @enderror" required>
                         <option value="">Seleccione una opción</option>
                         @foreach($dependencias as $id => $nombre)
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Unidad administrativa <span class="text-danger">*</span></label>
+                    <label class="form-label">Unidad administrativa: <span class="text-danger">*</span></label>
                     <select name="unidad_administrativa_id" id="unidad_administrativa_id" class="form-select @error('unidad_administrativa_id') is-invalid @enderror" required>
                         <option value="">Seleccione primero una dependencia</option>
                         @if(isset($unidades))
@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label class="form-label">Cargo o puesto <span class="text-danger">*</span></label>
+                    <label class="form-label">Cargo o puesto: <span class="text-danger">*</span></label>
                     <input type="text" name="cargo" class="form-control @error('cargo') is-invalid @enderror" 
                         value="{{ old('cargo', $solicitante->cargo) }}" required>
                     @error('cargo') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -85,7 +85,7 @@
                 @endif
             </div>
 
-            <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
+            <div class="d-flex justify-content-start align-items-center gap-3  pt-3 ">
                 <button type="submit" class="btn btn-guinda rounded-pill shadow-sm">
                     Guardar
                 </button>

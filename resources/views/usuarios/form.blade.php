@@ -26,7 +26,7 @@
             <div class="row g-4">
                 
                 <div class="col-md-6">
-                    <label class="form-label">Nombre completo <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-guinda2">Nombre: <span class="text-danger">*</span></label>
                     <input type="text" name="nombre" 
                         class="form-control @error('nombre') is-invalid @enderror" 
                         value="{{ old('nombre', $usuario->nombre) }}" 
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Correo electrónico <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-guinda2">Correo electrónico: <span class="text-danger">*</span></label>
                     <input type="email" name="email" 
                         class="form-control @error('email') is-invalid @enderror" 
                         value="{{ old('email', $usuario->email) }}" 
@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label class="form-label mb-3">Rol de sistema <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-guinda2">Rol de sistema:<span class="text-danger">*</span></label>
                     
                     <div class="d-flex flex-wrap gap-4 p-3 border rounded-3 bg-light">
                         @foreach($roles as $key => $label)
@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="col-md-12 mt-4" id="divDependencia">
-                    <label class="form-label">Unidad administrativa <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-guinda2">Unidad administrativa: <span class="text-danger">*</span></label>
                     <select name="unidad_administrativa_id" id="selectDependencia" 
                             class="form-select @error('unidad_administrativa_id') is-invalid @enderror" required>
                         <option value="">Selecciona una unidad administrativa</option>
@@ -104,7 +104,7 @@
 
             </div>
 
-            <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
+            <div class="d-flex justify-content-start align-items-center gap-3 pt-3 ">
                 <button type="submit" class="btn btn-guinda rounded-pill shadow-sm">
                     Guardar
                 </button>

@@ -27,7 +27,7 @@
             <div class="row g-4">
                 
                 <div class="col-md-12">
-                    <label class="form-label fw-bold text-muted small">Tipo de requerimiento <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-guinda2">Tipo de requerimiento: <span class="text-danger">*</span></label>
                     <input type="text" name="tipo_requerimiento" 
                         class="form-control @error('tipo_requerimiento') is-invalid @enderror" 
                         value="{{ old('tipo_requerimiento', $tiporequerimiento->tipo_requerimiento) }}" 
@@ -38,21 +38,21 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label class="form-label fw-bold text-muted small mb-3">Aplicacion de requerimientos <span class="text-danger">*</span></label>
+                    <label class="form-label fw-bold text-guinda2 mb-3">Aplicación de requerimientos: <span class="text-danger">*</span></label>
                     
                     <div class="d-flex gap-5">
                         <div class="form-check">
                             <input class="form-check-input @error('requerimiento_oficio') is-invalid @enderror" 
                                 type="checkbox" name="requerimiento_oficio" id="checkOficios"
                                 {{ old('requerimiento_oficio', $tiporequerimiento->requerimiento_oficio) == 'X' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="checkOficios">Requerimiento de los oficios</label>
+                            <label class="small text-muted mb-0" for="checkOficios">Requerimiento de los oficios</label>
                         </div>
 
                         <div class="form-check">
                             <input class="form-check-input @error('requerimiento_actividad') is-invalid @enderror" 
                                 type="checkbox" name="requerimiento_actividad" id="checkActividad"
                                 {{ old('requerimiento_actividad', $tiporequerimiento->requerimiento_actividad) == 'X' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="checkActividad">Requerimiento de las actividades</label>
+                            <label class="small text-muted mb-0" for="checkActividad">Requerimiento de las actividades</label>
                         </div>
                     </div>
                     
@@ -65,7 +65,7 @@
 
                 @if($tiporequerimiento->exists)
                 <div class="col-md-12 mt-4">
-                    <label class="form-label fw-bold text-muted small mb-2">Estatus del registro</label>
+                    <label class="form-label fw-bold text-guinda2 mb-2">Estatus del registro</label>
                     <div class="form-check form-switch">
                         <input type="hidden" name="inactivo" id="inputInactivo" value="{{ $tiporequerimiento->inactivo }}">
                         

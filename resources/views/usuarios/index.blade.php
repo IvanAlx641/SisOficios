@@ -26,7 +26,7 @@
                     <div class="row g-3 align-items-end">
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Nombre</label>
+                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Nombre:</label>
                             <div class="input-group">
                                 <input type="text" name="nombre" class="form-control border-guinda"
                                     placeholder="Buscar por nombre..." value="{{ $request->nombre }}">
@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Correo electrónico</label>
+                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Correo electrónico:</label>
                             <div class="input-group">
                                 
                                 <input type="text" name="email" class="form-control border-guinda"
@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Rol</label>
+                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Rol:</label>
                             {{-- 3. AJUSTE HTML: Agregué id="filtro_rol" --}}
                             <select class="form-select border-guinda" name="rol" id="filtro_rol" onchange="this.form.submit()">
                                 <option value="Todos">Todos los roles</option>
@@ -86,7 +86,7 @@
                                 <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                             </div>
 
-                            <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary-subtle">
+                            <div class="d-flex align-items-center gap-3  ps-3 border-secondary-subtle">
                                 <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small
                                         class="text-muted fw-semibold">Activo</small></div>
                                 <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small
@@ -106,22 +106,22 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="text-center ps-4 py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Nombre</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Nombre</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Correo electrónico</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Correo electrónico</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Rol</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Rol</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Envío de cuenta</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Envío de cuenta</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Desactivar</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Desactivar</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -129,7 +129,7 @@
                             @forelse ($usuarios as $usuario)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="d-flex align-items-center">
+                                        <div class="fw-bold mb-1 fs-3 link-oficio-gris">
                                             <span
                                                 class="status-dot {{ $usuario->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}"
                                                 title="{{ $usuario->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
@@ -144,18 +144,16 @@
 
                                     <td>
                                         <div class="d-flex flex-column">
-                                            <span class="text-dark fs-5 mb-1">{{ $usuario->email }}</span>
+                                            <span class="text-wrap small">{{ $usuario->email }}</span>
 
                                             <div class="d-flex align-items-center gap-2">
                                                 @if ($usuario->email_verified_at)
-                                                    <span
-                                                        class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2">Verificado el:</span>
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-1 py-0" style="font-size: 0.7rem;">Verificado el:</span>
                                                 @else
-                                                    <span
-                                                        class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2">Pendiente</span>
+                                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-1 py-0" style="font-size: 0.7rem;">Pendiente</span>
                                                 @endif
 
-                                                <small class="text-muted" style="font-size: 0.75rem;">
+                                                <small class="text-muted" style="ext-wrap small">
                                                     {{ $usuario->fecha_creacion ? $usuario->fecha_creacion->format('d/m/Y H:i') : 'N/A' }}
                                                 </small>
                                             </div>
@@ -163,7 +161,7 @@
                                     </td>
 
                                     <td>
-                                        <span class="badge badge-guinda-subtle fw-semibold fs-2">
+                                        <span class="text-wrap small">
                                             {{ $usuario->rol }}
                                         </span>
                                     </td>
@@ -175,7 +173,7 @@
                                                 onsubmit="return confirm('¿Enviar credenciales/recuperación?');">
                                                 @csrf
                                                 <button type="submit"
-                                                    class="btn btn-outline-gold border-0 bg-transparent"
+                                                    class="btn btn-outline-guinda border-0 bg-transparent"
                                                     data-bs-toggle="tooltip" title="Enviar Credenciales">
                                                     <i class="ti ti-mail-forward fs-5"></i>
                                                 </button>
@@ -194,7 +192,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit"
-                                                    class="btn btn-outline-danger border-0 bg-transparent text-danger"
+                                                    class="btn btn-outline-danger border-0 bg-transparent text-guinda"
                                                     data-bs-toggle="tooltip" title="Desactivar cuenta">
                                                     <i class="ti ti-user-off fs-5"></i>
                                                 </button>
@@ -224,7 +222,7 @@
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
                                         <i class="ti ti-search fs-1 text-muted mb-2 d-block"></i>
-                                        <div class="text-muted">No se encontraron resultados para la búsqueda.</div>
+                                        <div class="text-muted-small">No se encontraron resultados para la búsqueda.</div>
                                     </td>
                                 </tr>
                             @endforelse

@@ -67,6 +67,7 @@ class SistemaController extends Controller
         return redirect()->route('sistema.index')->with('success', 'Sistema registrado correctamente.');
     }
 
+
     public function edit(Sistema $sistema): View
     {
         return view('sistemas.form', compact('sistema'));
@@ -92,11 +93,19 @@ class SistemaController extends Controller
 
     public function destroy(Sistema $sistema)
     {
-       /* if ($sistema->oficios()->count() > 0 || $sistema->actividades()->count() > 0) {
-            return redirect()->route('sistema.index')->with('error', 'El registro tiene información vinculada y no puede eliminarse.');
+        // 1. Regla: Verificar si el sistema está vinculado a algún Oficio
+        if ($sistema->oficios()->exists()) {
+            return redirect()->route('sistema.index')->with('error', 'El sistema no se puede eliminar porque tiene Oficios registrados asociados a él.');
         }
-*/
+
+        // 2. Regla: Verificar si el sistema tiene Actividades registradas
+        if ($sistema->actividades()->exists()) {
+            return redirect()->route('sistema.index')->with('error', 'El sistema no se puede eliminar porque tiene Actividades registradas asociadas a él.');
+        }
+
+        // 3. Si pasa las validaciones, procedemos a eliminar
         $sistema->delete();
-        return redirect()->route('sistema.index')->with('success', 'Sistema eliminado correctamente.');
+        
+        return redirect()->route('sistema.index')->with('success', 'Sistema eliminado correctamente del catálogo.');
     }
 }

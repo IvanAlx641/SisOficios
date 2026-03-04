@@ -15,14 +15,14 @@
 
             <div class="row g-4">
                 <div class="col-md-8">
-                    <label class="form-label">Nombre del sistema <span class="text-danger">*</span></label>
+                    <label class="form-label">Nombre del sistema: <span class="text-danger">*</span></label>
                     <input type="text" name="nombre_sistema" class="form-control @error('nombre_sistema') is-invalid @enderror" 
                            value="{{ old('nombre_sistema', $sistema->nombre_sistema) }}" placeholder="Ej. Sistema de Atención..." required>
                     @error('nombre_sistema') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Siglas del sistema <span class="text-danger">*</span></label>
+                    <label class="form-label">Siglas del sistema: <span class="text-danger">*</span></label>
                     <input type="text" name="sigla_sistema" class="form-control @error('sigla_sistema') is-invalid @enderror" 
                            value="{{ old('sigla_sistema', $sistema->sigla_sistema) }}" placeholder="Ej. SAM" required>
                     @error('sigla_sistema') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -46,7 +46,7 @@
                 @endif
             </div>
 
-            <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
+            <div class="d-flex justify-content-start align-items-center gap-3 mt-3 pt-3">
                 <button type="submit" class="btn btn-guinda rounded-pill shadow-sm">Guardar</button>
                 <a href="{{ route('sistema.index') }}" class="btn-cancelar">Cancelar</a>
             </div>

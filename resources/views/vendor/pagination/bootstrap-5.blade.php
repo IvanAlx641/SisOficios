@@ -20,6 +20,7 @@
         background-color: #9D2449 !important;
         border-color: #9D2449 !important;
         color: #fff !important;
+        
     }
     
     .page-link:hover {
@@ -87,7 +88,7 @@
                     @if ($paginator->hasMorePages())
                         <li class="page-item"><a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next">Siguiente</a></li>
                     @else
-                        <li class="page-item disabled" aria-disabled="true"><span class="page-link">Siguiente</span></li>
+                        <li class="page-item disabled" aria-disabled="true"><span class="page-link ">Siguiente</span></li>
                     @endif
                 </ul>
             </div>

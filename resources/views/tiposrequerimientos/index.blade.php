@@ -23,7 +23,7 @@
                     <div class="row g-3 align-items-end">
 
                         <div class="col-md-9">
-                            <label class="form-label fw-bold text-guinda2 small">Tipo de requerimiento</label>
+                            <label class="form-label fw-bold text-guinda2 small">Tipo de requerimiento: </label>
                             <div class="input-group">
                                 <input type="text" name="tipo_requerimiento" class="form-control border-guinda"
                                     placeholder="Buscar..." value="{{ $request->tipo_requerimiento }}">
@@ -56,7 +56,7 @@
                                 <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                             </div>
 
-                            <div class="d-flex align-items-center gap-3 border-start ps-3 border-secondary-subtle">
+                            <div class="d-flex align-items-center gap-3 ps-3 border-secondary-subtle">
                                 <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small
                                         class="text-muted fw-semibold">Activo</small></div>
                                 <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small
@@ -76,16 +76,16 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="text-center ps-4 py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Tipo de requerimiento</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Tipo de requerimiento</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Aplica oficios</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Aplica oficios</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Aplica actividades</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Aplica actividades</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
                                 </th>
                             </tr>
                         </thead>

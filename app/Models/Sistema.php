@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+// IMPORTAMOS LOS MODELOS NECESARIOS
+use App\Models\Oficio;
+use App\Models\Actividad;
 
 class Sistema extends Model
 {
@@ -41,5 +44,14 @@ class Sistema extends Model
         return $this->belongsTo(User::class, 'usuario_modificacion_id');
     }
 
-    // --- Relaciones de Negocio ---
+    // --- Relaciones de Restricción de Eliminación ---
+    public function oficios(): HasMany
+    {
+        return $this->hasMany(Oficio::class, 'sistema_id');
+    }
+
+    public function actividades(): HasMany
+    {
+        return $this->hasMany(Actividad::class, 'sistema_id');
+    }
 }
