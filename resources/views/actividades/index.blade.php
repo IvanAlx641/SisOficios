@@ -16,7 +16,7 @@
                 <div class="row g-3 align-items-end">
                     
                     <div class="col-md-2">
-                        <label class="form-label text-guinda2 small fw-bold">Fecha del:</label>
+                        <label class="form-label text-guinda2 small fw-bold">Fecha de la actividad del:</label>
                         <input type="date" name="fecha_inicial" class="form-control border-guinda " value="{{ request('fecha_inicial') }}">
                     </div>
 
@@ -27,7 +27,7 @@
 
                     <div class="col-md-3">
                         <label class="form-label text-guinda2 small fw-bold">Responsable:</label>
-                        <select name="responsable_id" id="filtro_responsable" class="form-select border-guinda text-secondary" onchange="this.form.submit()">
+                        <select name="responsable_id" id="filtro_responsable" class="form-select border-guinda text-secondary" >
                             <option value="Todos">Todos</option>
                             @foreach($responsables as $id => $nombre)
                                 <option value="{{ $id }}" {{ request('responsable_id') == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}</option>
@@ -35,31 +35,44 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2">
-                        <label class="form-label text-guinda2 small fw-bold">Sistema:</label>
-                        <select name="sistema_id" id="filtro_sistema" class="form-select border-guinda text-secondary" onchange="this.form.submit()">
-                            <option value="Todos">Todos</option>
-                        </select>
-                    </div>
+                    <div class="col-md-2 mt-3">
+                            <label class="form-label text-guinda2 small fw-bold">Sistema:</label>
+                            <select name="sistema_id" id="filtro_sistema" class="form-select border-guinda text-secondary">
+                                <option value="Todos">Todos</option>
+                                @foreach ($sistemas as $id => $nombre)
+                                    <option value="{{ $id }}"
+                                        {{ request('sistema_id') == $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                     <div class="col-md-2">
-                        <label class="form-label text-guinda2 small fw-bold d-block mb-2">Estatus:</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input border-guinda" type="radio" name="estatus" id="estTodas" value="Todas" onchange="this.form.submit()" {{ request('estatus', 'Todas') == 'Todas' ? 'checked' : '' }}>
-                            <label class="form-check-label small" for="estTodas">Todas</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input border-guinda" type="radio" name="estatus" id="estProceso" value="En proceso" onchange="this.form.submit()" {{ request('estatus') == 'En proceso' ? 'checked' : '' }}>
-                            <label class="form-check-label small" for="estProceso">En proceso</label>
-                        </div>
-                        <div class="form-check form-check-inline mt-1">
-                            <input class="form-check-input border-guinda" type="radio" name="estatus" id="estAtendida" value="Atendida" onchange="this.form.submit()" {{ request('estatus') == 'Atendida' ? 'checked' : '' }}>
-                            <label class="form-check-label small" for="estAtendida">Atendidas</label>
-                        </div>
                     </div>
 
                     <div class="col-md-1 text-end">
                         <button type="submit" class="btn btn-outline-guinda w-100 rounded-pill shadow-sm fw-bold">Buscar</button>
+                    </div>
+
+                <div class="row mt-4">
+                        <div class="col-md-12 d-flex align-items-center flex-wrap">
+                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
+
+                            <div class="btn-group shadow-sm flex-wrap" role="group">
+                                <input type="radio" class="btn-check" name="estatus" value="Todas" id="estTodas"
+                                    onchange="this.form.submit()"
+                                    {{ $request->estatus == 'Todas' || !$request->filled('estatus') ? 'checked' : '' }}>
+                                <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="estTodas">Todos</label>
+
+                                <input type="radio" class="btn-check" name="estatus" value="En proceso" id="estProceso"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'En proceso' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-warning btn-sm px-3 py-2 "
+                                    for="estProceso">En proceso</label>
+
+                                <input type="radio" class="btn-check" name="estatus" value="Atendida" id="estAtendida"
+                                    onchange="this.form.submit()" {{ $request->estatus == 'Atendida' ? 'checked' : '' }}>
+                                <label class="btn btn-outline-success btn-sm px-3 py-2" for="estAtendida">Atendidas</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -80,18 +93,18 @@
 
                     <div class="card-body bg-white pt-4 pb-2">
                         <div class="d-flex align-items-center mb-3">
-                            <div class="icon-circle bg-light text-guinda me-3"><i class="ti ti-calendar fs-5"></i></div>
+                            
                             <div>
                                 <small class="text-muted d-block fw-bold text-uppercase" style="font-size: 0.7rem;">Fecha</small>
-                                <span class="fw-semibold text-dark">{{ $actividad->fecha_actividad ? $actividad->fecha_actividad->format('d/m/Y') : '-' }}</span>
+                                <span class="text-black small mb-0">{{ $actividad->fecha_actividad ? $actividad->fecha_actividad->format('d/m/Y') : '-' }}</span>
                             </div>
                         </div>
                         
                         <div class="d-flex align-items-center mb-3">
-                            <div class="icon-circle bg-light text-guinda me-3"><i class="ti ti-user fs-5"></i></div>
+                            
                             <div class="w-100">
                                 <small class="text-muted d-block fw-bold text-uppercase" style="font-size: 0.7rem;">Responsable</small>
-                                <span class="fw-semibold text-dark text-truncate d-block" title="{{ mb_strtoupper($actividad->responsable->nombre ?? 'N/A') }}">
+                                <span class="text-black small mb-0" title="{{ mb_strtoupper($actividad->responsable->nombre ?? 'N/A') }}">
                                     {{ mb_strtoupper($actividad->responsable->nombre ?? 'N/A') }}
                                 </span>
                             </div>
@@ -103,12 +116,12 @@
                             </span>
                             
                             <div class="d-flex gap-1">
-                                <a href="{{ route('actividad.edit', $actividad->id) }}" class="btn btn-sm btn-light border rounded-circle text-guinda shadow-sm" title="Editar"><i class="ti ti-pencil"></i></a>
-                                <a href="{{ route('detalleactividad.index', ['actividad_id' => encrypt($actividad->id)]) }}" class="btn btn-sm btn-light border rounded-circle text-guinda shadow-sm" title="Añadir/Gestionar Tareas"><i class="ti ti-plus"></i></a>
+                                <a href="{{ route('actividad.edit', $actividad->id) }}" class="btn btn-sm  border rounded-circle text-guinda  title="Editar"><i class="ti ti-pencil"></i></a>
+                                <a href="{{ route('detalleactividad.index', ['actividad_id' => encrypt($actividad->id)]) }}" class="btn btn-sm  border rounded-circle text-guinda " title="Añadir/Gestionar Tareas"><i class="ti ti-plus"></i></a>
                                 
                                 <form action="{{ route('actividad.destroy', $actividad->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de querer eliminar esta actividad?');">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-light border rounded-circle text-guinda shadow-sm" {{ $actividad->detalle_actividades_count > 0 ? 'disabled' : '' }} title="Eliminar"><i class="ti ti-trash"></i></button>
+                                    <button type="submit" class="btn btn-sm  border  text-guinda " {{ $actividad->detalle_actividades_count > 0 ? 'disabled' : '' }} title="Eliminar"><i class="ti ti-trash"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -116,7 +129,7 @@
 
                     @if($actividad->detalle_actividades_count > 0)
                         <div class="bg-white text-center pb-3">
-                            <button class="btn btn-sm btn-more-info rounded-pill px-4 fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetalles{{ $actividad->id }}" aria-expanded="false">
+                            <button class="btn btn-sm btn-more-info rounded-pill px-4 fw-bold " type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetalles{{ $actividad->id }}" aria-expanded="false">
                                 Ver Tareas <i class="ti ti-chevron-down ms-1 transition-icon"></i>
                             </button>
                         </div>
@@ -130,10 +143,10 @@
                                                 {{ $detalle->estatus }}
                                             </span>
                                         </div>
-                                        <h6 class="fw-bold text-dark text-truncate mb-1" style="font-size: 0.85rem;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}">
+                                        <h6 class="fw-bold text-muted text-truncate mb-1 text-small" style="font-size: 0.85rem;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}">
                                             {{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}
                                         </h6>
-                                        <div class="small text-muted" style="font-size: 0.75rem;">
+                                        <div class="text-black small mb-0" style="font-size: 0.75rem;">
                                             {{ \Illuminate\Support\Str::limit(strip_tags($detalle->descripcion_actividad), 80) }}
                                         </div>
                                     </div>
