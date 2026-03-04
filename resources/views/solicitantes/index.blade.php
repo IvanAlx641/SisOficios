@@ -92,10 +92,10 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-guinda text-white">
                         <tr>
-                            <th class="text-center ps-4 py-3"><h6 class="text-white text-center form-label fw-bold small">Nombre</h6></th>
-                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Dependencia</h6></th>
-                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Unidad administrativa</h6></th>
-                            <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Cargo</h6></th>
+                            <th class="text-left ps-4 py-3"><h6 class="text-white text-left form-label fw-bold small">Nombre</h6></th>
+                            <th class="text-left py-3"><h6 class="text-white text-left form-label fw-bold small">Dependencia</h6></th>
+                            <th class="text-left py-3"><h6 class="text-white text-left form-label fw-bold small">Unidad administrativa</h6></th>
+                            <th class="text-left py-3"><h6 class="text-white text-left form-label fw-bold small">Cargo</h6></th>
                             <th class="text-center py-3"><h6 class="text-white text-center form-label fw-bold small">Eliminar</h6></th>
                         </tr>
                     </thead>
@@ -113,17 +113,17 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="text-wrap small">
+                                <span class="text-wrap small text-left">
                                     {{ $solicitante->dependencia->nombre_dependencia ?? 'N/A' }}
                                 </span>
                             </td>
                             <td>
-                                <span class="text-wrap small">
+                                <span class="text-wrap small text-left">
                                     {{ $solicitante->unidadAdministrativa->nombre_unidad_administrativa ?? 'N/A' }}
                                 </span>
                             </td>
                             <td>
-                                <span class="text-wrap small">
+                                <span class="text-wrap small text-left">
                                     {{ $solicitante->cargo }}
                                 </span>
                             </td>

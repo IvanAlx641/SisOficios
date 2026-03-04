@@ -16,8 +16,8 @@ class SeguimientoController extends Controller
     public function index(Request $request): View
     {
         $query = Oficio::with([
-            'areaDirigido', 
-            'solicitantes', 
+            'areaDirigido',
+            'solicitantes',
             'areaAsignada',
             'sistema',
             'tipoRequerimiento',
@@ -30,22 +30,32 @@ class SeguimientoController extends Controller
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');
         }
 
-        if ($request->filled('dirigido_id')) {
+        // CORRECCIÓN 1: Agregamos la validación del "0"
+        if ($request->filled('dirigido_id') && $request->dirigido_id != 0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
+        // ¡Tus fechas aquí ya estaban perfectas!
         if ($request->filled('fecha_recepcion')) {
-            $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
+            $query->whereDate('fecha_recepcion', '>=', $request->fecha_recepcion);
+        }
+
+        if ($request->filled('fecha_recepcion_fin')) {
+            $query->whereDate('fecha_recepcion', '<=', $request->fecha_recepcion_fin);
         }
 
         if ($request->filled('estatus') && $request->estatus !== 'Todos') {
             $query->where('estatus', $request->estatus);
         } else {
-            $query->whereIn('estatus', ['Turnado', 'Concluido', 'En validación']); 
+            // OJO: Recuerda que si el oficio es "Pendiente", no saldrá aquí a menos que elijan "Todos"
+            $query->whereIn('estatus', ['Turnado', 'Concluido', 'En validación']);
         }
 
-        $oficios = $query->orderBy('id', 'desc')->paginate(50);
-        
+        // CORRECCIÓN 2: Agregamos withQueryString() para que no se borren los filtros al cambiar de página
+        $oficios = $query->orderBy('id', 'desc')
+            ->paginate(50)
+            ->withQueryString();
+
         $unidades = UnidadAdministrativa::whereNull('inactivo')
             ->orderBy('nombre_unidad_administrativa')
             ->pluck('nombre_unidad_administrativa', 'id');
@@ -80,18 +90,30 @@ class SeguimientoController extends Controller
 
     public function concluir(Request $request, Oficio $oficio): RedirectResponse
     {
-        // 1. REAGREGAMOS LA VALIDACIÓN AQUÍ
-        $request->validate([
+        // 1. Reglas base
+        $reglas = [
             'fecha_conclusion' => 'required|date',
             'propuesta_respuesta' => 'required|string',
-            'soporte_documental' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480',
-        ], [
+        ];
+
+        // 2. Regla dinámica para el archivo
+        // Si no tiene un documento previo, es OBLIGATORIO subir uno nuevo.
+        if (empty($oficio->soporte_documental)) {
+            $reglas['soporte_documental'] = 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480';
+        } else {
+            $reglas['soporte_documental'] = 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480';
+        }
+
+        // 3. Ejecutamos la validación
+        $request->validate($reglas, [
             'fecha_conclusion.required' => 'El campo fecha de conclusión es obligatorio.',
             'propuesta_respuesta.required' => 'El campo texto de la propuesta es obligatorio.',
+            'soporte_documental.required' => 'El campo soporte documental es obligatorio.',
             'soporte_documental.mimes' => 'El soporte documental debe ser un archivo de tipo: pdf, jpg, jpeg, png, doc, docx.',
-            'soporte_documental.max' => 'El soporte documental no debe pesar más de 20MB.'
+            'soporte_documental.max' => 'El campo soporte documental no debe pesar más de 20MB.'
         ]);
 
+        // ... EL RESTO DE TU CÓDIGO SE QUEDA IGUAL ...
         $dataUpdate = [
             'estatus' => 'Concluido',
             'fecha_conclusion' => $request->fecha_conclusion,

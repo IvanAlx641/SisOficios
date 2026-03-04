@@ -8,7 +8,7 @@
         {{-- 2. AJUSTE HTML: Quité 'overflow-hidden' de esta clase para que el menú se vea --}}
         <div class="card w-100 position-relative border-0 shadow-sm">
             <div class="card-body pt-2 py-3 bg-light">
-                <div class="row align-items-center">
+                <div class="row align-items-left">
                     <div class="col-9">
                         <h4 class="fw-bold mb-0 text-guinda">Gestión de usuarios</h4>
                     </div>
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="row mt-4">
-                        <div class="col-md-8 d-flex align-items-center flex-wrap">
+                        <div class="col-md-8 d-flex align-items-left flex-wrap">
                             <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
 
                             <div class="btn-group me-4 shadow-sm" role="group">
@@ -86,10 +86,10 @@
                                 <label class="btn btn-outline-danger-custom" for="st_inactive">Inactivos</label>
                             </div>
 
-                            <div class="d-flex align-items-center gap-3  ps-3 border-secondary-subtle">
-                                <div class="d-flex align-items-center"><span class="status-dot dot-active"></span> <small
+                            <div class="d-flex align-items-left gap-3  ps-3 border-secondary-subtle">
+                                <div class="d-flex align-items-left"><span class="status-dot dot-active"></span> <small
                                         class="text-muted fw-semibold">Activo</small></div>
-                                <div class="d-flex align-items-center"><span class="status-dot dot-inactive"></span> <small
+                                <div class="d-flex align-items-left"><span class="status-dot dot-inactive"></span> <small
                                         class="text-muted fw-semibold">Inactivo</small></div>
                             </div>
                         </div>
@@ -105,22 +105,22 @@
                     <table class="table table-hover mb-0 align-middle">
                         <thead class="bg-guinda text-white">
                             <tr>
-                                <th class="text-center ps-4 py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Nombre</h6>
+                                <th class="text-left ps-4 py-3">
+                                    <h6 class="text-white text-left form-label fw-bold small">Nombre</h6>
                                 </th>
-                                <th class="text-center py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Correo electrónico</h6>
+                                <th class="text-left py-3">
+                                    <h6 class="text-white text-left form-label fw-bold small">Correo electrónico</h6>
                                 </th>
-                                <th class="text-center py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Rol</h6>
+                                <th class="text-left py-3">
+                                    <h6 class="text-white text-left form-label fw-bold small">Rol</h6>
                                 </th>
-                                <th class="text-center py-3">
+                                <th class="text-left py-3">
                                     <h6 class="text-white text-center form-label fw-bold small">Envío de cuenta</h6>
                                 </th>
-                                <th class="text-center py-3">
+                                <th class="text-left py-3">
                                     <h6 class="text-white text-center form-label fw-bold small">Desactivar</h6>
                                 </th>
-                                <th class="text-center py-3">
+                                <th class="text-left py-3">
                                     <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
                                 </th>
                             </tr>
@@ -129,7 +129,7 @@
                             @forelse ($usuarios as $usuario)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="fw-bold mb-1 fs-3 link-oficio-gris">
+                                        <div class="fw-bold mb-1 fs-3 link-oficio-gris text-left">
                                             <span
                                                 class="status-dot {{ $usuario->inactivo == 'X' ? 'dot-inactive' : 'dot-active' }}"
                                                 title="{{ $usuario->inactivo == 'X' ? 'Inactivo' : 'Activo' }}">
@@ -144,9 +144,9 @@
 
                                     <td>
                                         <div class="d-flex flex-column">
-                                            <span class="text-wrap small">{{ $usuario->email }}</span>
+                                            <span class="text-wrap small text-left">{{ $usuario->email }}</span>
 
-                                            <div class="d-flex align-items-center gap-2">
+                                            <div class="d-flex align-items-left gap-2">
                                                 @if ($usuario->email_verified_at)
                                                     <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-1 py-0" style="font-size: 0.7rem;">Verificado el:</span>
                                                 @else
@@ -161,7 +161,7 @@
                                     </td>
 
                                     <td>
-                                        <span class="text-wrap small">
+                                        <span class="text-wrap small text-left">
                                             {{ $usuario->rol }}
                                         </span>
                                     </td>
@@ -220,7 +220,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-5">
+                                    <td colspan="6" class="text-left py-5">
                                         <i class="ti ti-search fs-1 text-muted mb-2 d-block"></i>
                                         <div class="text-muted-small">No se encontraron resultados para la búsqueda.</div>
                                     </td>

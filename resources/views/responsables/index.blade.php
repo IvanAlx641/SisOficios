@@ -4,27 +4,40 @@
 
     <div class="card border-0 shadow-sm rounded-3">
 
-        <div class="card-header bg-light border-bottom-0 pt-4 px-4">
-
-            <h4 class="fw-bold text-guinda mb-3">Turno de oficio
-
-                <ul class="nav nav-tabs border-bottom-0">
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="{{ route('turno.edit', $oficio->id) }}">
-                            <i class="ti ti-file-description me-1"></i> Datos del turno
+        <div class="card-body pt-2 py-3 bg-light">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <div class="d-flex align-items-center">
+                        <a href="{{ route('turno.index') }}" class="text-guinda text-decoration-none me-2"
+                            title="Volver al listado">
+                            <i class="ti ti-arrow-back-up fs-3"></i>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fw-bold text-guinda border-bottom-guinda" href="#">
-                            <i class="ti ti-users me-1"></i> Responsables
-                        </a>
-                    </li>
-                </ul>
+                        <h4 class="fw-bold mb-0 text-guinda">Turno</h4>
+                    </div>
+                </div>
+                <div class="col-3 text-end">
+                    <button class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#modalResponsable" onclick="abrirModalCrear()" style="text-transform: none;">
+                        Agregar responsable
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="card-body p-4 bg-light">
-            <div class="bg-white p-4 rounded-3 shadow-sm border mb-4">
-                <h5 class="fw-bold text-guinda mb-3 border-bottom pb-2">Contexto</h5>
+        <div class="card-body p-4 bg-white">
+            <ul class="nav nav-tabs border-bottom-0">
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="{{ route('turno.edit', $oficio->id) }}">
+                        <i class="ti ti-file-description me-1"></i> Datos del turno
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active fw-bold text-guinda border-bottom-guinda" href="#">
+                        <i class="ti ti-users me-1"></i> Responsables
+                    </a>
+                </li>
+            </ul>
+            <div class="bg-white p-4 rounded-3">
 
                 <div class="row g-3">
                     <div class="col-12">
@@ -53,10 +66,19 @@
                             </span>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <span class="small text-muted me-2">Sistema:</span>
+                        <span class="text-dark small mb-0">{{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted small me-2">Tipo de requerimiento:</span>
+                        <span
+                            class="text-dark small mb-0">{{ $oficio->tipoRequerimiento->tipo_requerimiento ?? 'N/A' }}</span>
+                    </div>
 
                     <div class="col-12">
                         <p class="mb-1 small text-muted">Descripción del requerimiento:</p>
-                        <div class="text-dark small bg-white p-2 rounded border mb-0">
+                        <div class="text-dark small bg-white p-2 mb-0">
                             {{ $oficio->descripción_oficio }}
                         </div>
                     </div>
@@ -66,10 +88,10 @@
                             <span class="small text-muted me-2 pt-2">Solicitantes:</span>
                             <div class="flex-grow-1">
                                 @if ($oficio->solicitantes->count() > 0)
-                                    <ul class="list-unstyled mb-0 bg-light p-2 rounded border">
+                                    <ul class="list-unstyled mb-0  p-2 ">
                                         @foreach ($oficio->solicitantes as $solicitante)
                                             <li>
-                                                <i class="ti ti-user text-guinda me-1"></i>
+
                                                 <span class="fw-bold">{{ $solicitante->nombre }}</span>
                                                 <span class="text-muted small">({{ $solicitante->cargo }})</span>
                                             </li>
@@ -82,30 +104,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="bg-white p-3 rounded-3 shadow-sm border mb-4">
-                <div class="row text-sm">
-                    <div class="col-md-3 border-end">
-                        <span class="text-muted d-block small">Número:</span>
-                        <strong class="text-dark small">{{ $oficio->numero_oficio }}</strong>
-                    </div>
-                    <div class="col-md-3 border-end">
-                        <span class="text-muted d-block small">Sistema:</span>
-                        <strong class="text-dark small">{{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</strong>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="text-muted d-block small">Tipo de requerimiento:</span>
-                        <strong
-                            class="text-dark small">{{ $oficio->tipoRequerimiento->tipo_requerimiento ?? 'N/A' }}</strong>
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end mb-4">
-                <button class="btn btn-guinda rounded-pill px-4 shadow-sm" data-bs-toggle="modal"
-                    data-bs-target="#modalResponsable" onclick="abrirModalCrear()"style="text-transform: none;">
-                    Agregar responsable
-                </button>
             </div>
 
             <div class="row g-3 align-items-stretch">
@@ -156,29 +154,16 @@
                         <h5 class="text-muted">No hay responsables asignados.</h5>
                     </div>
                 @endforelse
-                @if ($errors->any())
-        <div class="alert alert-danger p-2 mb-3 small border-0 shadow-sm rounded">
-            <ul class="mb-0 ps-3">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-            </div>
-
-
-         <div class="mt-4 pt-3 border-top">
-               <a href="{{ route('turno.index') }}" class="btn-cancelar">Finalizar</a>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalResponsable" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalResponsable" tabindex="-1" aria-hidden="true"
+        @if ($errors->any()) data-bs-backdrop="static" @endif>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0">
-                <div class="modal-header bg-guinda text-white">
-                    <h6 class="modal-title text-white fw-bold" id="modalTitle">Responsable</h6>
+                <div class="modal-header bg-light text-white">
+                    <h6 class="modal-title text-guinda fw-bold" id="modalTitle">Responsable</h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -187,23 +172,34 @@
                         <input type="hidden" name="_method" id="formMethod" value="POST">
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold text-guinda">Seleccione responsable:</label>
-                            <select name="responsable_id" id="modal_responsable_id" class="form-select border-guinda"
-                                required>
+                            <label class="form-label fw-bold text-guinda2" for="modal_responsable_id">Seleccione
+                                responsable:</label>
+                            <select name="responsable_id" id="modal_responsable_id"
+                                class="form-select border-guinda @error('responsable_id') is-invalid @enderror">
                                 <option value="">Seleccione...</option>
                                 @foreach ($responsables as $id => $nombre)
-                                    <option value="{{ $id }}">{{ $nombre }}</option>
+                                    <option value="{{ $id }}" @selected(old('responsable_id') == $id)>
+                                        {{ $nombre }}
+                                    </option>
                                 @endforeach
                             </select>
+
+                            @error('responsable_id')
+                                <div class="invalid-feedback fw-bold d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="genera_respuesta"
-                                    id="genera_respuesta" value="X">
-                                <label class="form-check-label fw-bold text-dark" for="genera_respuesta">
+                                <input class="form-check-input @error('genera_respuesta') is-invalid @enderror"
+                                    type="checkbox" name="genera_respuesta" id="genera_respuesta" value="X"
+                                    @checked(old('genera_respuesta') == 'X')>
+                                <label class="form-check-label small text-dark mb-0" for="genera_respuesta">
                                     ¿Elabora respuesta?
                                 </label>
+                                @error('genera_respuesta')
+                                    <div class="invalid-feedback fw-bold d-block">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -220,11 +216,9 @@
                         @endif
 
                         <div class="text-left">
-
                             <button type="submit" class="btn btn-guinda">Guardar</button>
-                            <button type="button" class="btn btn-cancelar  me-2 fw-bold"
-                                data-bs-dismiss="modal">Cancelar</button>
-
+                            <button type="button" class="btn btn-cancelar me-2 fw-bold" data-bs-dismiss="modal"
+                                onclick="document.getElementById('formResponsable').reset(); limpiarErrores();">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -245,49 +239,91 @@
     </style>
 
     <script>
-        // JS para manejar Formulario Modal Dinámico (Crear/Editar)
+        // Función agresiva para limpiar errores y valores manualmente
+        function limpiarErrores() {
+            // 1. Quitar los bordes rojos de los inputs
+            const invalidInputs = document.querySelectorAll('#formResponsable .is-invalid');
+            invalidInputs.forEach(input => input.classList.remove('is-invalid'));
+
+            // 2. Forzar el ocultamiento de los textos de error de Laravel
+            const errorTexts = document.querySelectorAll('#formResponsable .invalid-feedback');
+            errorTexts.forEach(text => {
+                text.style.display = 'none';
+                text.classList.remove('d-block');
+            });
+
+            // 3. Limpiar valores manualmente (bypasseando el old() de Laravel)
+            const selectResp = document.getElementById('modal_responsable_id');
+            if (selectResp) {
+                selectResp.value = '';
+                // Si hay un buscador custom JS, reiniciamos su texto visual
+                if (typeof convertirSelectABuscador === 'function' && selectResp.nextElementSibling) {
+                    const trigger = selectResp.nextElementSibling.querySelector('.searchable-trigger');
+                    if (trigger) trigger.textContent = 'Seleccione...';
+                }
+            }
+
+            const checkRespuesta = document.getElementById('genera_respuesta');
+            if (checkRespuesta) {
+                checkRespuesta.checked = false;
+            }
+        }
+
         function abrirModalCrear() {
+            limpiarErrores(); // Se limpia todo antes de abrir
             document.getElementById('formResponsable').action = "{{ route('responsable.store') }}";
             document.getElementById('formMethod').value = 'POST';
             document.getElementById('modalTitle').innerText = 'Agregar responsable';
-            document.getElementById('modal_responsable_id').value = '';
-            document.getElementById('genera_respuesta').checked = false;
 
-            // Si usas el buscador JS
             if (typeof convertirSelectABuscador === 'function') {
                 convertirSelectABuscador('modal_responsable_id');
             }
         }
 
         function abrirModalEditar(id, urlActualizar) {
+            limpiarErrores();
             document.getElementById('formResponsable').action = urlActualizar;
             document.getElementById('formMethod').value = 'PUT';
             document.getElementById('modalTitle').innerText = 'Editar responsable';
 
-            // Petición AJAX para obtener datos y llenar
             fetch(`/responsable/${id}/edit`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('modal_responsable_id').value = data.responsable_id;
                     document.getElementById('genera_respuesta').checked = (data.genera_respuesta === 'X');
 
-                    // Actualizar el buscador JS visualmente si está activo
                     if (typeof convertirSelectABuscador === 'function') {
-                        // Forzamos un evento change falso para que el texto visual se actualice si usas el script custom
                         const select = document.getElementById('modal_responsable_id');
-                        const trigger = select.nextElementSibling.querySelector('.searchable-trigger');
-                        if (trigger) trigger.textContent = select.options[select.selectedIndex].text;
+                        if (select && select.nextElementSibling) {
+                            const trigger = select.nextElementSibling.querySelector('.searchable-trigger');
+                            if (trigger) trigger.textContent = select.options[select.selectedIndex].text;
+                        }
                     }
 
                     var modal = new bootstrap.Modal(document.getElementById('modalResponsable'));
                     modal.show();
-                });
+                })
+                .catch(error => console.error("Error obteniendo datos:", error));
         }
 
         document.addEventListener("DOMContentLoaded", function() {
             if (typeof convertirSelectABuscador === 'function') {
                 convertirSelectABuscador('modal_responsable_id');
             }
+
+            // Evento global: Si el usuario presiona "Cancelar", la "X", o da clic fuera del modal, se limpia.
+            const modalEl = document.getElementById('modalResponsable');
+            if (modalEl) {
+                modalEl.addEventListener('hidden.bs.modal', function() {
+                    limpiarErrores();
+                });
+            }
+
+            // Si Laravel detecta un error al recargar, se abre el modal automáticamente
+            @if ($errors->any())
+                var modal = new bootstrap.Modal(document.getElementById('modalResponsable'));
+                modal.show();
+            @endif
         });
     </script>
 

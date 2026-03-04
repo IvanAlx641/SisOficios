@@ -16,43 +16,54 @@ class BuscadorController extends Controller
     {
         // 1. Cargamos las relaciones
         $query = Oficio::with([
-            'areaDirigido', 
-            'solicitantes', 
-            'sistema', 
+            'areaDirigido',
+            'solicitantes',
+            'sistema',
             'tipoRequerimiento',
             'respuestasOficios'
         ]);
 
         // 2. Aplicamos los filtros
+        // 2. Aplicamos los filtros
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');
         }
-        if ($request->filled('fecha_del') && $request->filled('fecha_al')) {
-            $query->whereBetween('fecha_recepcion', [$request->fecha_del, $request->fecha_al]);
+        if ($request->filled('fecha_recepcion')) {
+            $query->whereDate('fecha_recepcion', '>=', $request->fecha_recepcion);
         }
-        if ($request->filled('dirigido_id') && $request->dirigido_id !== 'Todos') {
+        if ($request->filled('fecha_recepcion_fin')) {
+            $query->whereDate('fecha_recepcion', '<=', $request->fecha_recepcion_fin);
+        }
+
+        // Blindamos TODOS los selects contra el 0 y la palabra 'Todos'
+        if ($request->filled('dirigido_id') && $request->dirigido_id != 0 && $request->dirigido_id !== 'Todos') {
             $query->where('dirigido_id', $request->dirigido_id);
         }
-        if ($request->filled('solicitado_por_id') && $request->solicitado_por_id !== 'Todos') {
-            $query->whereHas('solicitantes', function($q) use ($request) {
-                // whereKey busca el ID correcto automáticamente, sin importar el nombre de la tabla
-                $q->whereKey($request->solicitado_por_id); 
+
+        if ($request->filled('solicitado_por_id') && $request->solicitado_por_id != 0 && $request->solicitado_por_id !== 'Todos') {
+            $query->whereHas('solicitantes', function ($q) use ($request) {
+                $q->whereKey($request->solicitado_por_id);
             });
         }
-        if ($request->filled('estatus') && $request->estatus !== 'Todos') {
+
+        if ($request->filled('estatus') && $request->estatus != 0 && $request->estatus !== 'Todos') {
             $query->where('estatus', $request->estatus);
         }
-        if ($request->filled('sistema_id') && $request->sistema_id !== 'Todos') {
+
+        if ($request->filled('sistema_id') && $request->sistema_id != 0 && $request->sistema_id !== 'Todos') {
             $query->where('sistema_id', $request->sistema_id);
         }
-        if ($request->filled('tipo_requerimiento_id') && $request->tipo_requerimiento_id !== 'Todos') {
+
+        if ($request->filled('tipo_requerimiento_id') && $request->tipo_requerimiento_id != 0 && $request->tipo_requerimiento_id !== 'Todos') {
             $query->where('tipo_requerimiento_id', $request->tipo_requerimiento_id);
         }
+
         if ($request->filled('descripcion')) {
             $query->where('descripción_oficio', 'like', '%' . $request->descripcion . '%');
         }
 
-        $oficios = $query->orderBy('id', 'desc')->paginate(50);
+        // Corregimos el doble ;;
+        $oficios = $query->orderBy('id', 'desc')->paginate(50)->withQueryString();
 
         // 3. Consultas para los menús desplegables (AHORA CON LOS CATÁLOGOS CORRECTOS)
         $unidades = UnidadAdministrativa::whereNull('inactivo')->orderBy('nombre_unidad_administrativa')->pluck('nombre_unidad_administrativa', 'id');
@@ -74,8 +85,8 @@ class BuscadorController extends Controller
             'tipoRequerimiento',
             'responsablesOficios.responsable',
             'responsablesOficios.seguimientos',
-            'respuestasOficios.dirigidoA', 
-            'respuestasOficios.firmadoPor' 
+            'respuestasOficios.dirigidoA',
+            'respuestasOficios.firmadoPor'
         ])->findOrFail($id);
 
         return view('buscador.show', compact('oficio'));

@@ -75,8 +75,8 @@
                     <table class="table table-hover mb-0 align-middle">
                         <thead class="bg-guinda text-white">
                             <tr>
-                                <th class="text-center ps-4 py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Tipo de requerimiento</h6>
+                                <th class="text-left ps-4 py-3">
+                                    <h6 class="text-white text-left form-label fw-bold small">Tipo de requerimiento</h6>
                                 </th>
                                 <th class="text-center py-3">
                                     <h6 class="text-white text-center form-label fw-bold small">Aplica oficios</h6>

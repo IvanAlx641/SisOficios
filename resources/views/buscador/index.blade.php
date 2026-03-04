@@ -18,15 +18,17 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
-                            <div class="input-group">
-                                <input type="date" name="fecha_del" class="form-control border-guinda"
-                                    value="{{ request('fecha_del') }}">
-
-                                <span class="input-group-text bg-white border-guinda text-gray small ">al:</span>
-
-                                <input type="date" name="fecha_al" class="form-control border-guinda"
-                                    value="{{ request('fecha_al') }}">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
+                                    <input type="date" name="fecha_recepcion" class="form-control border-guinda"
+                                        value="{{ $request->fecha_recepcion }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-bold text-guinda2 small">al:</label>
+                                    <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
+                                        value="{{ $request->fecha_recepcion_fin }}">
+                                </div>
                             </div>
                         </div>
 
@@ -100,7 +102,7 @@
 
                         <div class="col-md-1 mt-3 text-end">
                             <button type="submit"
-                                class="btn btn-guinda w-100 rounded-pill shadow-sm fw-bold">Buscar</button>
+                                class="btn btn-outline-guinda w-100 fw-bold">Buscar</button>
                         </div>
                     </div>
                 </form>
@@ -114,31 +116,31 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Número de oficio</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Número de oficio</h6>
                                 </th>
                                 <th class="py-3 text-center">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Fecha de<br>recepción</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Fecha de<br>recepción</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Dirigido a</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Dirigido a</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Solicitado por</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Solicitado por</h6>
                                 </th>
                                 <th class="py-3 text-center">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Fecha de<br>turno</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Fecha de<br>turno</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Sistema</h6>
+                                <th class="py-3 text-left">
+                                    <h6 class="text-white text-left form-label fw-bold small">Sistema</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Tipo de requerimiento</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Tipo de requerimiento</h6>
                                 </th>
                                 <th class="py-3 text-center">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Ver<br>oficio</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Ver<br>oficio</h6>
                                 </th>
                                 <th class="py-3 text-center">
-                                    <h6 class="fs-5 fw-bold mb-0 text-white">Oficio de<br>respuesta</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Oficio de<br>respuesta</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -148,7 +150,7 @@
                                     <td class="ps-4">
                                         <div class="d-flex flex-column">
                                             <a href="{{ route('buscador.show', $oficio->id) }}"
-                                                class="link-hover-guinda text-muted fw-bold d-block mb-1">
+                                                class="link-hover-guinda text-muted text-left fw-bold d-block mb-1">
                                                 {{ $oficio->numero_oficio }}
                                             </a>
                                             @php
@@ -166,13 +168,13 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-center text-muted small">
+                                    <td class="text-center text-wrap small">
                                         {{ $oficio->fecha_recepcion ? \Carbon\Carbon::parse($oficio->fecha_recepcion)->format('d/m/Y') : '-' }}
                                     </td>
-                                    <td class="small text-muted text-uppercase">
+                                    <td class="small text-wrap text-left text-uppercase">
                                         {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? 'N/A' }}</td>
 
-                                    <td class="small text-muted">
+                                    <td class="small text-wrap">
                                         @if ($oficio->solicitantes->count() > 1)
                                             <div class="custom-hover-wrapper position-relative d-inline-block">
                                                 <div class="text-uppercase" style="cursor: pointer;">
@@ -185,7 +187,7 @@
                                                         class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
                                                         Solicitantes
                                                     </div>
-                                                    <div class="px-3 py-2 text-muted small">
+                                                    <div class="px-3 py-2 text-wrap small">
                                                         @foreach ($oficio->solicitantes as $sol)
                                                             <div class="text-uppercase mb-1"><i
                                                                     class="ti ti-user me-1 text-guinda"></i>{{ $sol->nombre }}
@@ -198,16 +200,16 @@
                                             <div class="text-uppercase">
                                                 {{ mb_strtoupper($oficio->solicitantes->first()->nombre) }}</div>
                                         @else
-                                            <span class="fst-italic text-muted">Sin asignar</span>
+                                            <span class="fst-italic text-wrap">Sin asignar</span>
                                         @endif
                                     </td>
 
-                                    <td class="text-center text-muted small">
+                                    <td class="text-center text-wrap small">
                                         {{ $oficio->fecha_turno ? \Carbon\Carbon::parse($oficio->fecha_turno)->format('d/m/Y') : '-' }}
                                     </td>
-                                    <td class="text-center small text-muted">
+                                    <td class="text-left small text-wrap">
                                         {{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</td>
-                                    <td class="small text-muted">
+                                    <td class="small text-left text-wrap">
                                         {{ $oficio->tipoRequerimiento->tipo_requerimiento ?? 'N/A' }}</td>
 
                                     <td class="text-center">
@@ -217,7 +219,7 @@
                                                 <i class="ti ti-eye"></i>
                                             </a>
                                         @else
-                                            <span class="text-muted"><i class="ti ti-eye-off"></i></span>
+                                            <span class="text-wrap"><i class="ti ti-eye-off"></i></span>
                                         @endif
                                     </td>
 
@@ -232,7 +234,7 @@
                                                     $url = $resp->url_oficio_respuesta
                                                         ? asset($resp->url_oficio_respuesta)
                                                         : '#';
-                                                    $popoverHtml .= "<li class='mb-2 pb-1 border-bottom'><a href='{$url}' target='_blank' class='text-guinda fw-bold text-decoration-none'><i class='ti ti-file-text me-1'></i>{$resp->numero_oficio_respuesta}</a><br><small class='text-muted'>({$fecha})</small></li>";
+                                                    $popoverHtml .= "<li class='mb-2 pb-1 border-bottom'><a href='{$url}' target='_blank' class='text-guinda fw-bold text-decoration-none'><i class='ti ti-file-text me-1'></i>{$resp->numero_oficio_respuesta}</a><br><small class='text-wrap'>({$fecha})</small></li>";
                                                 }
                                                 $popoverHtml .= '</ul>';
                                             @endphp

@@ -11,58 +11,72 @@
             <div class="card-body p-4">
                 <form action="{{ route('respuestas.index') }}" method="GET">
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label class="form-label fw-bold text-guinda2 small">Número de oficio:</label>
                             <input type="text" name="numero_oficio" class="form-control border-guinda"
-                                value="{{ $request->numero_oficio }}">
+                                placeholder="Buscar por número..." value="{{ $request->numero_oficio }}">
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
-                            <div class="input-group">
-                                <input type="date" name="fecha_recepcion" class="form-control border-guinda"
-                                    value="{{ $request->fecha_recepcion }}">
-                                <span class="input-group-text bg-white border-guinda">al:</span>
-                                <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
-                                    value="{{ $request->fecha_recepcion_fin }}">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
+                                    <input type="date" name="fecha_recepcion" class="form-control border-guinda"
+                                        value="{{ $request->fecha_recepcion }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-bold text-guinda2 small">al:</label>
+                                    <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
+                                        value="{{ $request->fecha_recepcion_fin }}">
+                                </div>
                             </div>
                         </div>
 
-                       <div class="col-md-3">
-                            <label class="form-label text-guinda2 small fw-bold">Dirigido a:</label>
-                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda text-secondary"
-                                onchange="this.form.submit()">
-                                <option value="Todos">Todos</option>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
+                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda">
+                                <option value="0">Todas las unidades</option>
                                 @foreach ($unidades as $id => $nombre)
                                     <option value="{{ $id }}"
-                                        {{ request('dirigido_id') == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}
+                                        {{ $request->dirigido_id == $id ? 'selected' : '' }}>
+                                        {{ $nombre }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="col-md-2">
-                            <label class="form-label fw-bold text-guinda2 small d-block mb-1">Estatus:</label>
-                            <div class="form-check form-check-inline mt-1">
-                                <input class="form-check-input" type="radio" name="estatus" id="st_todos" value="Todos"
-                                    {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
-                                <label class="form-check-label small" for="st_todos">Todos</label>
-                            </div>
-                            <div class="form-check form-check-inline mt-1">
-                                <input class="form-check-input" type="radio" name="estatus" id="st_concluidos"
-                                    value="Concluido" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
-                                <label class="form-check-label small" for="st_concluidos">Concluidos</label>
-                            </div>
-                            <div class="form-check form-check-inline mt-1">
-                                <input class="form-check-input" type="radio" name="estatus" id="st_atendidos"
-                                    value="Atendido" {{ $request->estatus == 'Atendido' ? 'checked' : '' }}>
-                                <label class="form-check-label small" for="st_atendidos">Atendidos</label>
+                        <div class="col-md-2 text-end">
+                            <button type="submit" class="btn btn-outline-guinda w-100 fw-bold">
+                                Buscar
+                            </button>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-12 d-flex align-items-center flex-wrap">
+                                <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
+
+                                <div class="btn-group shadow-sm flex-wrap" role="group">
+                                    <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
+                                        onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
+
+                                    <input type="radio" class="btn-check" name="estatus" value="Atendido" id="st_atendido"
+                                        onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Atendido' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-primary btn-sm px-3 py-2"
+                                        for="st_atendido">Atendidos</label>
+                                    <input type="radio" class="btn-check" name="estatus" value="Concluido"
+                                        id="st_concluido" onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Conluido' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-success btn-sm px-3 py-2"
+                                        for="st_concluido">Concluidos</label>
+
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-1 text-end">
-                            <button type="submit" class="btn btn-outline-guinda w-100 fw-bold rounded-pill">Buscar</button>
-                        </div>
+
                     </div>
                 </form>
             </div>
@@ -75,25 +89,25 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Número de oficio</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Número de oficio</h6>
                                 </th>
                                 <th class="py-3 text-center">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Fecha de<br>recepción</h6>
+                                    <h6 class="text-white form-label fw-bold small">Fecha de<br>recepción</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Dirigido a</h6>
+                                    <h6 class="text-white text-left  form-label fw-bold small">Dirigido a</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Solicitado por</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Solicitado por</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Sistema</h6>
-                                </th>
-                                <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Ver<br>oficio</h6>
+                                <th class="py-3 text-left ">
+                                    <h6 class="text-white text-left form-label fw-bold small">Sistema</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Oficios de<br>Respuesta</h6>
+                                    <h6 class="text-white form-label fw-bold small">Ver<br>oficio</h6>
+                                </th>
+                                <th class="text-center py-3">
+                                    <h6 class="text-white form-label fw-bold small">Oficios de<br>Respuesta</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -102,49 +116,50 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div class="d-flex flex-column">
-                                        @if ($oficio->solicitud_conjunta === 'X')
-                                            <a href="{{ route('detallerespuestas.index', $oficio->id) }}"
-                                                class="fw-bold fs-4 link-oficio-guinda mb-1 d-block">
-                                                {{ $oficio->numero_oficio }}
-                                            </a>
-                                        @else
-                                            <a href="javascript:void(0)"
-                                                class="fw-bold fs-4 link-oficio-guinda mb-1 d-block" data-bs-toggle="modal"
-                                                data-bs-target="#modalRespuesta{{ $oficio->id }}">
-                                                {{ $oficio->numero_oficio }}
-                                            </a>
-                                        @endif
-                                        @php
-                                            $badgeClass = match ($oficio->estatus) {
-                                                'Turnado' => 'bg-info text-white',
-                                                'Concluido'=> 'bg-success text-white',
-                                                'Atendido'=> 'bg-primary text-white',
-                                                default => 'bg-secondary text-white',
-                                            };
-                                        @endphp
-                                        <span class="badge {{ $badgeClass }} rounded-pill w-auto"
-                                            style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
+                                            @if ($oficio->solicitud_conjunta === 'X')
+                                                <a href="{{ route('detallerespuestas.index', $oficio->id) }}"
+                                                    class="fw-bold mb-1 fs-3 link-oficio-gris mb-1">
+                                                    {{ $oficio->numero_oficio }}
+                                                </a>
+                                            @else
+                                                <a href="javascript:void(0)" class="fw-bold mb-1 fs-3 link-oficio-gris mb-1"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalRespuesta{{ $oficio->id }}">
+                                                    {{ $oficio->numero_oficio }}
+                                                </a>
+                                            @endif
+                                            @php
+                                                $badgeClass = match ($oficio->estatus) {
+                                                    'Turnado' => 'bg-info text-white',
+                                                    'Concluido' => 'bg-success text-white',
+                                                    'Atendido' => 'bg-primary text-white',
+                                                    default => 'bg-secondary text-white',
+                                                };
+                                            @endphp
+                                            <span class="badge {{ $badgeClass }} rounded-pill w-auto"
+                                                style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
                                         </div>
                                     </td>
 
-                                    <td class="text-center text-muted small">
+                                    <td class="text-center text-wrap small">
                                         {{ $oficio->fecha_recepcion ? $oficio->fecha_recepcion->format('d/m/Y') : '-' }}
                                     </td>
-                                    <td class="small text-muted text-uppercase">
+                                    <td class="small text-wrap text-left  text-uppercase">
                                         {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? '-' }}</td>
 
-                                    <td class="small text-muted">
+                                    <td class="small text-wrap">
                                         @if ($oficio->solicitantes->count() > 1)
                                             <div class="custom-hover-wrapper position-relative d-inline-block">
                                                 <div class="text-uppercase" style="cursor: pointer;">
                                                     {{ mb_strtoupper($oficio->solicitantes->first()->nombre) }} <i
                                                         class="ti ti-arrow-down text-guinda fw-bold ms-1"></i>
                                                 </div>
-                                                <div class="custom-hover-card shadow-lg border rounded bg-white text-start">
+                                                <div
+                                                    class="custom-hover-card shadow-lg border rounded bg-white text-start">
                                                     <div
                                                         class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
                                                         Solicitantes</div>
-                                                    <div class="px-3 py-2 text-muted small">
+                                                    <div class="px-3 py-2 text-wrap small">
                                                         @foreach ($oficio->solicitantes as $sol)
                                                             <div class="text-uppercase mb-1">{{ $sol->nombre }}</div>
                                                         @endforeach
@@ -159,7 +174,7 @@
                                         @endif
                                     </td>
 
-                                    <td class="text-center text-muted small">
+                                    <td class="text-left  text-wrap small">
                                         {{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</td>
 
                                     <td class="text-center">
@@ -180,7 +195,7 @@
                                                     $url = $resp->url_oficio_respuesta
                                                         ? asset($resp->url_oficio_respuesta)
                                                         : '#';
-                                                    $popoverHtml .= "<li class='mb-2 pb-1 border-bottom'><a href='{$url}' target='_blank' class='text-guinda fw-bold text-decoration-none'><i class='ti ti-file-text me-1'></i>{$resp->numero_oficio_respuesta}</a><br><small class='text-muted'>({$fecha})</small></li>";
+                                                    $popoverHtml .= "<li class='mb-2 pb-1 border-bottom'><a href='{$url}' target='_blank' class='text-guinda fw-bold text-decoration-none'><i class='ti ti-file-text me-1'></i>{$resp->numero_oficio_respuesta}</a><br><small class='text-wrap'>({$fecha})</small></li>";
                                                 }
                                                 $popoverHtml .= '</ul>';
                                             @endphp
@@ -193,7 +208,7 @@
                                                     class="ti ti-arrow-down small"></i>
                                             </button>
                                         @else
-                                            <span class="text-muted"><i class="ti ti-minus"></i></span>
+                                            <span class="text-wrap"><i class="ti ti-minus"></i></span>
                                         @endif
                                     </td>
                                 </tr>
@@ -219,138 +234,133 @@
         <div class="modal fade" id="modalRespuesta{{ $oficio->id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-white border-bottom-0 pb-0">
+                    <div class="modal-header bg-light border-bottom-0 pb-0">
                         <h5 class="modal-title fw-bold text-guinda">Respuesta </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body p-4 bg-white">
 
-                        <div class="bg-white p-3 rounded border border-guinda mb-4 shadow-sm">
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <small class="text-muted d-block mb-1">Fecha de recepción:</small>
-                                    <span
-                                        class="text-guinda fw-bold">{{ $oficio->fecha_recepcion ? $oficio->fecha_recepcion->format('d/m/Y') : 'N/A' }}</span>
-                                </div>
 
-                                <div class="col-12 mb-4">
-                                    <div class="mb-2">
-                                        <small class="text-muted d-block mb-1">Número de oficio:</small>
-                                        <span class="text-guinda fw-bold">{{ $oficio->numero_oficio }}</span>
-                                    </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <small class="text-muted me-1">Número de oficio:</small>
+                                <span class="text-black small mb-0">{{ $oficio->numero_oficio }}</span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <small class="text-muted me-1">Fecha de recepción:</small>
+                                <span
+                                    class="text-black small mb-0">{{ $oficio->fecha_recepcion ? $oficio->fecha_recepcion->format('d/m/Y') : 'N/A' }}</span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <small class="text-muted me-1">Sistema asociado:</small>
+                                <span class="text-black small mb-0">{{ $oficio->sistema->nombre_sistema ?? 'N/A' }}</span>
+                            </div>
 
-                                    <div class="mt-2">
-                                        <small class="text-muted d-block mb-1">Solicitantes:</small>
-                                        @foreach ($oficio->solicitantes as $sol)
-                                            <div class="small">
-                                                <i class="ti ti-check text-success me-1"></i>
-                                                {{ $sol->nombre }}
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <small class="text-muted d-block mb-1">Sistema asociado:</small>
-                                    <span
-                                        class="text-guinda fw-bold">{{ $oficio->sistema->nombre_sistema ?? 'N/A' }}</span>
+                            {{-- Para los solicitantes usamos flexbox para que la lista se alinee bien si hay más de uno --}}
+                            <div class="col-12 mb-2 d-flex align-items-start">
+                                <small class="text-muted me-2 mt-1">Solicitantes:</small>
+                                <div>
+                                    @foreach ($oficio->solicitantes as $sol)
+                                        <div class="text-black small mb-0">
+                                            <i class="ti ti-check text-success me-1"></i> {{ $sol->nombre }}
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-
-                        <hr class="border-secondary mb-4">
-
                         <form action="{{ route('respuestas.store', $oficio->id) }}" method="POST" novalidate>
                             @csrf
                             <input type="hidden" name="oficio_id" value="{{ $oficio->id }}">
 
-                            
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-bold text-guinda2 small">Fecha de la respuesta:</label>
-                                        <input type="date" name="fecha_respuesta"
-                                            value="{{ old('fecha_respuesta', date('Y-m-d')) }}"
-                                            class="form-control border-guinda @error('fecha_respuesta') is-invalid @enderror">
-                                        @error('fecha_respuesta')
-                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                        @enderror
-                                    </div>
 
-                                    <div class="col-md-8">
-                                        <label class="form-label fw-bold text-guinda2 small">Núm. de oficio de
-                                            respuesta:</label>
-                                        <input type="text" name="numero_oficio_respuesta"
-                                            value="{{ old('numero_oficio_respuesta') }}"
-                                            class="form-control border-guinda @error('numero_oficio_respuesta') is-invalid @enderror"
-                                            placeholder="Ej. 21808000020000L-001/2026">
-                                        @error('numero_oficio_respuesta')
-                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
-                                        <select name="dirigido_a_id"
-                                            class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
-                                            <option value="">Seleccione a quién va dirigido...</option>
-                                            @foreach ($usuarios as $id => $nombre)
-                                                <option value="{{ $id }}"
-                                                    {{ old('dirigido_a_id') == $id ? 'selected' : '' }}>
-                                                    {{ mb_strtoupper($nombre) }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('dirigido_a_id')
-                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold text-guinda2 small">Firmado por:</label>
-                                        <select name="firmado_por_id"
-                                            class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
-                                            <option value="">Seleccione quién firma...</option>
-                                            @foreach ($usuarios as $id => $nombre)
-                                                <option value="{{ $id }}"
-                                                    {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
-                                                    {{ mb_strtoupper($nombre) }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('firmado_por_id')
-                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label fw-bold text-guinda2 small">URL del documento de respuesta
-                                            (Opcional)
-                                            :</label>
-                                        <input type="url" name="url_oficio_respuesta"
-                                            value="{{ old('url_oficio_respuesta') }}"
-                                            class="form-control border-guinda @error('url_oficio_respuesta') is-invalid @enderror"
-                                            placeholder="https://...">
-                                        @error('url_oficio_respuesta')
-                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-12 mb-2">
-                                        <label class="form-label fw-bold text-guinda2 small">Descripción de la
-                                            respuesta:</label>
-                                        <textarea name="descripción_respuesta_oficio" rows="5"
-                                            placeholder="Escriba la descripción de la respuesta aquí..."
-                                            class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio') }}</textarea>
-                                        @error('descripción_respuesta_oficio')
-                                            <div class="invalid-feedback fw-bold">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-guinda2 small">Fecha de la respuesta:<span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" name="fecha_respuesta"
+                                        value="{{ old('fecha_respuesta', date('Y-m-d')) }}"
+                                        class="form-control border-guinda @error('fecha_respuesta') is-invalid @enderror">
+                                    @error('fecha_respuesta')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="d-flex align-items-center pt-3 border-top mt-2">
-                                    <button type="submit"
-                                        class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar
-                                        Respuesta
-                                    </button>
-                                    <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
+
+                                <div class="col-md-8">
+                                    <label class="form-label fw-bold text-guinda2 small">Núm. de oficio de
+                                        respuesta:<span class="text-danger">*</span></label>
+                                    <input type="text" name="numero_oficio_respuesta"
+                                        value="{{ old('numero_oficio_respuesta') }}"
+                                        class="form-control border-guinda @error('numero_oficio_respuesta') is-invalid @enderror"
+                                        placeholder="Ej. 21808000020000L-001/2026">
+                                    @error('numero_oficio_respuesta')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-guinda2 small">Dirigido a:<span
+                                            class="text-danger">*</span></label>
+                                    <select name="dirigido_a_id" id="dirigido_a_{{ $oficio->id }}"
+                                        class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
+                                        <option value="">Seleccione a quién va dirigido...</option>
+                                        @foreach ($usuarios as $id => $nombre)
+                                            <option value="{{ $id }}"
+                                                {{ old('dirigido_a_id') == $id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($nombre) }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('dirigido_a_id')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-guinda2 small">Firmado por:<span
+                                            class="text-danger">*</span></label>
+                                    <select name="firmado_por_id" id="firmado_por_{{ $oficio->id }}"
+                                        class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
+                                        <option value="">Seleccione quién firma...</option>
+                                        @foreach ($usuarios as $id => $nombre)
+                                            <option value="{{ $id }}"
+                                                {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($nombre) }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('firmado_por_id')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold text-guinda2 small">URL del documento de respuesta
+                                        (Opcional)
+                                        :</label>
+                                    <input type="url" name="url_oficio_respuesta"
+                                        value="{{ old('url_oficio_respuesta') }}"
+                                        class="form-control border-guinda @error('url_oficio_respuesta') is-invalid @enderror"
+                                        placeholder="https://...">
+                                    @error('url_oficio_respuesta')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-12 mb-2">
+                                    <label class="form-label fw-bold text-guinda2 small">Descripción de la
+                                        respuesta:<span class="text-danger">*</span></label>
+                                    <textarea name="descripción_respuesta_oficio" rows="5"
+                                        placeholder="Escriba la descripción de la respuesta aquí..."
+                                        class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio') }}</textarea>
+                                    @error('descripción_respuesta_oficio')
+                                        <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center pt-3 border-top mt-2">
+                                <button type="submit"
+                                    class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar
+
+                                </button>
+                                <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -373,7 +383,7 @@
             </script>
         @endif
     @endforeach
-    
+
     <style>
         .border-guinda {
             border-color: #9D2449 !important;
@@ -439,10 +449,11 @@
             opacity: 1;
             margin-top: 5px;
         }
+
         .bg-primary {
-        background-color: blue !important;
-        border-color: blue !important;
-        
+            background-color: blue !important;
+            border-color: blue !important;
+
         }
     </style>
     <script>
@@ -574,6 +585,36 @@
             convertirSelectABuscador('filtro_estatus');
             convertirSelectABuscador('filtro_sistema');
             convertirSelectABuscador('filtro_requerimiento');
+            @foreach ($oficios as $oficio)
+                if (typeof convertirSelectABuscador === 'function') {
+                    convertirSelectABuscador('dirigido_a_{{ $oficio->id }}');
+                    convertirSelectABuscador('firmado_por_{{ $oficio->id }}');
+                }
+            @endforeach
         });
+        // --- NUEVO CÓDIGO: Limpiar validaciones al cerrar cualquier modal ---
+        var modals = document.querySelectorAll('.modal');
+        modals.forEach(function(modal) {
+            modal.addEventListener('hidden.bs.modal', function() {
+                var form = this.querySelector('form');
+                if (form) {
+                    // 1. Quitar los bordes rojos de los inputs, selects y textareas
+                    var invalidInputs = form.querySelectorAll('.is-invalid');
+                    invalidInputs.forEach(function(input) {
+                        input.classList.remove('is-invalid');
+                    });
+
+                    // 2. Ocultar los textos de error generados por Laravel
+                    var errorFeedbacks = form.querySelectorAll('.invalid-feedback');
+                    errorFeedbacks.forEach(function(feedback) {
+                        feedback.style.display = 'none';
+                    });
+
+                    // 3. Resetear el formulario para limpiar los datos mal ingresados
+                    form.reset();
+                }
+            });
+        });
+        // ----------
     </script>
 @endsection

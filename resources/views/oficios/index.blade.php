@@ -8,7 +8,7 @@
             <div class="card-body pt-2 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-bold mb-0 text-guinda">Oficios</h4>
+                        <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
                     </div>
                     <div class="col-3 text-end">
                         <a href="{{ route('oficio.create') }}" class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill">
@@ -21,17 +21,30 @@
             <div class="card-body p-4">
                 <form action="{{ route('oficio.index') }}" method="GET" id="filterForm">
                     <div class="row g-3 align-items-end">
-
                         <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Número de oficio</label>
+                            <label class="form-label fw-bold text-guinda2 small">Número de oficio:</label>
                             <input type="text" name="numero_oficio" class="form-control border-guinda"
                                 placeholder="Buscar por número..." value="{{ $request->numero_oficio }}">
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label fw-bold text-guinda2 small">Dirigido a</label>
-                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda"
-                                onchange="this.form.submit()">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
+                                    <input type="date" name="fecha_recepcion" class="form-control border-guinda"
+                                        value="{{ $request->fecha_recepcion }}">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-bold text-guinda2 small">al:</label>
+                                    <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
+                                        value="{{ $request->fecha_recepcion_fin }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
+                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda">
                                 <option value="0">Todas las unidades</option>
                                 @foreach ($unidades as $id => $nombre)
                                     <option value="{{ $id }}"
@@ -40,12 +53,6 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Fecha recepción</label>
-                            <input type="date" name="fecha_recepcion" class="form-control border-guinda"
-                                onchange="this.form.submit()" value="{{ $request->fecha_recepcion }}">
                         </div>
 
                         <div class="col-md-2 text-end">
@@ -70,14 +77,7 @@
                                 <label class="btn btn-outline-warning btn-sm px-3 py-2 text-whit"
                                     for="st_pendiente">Pendientes</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Concluido" id="st_concluido"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-success btn-sm px-3 py-2"
-                                    for="st_concluido">Concluidos</label>
 
                                 <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado"
                                     onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
@@ -100,25 +100,25 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Número de oficio</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Número de oficio</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Fecha recepción</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Fecha de recepción</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Dirigido a</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Dirigido a</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Solicitado por</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Solicitado por</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Asignado a</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Asignado a</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Ver oficio</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Ver oficio</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="fs-4 fw-bold mb-0 text-white">Eliminar</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -127,9 +127,9 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div class="d-flex flex-column">
-                                            
+
                                             <a href="{{ route('oficio.edit', $oficio->id) }}"
-                                                class="fw-bold mb-1 fs-4 link-oficio-gris">
+                                                class="fw-bold mb-1 fs-3 link-oficio-gris text-left">
                                                 {{ $oficio->numero_oficio }}
                                             </a>
 
@@ -142,38 +142,55 @@
                                                     default => 'bg-secondary text-white',
                                                 };
                                             @endphp
-                                            <span class="badge {{ $badgeClass }} rounded-pill py-2"
-                                                style="display: block; width: 100%; min-width: 130px; font-size: 0.75rem; text-align: center;">
+                                            <span class="badge {{ $badgeClass }} rounded-pill w-auto"
+                                                style="width: fit-content; font-size: 0.75rem;">
                                                 {{ $oficio->estatus }}
                                             </span>
                                         </div>
                                     </td>
 
                                     <td>
-                                        <div class="text-center text-muted small">
+                                        <div class="text-center text-wrap small">
                                             {{ $oficio->fecha_recepcion->format('d/m/Y') }}</div>
                                     </td>
 
                                     <td>
-                                        <div class="small text-truncate" style="max-width: 200px;"
+                                        <div class="small text-wrap text-left"
                                             title="{{ $oficio->areaDirigido->nombre_unidad_administrativa ?? 'N/A' }}">
                                             {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? 'N/A' }}
                                         </div>
                                     </td>
 
-                                    <td>
-                                        @if ($oficio->solicitantes->count() > 0)
-                                            @foreach ($oficio->solicitantes as $sol)
-                                                <div class="small text-muted mb-1">•
-                                                    {{ \Illuminate\Support\Str::limit($sol->nombre, 25) }}</div>
-                                            @endforeach
+                                    <td class="small text-wrap">
+                                        @if (isset($oficio->solicitantes) && $oficio->solicitantes->count() > 1)
+                                            <div class="custom-hover-wrapper position-relative d-inline-block">
+                                                <div class="text-uppercase" style="cursor: pointer;">
+                                                    {{ mb_strtoupper($oficio->solicitantes->first()->nombre) }}
+                                                    <i class="ti ti-arrow-down text-guinda fw-bold ms-1"></i>
+                                                </div>
+                                                <div
+                                                    class="custom-hover-card shadow-lg border rounded bg-white text-start">
+                                                    <div
+                                                        class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
+                                                        Solicitantes
+                                                    </div>
+                                                    <div class="px-3 py-2 text-wrap small">
+                                                        @foreach ($oficio->solicitantes as $sol)
+                                                            <div class="text-uppercase mb-1">• {{ $sol->nombre }}</div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @elseif (isset($oficio->solicitantes) && $oficio->solicitantes->count() == 1)
+                                            <div class="text-uppercase">
+                                                {{ mb_strtoupper($oficio->solicitantes->first()->nombre) }}
+                                            </div>
                                         @else
                                             <span class="text-muted small fst-italic">Sin asignar</span>
                                         @endif
                                     </td>
-
                                     <td>
-                                        <div class="small text-truncate" style="max-width: 200px;"
+                                        <div class="small text-wrap text-left"
                                             title="{{ $oficio->areaAsignada->nombre_unidad_administrativa ?? 'N/A' }}">
                                             {{ $oficio->areaAsignada->nombre_unidad_administrativa ?? 'N/A' }}
                                         </div>
@@ -319,7 +336,47 @@
     </script>
 
     <style>
+        /* 1. El contenedor padre debe ser relativo */
+        .custom-hover-wrapper {
+            position: relative;
+            display: inline-block;
+        }
 
+        /* 2. La tarjeta flotante oculta por defecto */
+        .custom-hover-card {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: 100%;
+            /* Aparece justo debajo del nombre */
+            left: 0;
+            z-index: 1050;
+            /* Asegura que flote sobre la tabla y otros elementos */
+            min-width: 220px;
+            /* Ancho para que los nombres quepan bien */
+            margin-top: 5px;
+            /* Un pequeño espacio de separación */
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            /* Efecto suave al aparecer/desaparecer */
+        }
+
+        /* 3. Mostrar la tarjeta al pasar el cursor sobre el wrapper */
+        .custom-hover-wrapper:hover .custom-hover-card {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* 4. (Truco) Un "puente" invisible para que no se cierre si mueves el mouse rápido entre el nombre y la tarjeta */
+        .custom-hover-card::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            /* Cubre el espacio vacío arriba de la tarjeta */
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: transparent;
+        }
     </style>
 
 @endsection

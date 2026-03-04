@@ -11,37 +11,47 @@ use Illuminate\Http\RedirectResponse;
 
 class OficioSolicitanteController extends Controller
 {
-    public function index(): View
+    public function index(): View|RedirectResponse
     {
         // 1. Recuperar Oficio de Sesión
         $oficioId = session('oficio_id');
         
-        // Si no hay ID en sesión, abortamos o redirigimos (seguridad)
         if (!$oficioId) {
-            // Puedes redirigir al index de oficios si prefieres
-            return view('oficios.index')->withErrors('No se ha seleccionado un oficio.');
+            return redirect()->route('oficio.index')->withErrors('No se ha seleccionado un oficio en curso.');
         }
 
         $oficio = Oficio::findOrFail($oficioId);
         
         // 2. Cargar datos
         $solicitantes = $oficio->solicitantes()->with('dependencia', 'unidadAdministrativa')->get();
-        // Lista para el modal (SOLO ACTIVOS)
         $listaSolicitantes = Solicitante::whereNull('inactivo')->orderBy('nombre')->pluck('nombre', 'id');
 
-        // Retornamos la vista del Tab 2
-        return view('oficiosolicitantes.index', compact('oficio', 'solicitantes', 'listaSolicitantes'));
+        // 3. Lógica para saber si puede agregar más (Solo 1 si NO es conjunta)
+        $puedeAgregar = true;
+        if ($oficio->solicitud_conjunta !== 'X' && $solicitantes->count() >= 1) {
+            $puedeAgregar = false;
+        }
+
+        return view('oficiosolicitantes.index', compact('oficio', 'solicitantes', 'listaSolicitantes', 'puedeAgregar'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $oficioId = session('oficio_id');
+        $oficio = Oficio::findOrFail($oficioId);
 
         $request->validate([
             'solicitante_id' => 'required|integer|exists:csolicitantes,id',
         ], [
             'solicitante_id.required' => 'Debe seleccionar un solicitante.',
         ]);
+
+        // CANDADO: Verificar si excede el límite según el tipo de solicitud
+        $cantidadActual = SolicitanteOficio::where('oficio_id', $oficioId)->count();
+        if ($oficio->solicitud_conjunta !== 'X' && $cantidadActual >= 1) {
+            return redirect()->route('oficiosolicitante.index')
+                ->with('error', 'Este oficio no es de solicitud conjunta. Solo se permite agregar un solicitante.');
+        }
 
         // Verificar duplicados
         $existe = SolicitanteOficio::where('oficio_id', $oficioId)
@@ -65,7 +75,6 @@ class OficioSolicitanteController extends Controller
 
     public function destroy($id): RedirectResponse
     {
-        // Aquí $id es el ID del SOLICITANTE, borramos la relación usando el oficio de sesión
         $oficioId = session('oficio_id');
 
         SolicitanteOficio::where('oficio_id', $oficioId)
@@ -74,5 +83,28 @@ class OficioSolicitanteController extends Controller
 
         return redirect()->route('oficiosolicitante.index')
             ->with('success', 'Solicitante eliminado del oficio.');
+    }
+
+    // NUEVO MÉTODO: Para validar que no se quede vacío al terminar
+    public function finalizar(): RedirectResponse
+    {
+        $oficioId = session('oficio_id');
+        
+        if (!$oficioId) {
+            return redirect()->route('oficio.index');
+        }
+
+        $cantidad = SolicitanteOficio::where('oficio_id', $oficioId)->count();
+
+        // Validamos que haya al menos uno
+        if ($cantidad === 0) {
+            return redirect()->route('oficiosolicitante.index')
+                ->with('error', 'Debe agregar al menos un solicitante para guardar y finalizar el registro del oficio.');
+        }
+
+        // Limpiamos la sesión para dar por terminado el registro
+        session()->forget('oficio_id');
+
+        return redirect()->route('oficio.index')->with('success', 'Oficio completado y registrado exitosamente.');
     }
 }

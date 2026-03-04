@@ -5,10 +5,18 @@
     <div class="card border-0 shadow-sm rounded-3">
 
         <div class="card-header bg-light border-bottom-0 pt-4 px-4">
-            <h4 class="fw-bold text-guinda mb-3">
-                Turno
-            </h4>
+            <div class="d-flex align-items-center">
+                
+                <h4 class="fw-bold text-guinda mb-0">
+                    Turno
+                </h4>
+                <a href="{{ route('turno.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
+                    <i class="ti ti-arrow-back-up fs-3"></i>
+                </a>
+            </div>
+        </div>
 
+        <div class="card-body p-4 bg-white">
             <ul class="nav nav-tabs border-bottom-0">
                 <li class="nav-item">
                     <a class="nav-link active fw-bold text-guinda border-bottom-guinda" href="#">
@@ -29,17 +37,13 @@
                     @endif
                 </li>
             </ul>
-        </div>
-
-        <div class="card-body p-4 bg-light">
-            <div class="bg-white p-4 rounded-3 shadow-sm border mb-4">
-                <h5 class="fw-bold text-guinda mb-3 border-bottom pb-2">Contexto</h5>
+            <div class="bg-white p-4 rounded-3">
 
                 <div class="row g-3">
                     <div class="col-12">
                         <div class="d-flex align-items-center">
                             <span class="small text-muted me-2">Número de oficio:</span>
-                            <span class=" text-dark small mb-0">{{ $oficio->numero_oficio }}</span>
+                            <span class="text-black small mb-0">{{ $oficio->numero_oficio }}</span>
                             <a href="{{ $oficio->url_oficio }}" target="_blank"
                                 class="ms-3 btn btn-sm btn-outline-guinda py-0 px-2 rounded-pill">
                                 <i class="ti ti-eye"></i> Ver oficio
@@ -50,7 +54,7 @@
                     <div class="col-12">
                         <div class="d-flex align-items-center">
                             <span class="small text-muted me-2">Fecha de recepción:</span>
-                            <span class="text-dark small mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</span>
+                            <span class="text-black small mb-0">{{ $oficio->fecha_recepcion->format('d/m/Y') }}</span>
                         </div>
                     </div>
 
@@ -64,42 +68,43 @@
                     </div>
 
                     <div class="col-12">
-                        <p class="mb-1 small text-muted">Descripción del requerimiento:</p>
-                        <div class="text-dark bg-white small p-2 rounded border mb-0">
+                        <span class="mb-1 small text-muted">Descripción del requerimiento:</span>
+                        <span class="text-dark small mb-0">
                             {{ $oficio->descripción_oficio }}
-                        </div>
+                        </span>
                     </div>
+
 
                     <div class="col-12">
                         <div class="d-flex align-items-start">
                             <span class="small text-muted me-2 pt-2">Solicitantes:</span>
-                            <div class="flex-grow-1">
+                            <div class="flex-grow-1 mt-2">
                                 @if ($oficio->solicitantes->count() > 0)
-                                    <ul class="list-unstyled mb-0 bg-light p-2 rounded border">
+                                    <ul class="list-unstyled mb-0  p-2">
                                         @foreach ($oficio->solicitantes as $solicitante)
                                             <li>
-                                                <i class="ti ti-user text-guinda me-1"></i>
+
                                                 <span class="fw-bold">{{ $solicitante->nombre }}</span>
                                                 <span class="text-muted small">({{ $solicitante->cargo }})</span>
                                             </li>
                                         @endforeach
                                     </ul>
                                 @else
-                                    <p class="text-muted fst-italic mb-0 pt-2">Sin solicitantes asignados.</p>
+                                    <p class="text-wrap small fst-italic mb-0 pt-2">Sin solicitantes asignados.</p>
                                 @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <h4 class="mb-3 mt-5">Turno</h4>
+
 
                 <form action="{{ route('turno.update', $oficio->id) }}" method="POST" novalidate>
                     @csrf
                     @method('PUT')
 
-                    <div>
+                    <div class="mt-4">
 
-                        <div class="col-md-6">
+                        <div class="col-md-6 mt-4">
                             <label class="form-label fw-bold text-guinda2">Sistema: <span
                                     class="text-danger">*</span></label>
                             <select name="sistema_id" id="sistema_id"
@@ -117,7 +122,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-6 mt-4">
                             <label class="form-label fw-bold text-guinda2">Tipo de requerimiento:<span
                                     class="text-danger">*</span></label>
                             <select name="tipo_requerimiento_id" id="tipo_requerimiento_id"

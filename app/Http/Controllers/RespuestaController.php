@@ -34,7 +34,7 @@ class RespuestaController extends Controller
         }
 
         // NUEVO: Filtro "Dirigido a"
-        if ($request->filled('dirigido_id') && $request->dirigido_id !== 'Todos') {
+        if ($request->filled('dirigido_id') && $request->dirigido_id !=0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
@@ -45,7 +45,9 @@ class RespuestaController extends Controller
         }
 
 
-        $oficios = $query->orderBy('id', 'desc')->paginate(50);
+        $oficios = $query->orderBy('id', 'desc')
+                 ->paginate(50)
+                 ->withQueryString(); 
 
         // Catálogos para selects
         $usuarios = User::orderBy('nombre')->pluck('nombre', 'id');
@@ -98,14 +100,14 @@ class RespuestaController extends Controller
 
         ];
         $messages = [
-            'fecha_respuesta.required'              => 'La fecha de la respuesta es obligatoria.',
+            'fecha_respuesta.required'              => 'El campo fecha de la respuesta es obligatoria.',
             'fecha_respuesta.date'                  => 'Ingrese una fecha válida para la respuesta.',
-            'numero_oficio_respuesta.required'      => 'El número de oficio de respuesta es obligatorio.',
+            'numero_oficio_respuesta.required'      => 'El campo número de oficio de respuesta es obligatorio.',
             'numero_oficio_respuesta.max'           => 'El número de oficio no puede tener más de 255 caracteres.',
-            'dirigido_a_id.required'                => 'Por favor, seleccione a quién va dirigido el oficio.',
-            'firmado_por_id.required'               => 'Por favor, seleccione quién firma el oficio.',
+            'dirigido_a_id.required'                => 'El campo dirigido a es obligatorio',
+            'firmado_por_id.required'               => 'El campo firmado por es obligatorio',
             'url_oficio_respuesta.url'              => 'La URL del documento no es válida (asegúrese de incluir http:// o https://).',
-            'descripción_respuesta_oficio.required' => 'La descripción de la respuesta es obligatoria.',
+            'descripción_respuesta_oficio.required' => 'El campo descripción de la respuesta es obligatoria.',
         ];
 
         // 3. Ejecutamos la validación

@@ -77,10 +77,10 @@
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Nombre del sistema</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small">Nombre del sistema</h6>
                                 </th>
-                                <th class="text-center py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Siglas</h6>
+                                <th class="text-left py-3">
+                                    <h6 class="text-white text-left form-label fw-bold small">Siglas</h6>
                                 </th>
                                 <th class="text-center py-3">
                                     <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
@@ -100,7 +100,7 @@
 
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         <span
                                             class="text-wrap small">{{ $sistema->sigla_sistema }}</span>
                                     </td>

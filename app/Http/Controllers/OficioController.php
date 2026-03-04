@@ -19,43 +19,63 @@ class OficioController extends Controller
         'integer' => 'Seleccione una opción válida.',
     ];
 
-    public function index(Request $request): View
+    public function index(Request $request): View|RedirectResponse
     {
+        // --- CANDADO: Evitar salir sin solicitantes ---
+        if (session()->has('oficio_id')) {
+            $oficioIncompleto = Oficio::find(session('oficio_id'));
+
+            // Si el oficio existe en sesión pero no tiene solicitantes, lo regresamos a la pestaña 2
+            if ($oficioIncompleto && $oficioIncompleto->solicitantes()->count() === 0) {
+                return redirect()->route('oficiosolicitante.index')
+                    ->with('error', 'Acción denegada: Debe agregar al menos un solicitante antes de salir al listado principal.');
+            }
+
+            // Si sí tiene solicitantes y entró al index por el menú, damos el registro por terminado y limpiamos la sesión
+            session()->forget('oficio_id');
+        }
+
         $query = Oficio::with(['areaDirigido', 'solicitantes', 'areaAsignada']);
 
         // --- FILTROS ---
-
-        // 1. Número de Oficio
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');
         }
 
-        // 2. Dirigido A (Ignora si está vacío o null)
         if ($request->filled('dirigido_id') && $request->dirigido_id != 0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
-        // 3. Fecha de Recepción
         if ($request->filled('fecha_recepcion')) {
-            $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
+            $query->whereDate('fecha_recepcion', '>=', $request->fecha_recepcion);
+        }
+
+        // Si el usuario ingresó la fecha de fin (al:)
+        if ($request->filled('fecha_recepcion_fin')) {
+            $query->whereDate('fecha_recepcion', '<=', $request->fecha_recepcion_fin);
         }
         $query->where('estatus', '!=', 'Atendido');
-        // 4. Estatus (Si es 'Todos', no filtramos nada)
+
+        // --- FILTRO DE ESTATUS MEJORADO ---
         if ($request->filled('estatus') && $request->estatus !== 'Todos') {
-            $query->where('estatus', $request->estatus);
+            // Si el usuario busca un estatus específico, respetamos su búsqueda
+            if ($request->estatus == 'Concluido') {
+                $query->where('estatus', 'Concluido');
+            } else {
+                $query->where('estatus', $request->estatus);
+            }
+        } else {
+            // Si no hay filtro o seleccionó 'Todos', ocultamos los ya procesados
+            $query->whereNotIn('estatus', ['Atendido', 'Turnado', 'Concluido']);
         }
-        
-        
-        // Ordenar por ID descendente (los más nuevos primero)
+
         $oficios = $query->orderBy('id', 'desc')
-                ->paginate(50)
-                ->withQueryString();
-        
-        // Cargar catálogo para el select
+            ->paginate(50)
+            ->withQueryString();
+
         $unidades = UnidadAdministrativa::whereNull('inactivo')
             ->orderBy('nombre_unidad_administrativa')
             ->pluck('nombre_unidad_administrativa', 'id');
-            
 
         return view('oficios.index', compact('oficios', 'request', 'unidades'));
     }
@@ -71,7 +91,7 @@ class OficioController extends Controller
     }
 
     public function store(Request $request): RedirectResponse
-    
+
     {
         $request->validate([
             'numero_oficio' => 'required|string|max:50|unique:oficios,numero_oficio',
@@ -81,6 +101,7 @@ class OficioController extends Controller
             'descripción_oficio' => 'required|string',
             'url_oficio' => 'required|url',
         ], $this->mensajes);
+
 
         $oficio = Oficio::create([
             'estatus' => 'Pendiente',
@@ -107,9 +128,9 @@ class OficioController extends Controller
     {
         // Guardar ID en sesión para la navegación entre tabs
         session(['oficio_id' => $oficio->id]);
-        
+
         $unidades = UnidadAdministrativa::whereNull('inactivo')->orderBy('nombre_unidad_administrativa')->pluck('nombre_unidad_administrativa', 'id');
-        
+
         return view('oficios.form', compact('oficio', 'unidades'));
     }
 
@@ -123,7 +144,12 @@ class OficioController extends Controller
             'descripción_oficio' => 'required|string',
             'url_oficio' => 'required|url',
         ], $this->mensajes);
+        $cantidadSolicitantes = $oficio->solicitantes()->count();
 
+        // Si tiene más de 1 solicitante y el usuario desmarcó la casilla (no viene en el request)
+        if ($cantidadSolicitantes > 1 && !$request->has('solicitud_conjunta')) {
+            return back()->withInput()->with('error', 'No puedes desmarcar "Solicitud Conjunta" porque este oficio ya tiene ' . $cantidadSolicitantes . ' solicitantes asignados. Elimina los solicitantes extra primero.');
+        }
         $oficio->update([
             'numero_oficio' => mb_strtoupper($request->numero_oficio),
             'fecha_recepcion' => $request->fecha_recepcion,

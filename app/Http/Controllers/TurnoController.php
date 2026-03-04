@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 class TurnoController extends Controller
 {
     protected $mensajes = [
-        'sistema_id.required' => 'El sistema es requerido.',
-        'sistema_id.exists' => 'El sistema seleccionado no es válido.',
-        'tipo_requerimiento_id.required' => 'El tipo de requerimiento es requerido.',
-        'tipo_requerimiento_id.exists' => 'El tipo de requerimiento seleccionado no es válido.',
+        'sistema_id.required' => 'El campo sistema es requerido.',
+        'sistema_id.exists' => 'El campo sistema es requerido.',
+        'tipo_requerimiento_id.required' => 'El campo tipo de requerimiento es requerido.',
+        'tipo_requerimiento_id.exists' => 'El campo tipo de requerimiento es requerido.',
         'estatus.required' => 'Debe seleccionar un estatus.',
         'estatus.in' => 'El estatus seleccionado no es válido.',
         'observaciones_turno.max' => 'Las observaciones no pueden exceder los 2000 caracteres.',
@@ -44,20 +44,22 @@ class TurnoController extends Controller
         }
 
         if ($request->filled('fecha_recepcion')) {
-            $query->whereDate('fecha_recepcion', $request->fecha_recepcion);
-        }
-        $query->where('estatus', '!=', 'Atendido');
-        // --- FILTRO DE ESTATUS MEJORADO ---
-        if ($request->filled('estatus') && $request->estatus !== 'Todos') {
-            // Manejar la dualidad Concluido/Atendido si es necesario en tu lógica
-            if ($request->estatus == 'Concluido') {
-                // Si en BD es Atendido o Concluido, los traemos ambos
-                $query->whereIn('estatus', ['Concluido']);
-            } else {
-                $query->where('estatus', $request->estatus);
-            }
+            $query->whereDate('fecha_recepcion', '>=', $request->fecha_recepcion);
         }
 
+        // Si el usuario ingresó la fecha de fin (al:)
+        if ($request->filled('fecha_recepcion_fin')) {
+            $query->whereDate('fecha_recepcion', '<=', $request->fecha_recepcion_fin);
+        }
+        // 1. Excluimos definitivamente los estatus que no queremos ver nunca
+        $query->whereNotIn('estatus', ['Atendido', 'Concluido']);
+
+        // 2. --- FILTRO DE ESTATUS MEJORADO ---
+        if ($request->filled('estatus') && $request->estatus !== 'Todos') {
+            // Ya no necesitamos el "if" especial para concluidos, 
+            // simplemente filtramos por el estatus que el usuario seleccione.
+            $query->where('estatus', $request->estatus);
+        }
         $oficios = $query->orderBy('id', 'desc')->paginate(10);
 
         return view('turnos.index', compact('oficios', 'unidades', 'request'));

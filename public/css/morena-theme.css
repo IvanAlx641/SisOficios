@@ -298,7 +298,7 @@
 
 /* --- ESTILOS PARA EL LINK DEL OFICIO (GRIS -> GUINDA) --- */
     .link-oficio-gris {
-        color: #727a82 !important; /* Gris oscuro */
+        color: #9D2449 !important; /* Gris oscuro */
         text-decoration: none !important;
         transition: color 0.3s ease;
     }

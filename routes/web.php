@@ -67,7 +67,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/api/unidades-por-dependencia/{id}', [SolicitanteController::class, 'getUnidades'])->name('api.unidades');
         Route::resource('solicitante', SolicitanteController::class)
             ->parameters(['solicitante' => 'solicitante']);
-
+        Route::post('/oficiosolicitantes/finalizar', [OficioSolicitanteController::class, 'finalizar'])->name('oficiosolicitante.finalizar');
         // --- MÓDULO OFICIOS (REGISTRO) ---
         // 1. Oficios Principal (CRUD)
         Route::resource('oficio', OficioController::class)
