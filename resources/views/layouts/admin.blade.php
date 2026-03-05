@@ -35,65 +35,13 @@
             object-fit: contain;
         }
 
-        .moon,
-        .sun,
-        .lang-flag {
+        .moon, .sun, .lang-flag {
             display: none !important;
         }
 
-        .user-initial-circle {
-            width: 40px !important;
-            height: 40px !important;
-            min-width: 40px;
-            border-radius: 50% !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            aspect-ratio: 1 / 1;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .topbar,
-        .app-header {
+        .topbar, .app-header {
             border-bottom: none !important;
             box-shadow: none !important;
-        }
-
-        .custom-dropdown-pos {
-            position: absolute !important;
-            right: -15px !important;
-            left: auto !important;
-            top: 100% !important;
-            min-width: 300px !important;
-            margin-top: 15px !important;
-            border-radius: 12px !important;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid rgba(0, 0, 0, 0.05) !important;
-            padding: 0 !important;
-            transform: none !important;
-            will-change: transform;
-        }
-
-        .custom-dropdown-pos::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: transparent;
-            display: block;
-        }
-
-        .dropdown-menu.show {
-            display: block !important;
-            animation: fadeInMenu 0.2s ease-out forwards;
-        }
-
-        @keyframes fadeInMenu {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .sidebartoggler { display: none; }
@@ -106,45 +54,48 @@
                 font-size: 1.5rem;
                 cursor: pointer;
             }
-            .header-container { padding-left: 15px !important; padding-right: 15px !important; }
             .app-title-text { display: none; }
-            .custom-dropdown-pos { right: -10px !important; min-width: 260px !important; }
         }
 
         @media (min-width: 576px) {
             .app-title-text { display: block; }
         }
 
+        /* --- TAMAÑO DE LETRA REDUCIDO (1rem) --- */
         .app-title-text, 
         .user-name-text {
             font-family: inherit;
-            font-size: 1.15rem !important; 
+            font-size: 1rem !important; 
             font-weight: 600 !important;   
             letter-spacing: 0.5px;
         }
 
+        /* --- ALINEACIÓN PERFECTA DE CONTENEDORES --- */
+        .header-container, 
+        #sidebarnavh, 
+        .body-wrapper .container-fluid {
+            padding-left: 15px !important; 
+            padding-right: 15px !important;
+            max-width: 100% !important;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* BUSCADOR PERSONALIZADO JS */
         .searchable-dropdown-wrapper { position: relative; }
         .searchable-trigger { text-align: left; background-color: #fff; cursor: pointer; }
         .searchable-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            padding: 0.5rem;
-            margin-top: 0.1rem;
+            display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000;
+            background: #fff; border: 1px solid #dee2e6; border-radius: 0.375rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); padding: 0.5rem; margin-top: 0.1rem;
         }
         .searchable-menu.show { display: block; }
         .searchable-options { max-height: 200px; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
         .searchable-option { padding: 0.5rem 1rem; cursor: pointer; display: block; color: #212529; text-decoration: none; }
         .searchable-option:hover { background-color: #f8f9fa; color: #1e2125; }
-        
-        /* ELIMINADAS LAS REGLAS QUE PEGARON EL CONTENIDO HACIA ARRIBA */
+
+        .body-wrapper .container-fluid { padding-top: 0 !important; }
+        .body-wrapper { margin-top: 0 !important; padding-top: 0 !important; }
     </style>
 
     <title>Sistema de Oficios</title>
@@ -191,7 +142,7 @@
                                 </li>
                                 @endif
 
-                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Capturista']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('solicitante.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-pencil"></i>
@@ -300,14 +251,12 @@
 
             <header class="topbar rounded-0 border-0 bg-morena-primary">
                 <div class="app-header border-0 shadow-none">
-                    <nav class="navbar navbar-expand-xl container-fluid p-0 px-3 header-container"
-                        style="font-family: inherit;">
-
+                    <nav class="navbar navbar-expand-xl container-fluid p-0 header-container" style="font-family: inherit;">
+                        
                         <div class="d-flex align-items-center justify-content-between w-100" style="height: 64px;">
 
                             <div class="d-flex align-items-center">
-                                <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse"
-                                    href="javascript:void(0)">
+                                <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
                                     <i class="ti ti-menu-2"></i>
                                 </a>
 
@@ -320,48 +269,29 @@
                                     SISTEMA DE OFICIOS
                                 </span>
 
-                                <a href="/" class="text-white d-flex align-items-center ms-3 d-none d-sm-flex"
-                                    title="Dashboard">
-                                    <iconify-icon icon="solar:home-2-linear" width="24" height="24"></iconify-icon>
+                                <a href="/" class="text-white d-flex align-items-center ms-3 d-none d-sm-flex" title="Dashboard">
+                                    <iconify-icon icon="solar:home-2-linear" width="22" height="22"></iconify-icon>
                                 </a>
                             </div>
 
-                            <div class="d-flex align-items-center">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item dropdown position-relative">
-                                        <a class="nav-link d-flex align-items-center p-0" href="javascript:void(0)"
-                                            id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                                            
-                                            <span class="d-none d-lg-block text-nowrap text-white me-3 user-name-text text-uppercase">
-                                                {{ Auth::user()->nombre ?? 'USUARIO' }}
-                                            </span>
+                            <div class="d-flex align-items-center justify-content-end ms-auto">
+                                
+                                <span class="d-none d-lg-block text-white user-name-text text-uppercase text-end text-truncate me-3" style="max-width: 250px;">
+                                    {{ Auth::user()->nombre ?? 'USUARIO' }}
+                                </span>
 
-                                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5"
-                                                style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
-                                                {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
-                                            </div>
-                                        </a>
+                                <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5"
+                                    style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
+                                    {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
+                                </div>
 
-                                        <div class="dropdown-menu dropdown-menu-end shadow border-0 custom-dropdown-pos"
-                                            aria-labelledby="drop2" style="min-width: 210px;">
-                                            <div class="py-3 border-bottom text-center">
-                                                <h5 class="mb-1 fs-4 text-dark fw-semibold text-uppercase">
-                                                    {{ Auth::user()->nombre ?? 'Usuario' }}</h5>
-                                                <p class="mb-0 fs-2 text-muted">{{ Auth::user()->email ?? 'email' }}</p>
-                                                <span class="badge bg-light text-secondary mt-2 border">{{ Auth::user()->rol }}</span>
-                                            </div>
-                                            <div class="p-3">
-                                                <form action="{{ route('logout') }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
-                                                        <i class="ti ti-logout"></i> Cerrar Sesión
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <form action="{{ route('logout') }}" method="POST" class="m-0 p-0 ms-3 d-flex align-items-center">
+                                    @csrf
+                                    <button type="submit" class="btn p-0 m-0 border-0 text-white shadow-none opacity-75 nav-icon-hover" title="Cerrar Sesión" style="background: transparent;">
+                                        <i class="ti ti-logout" style="font-size: 1.6rem;"></i>
+                                    </button>
+                                </form>
+
                             </div>
 
                         </div>
@@ -402,7 +332,7 @@
                                     </li>
                                     @endif
 
-                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Capturista']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('solicitante.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-pencil"></i>

@@ -13,7 +13,8 @@ class SolicitantePolicy
     // Función auxiliar para no repetir código
     private function tienePermiso(User $user): bool
     {
-        return in_array($user->rol, ['Administrador TI', 'Capturista']);
+        return in_array($user->rol, ['Administrador TI', 'Capturista',
+            'Titular de área']);
     }
 
     public function viewAny(User $user): bool { return $this->tienePermiso($user); }

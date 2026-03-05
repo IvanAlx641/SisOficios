@@ -81,7 +81,7 @@
 
     <div class="row g-4">
         @forelse($actividades as $actividad)
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6 col-lg-6">
                 <div class="card custom-card h-100 border-0 shadow-sm position-relative">
                     
                     <div class="custom-card-header text-center py-4 px-3">

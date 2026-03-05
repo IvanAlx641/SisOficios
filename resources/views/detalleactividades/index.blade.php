@@ -56,7 +56,7 @@
             {{-- Grid de Detalle de Actividades --}}
             <div class="row g-4 mt-2">
                 @forelse ($detalleactividades as $detalle)
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-6">
                         <div class="card task-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                             <div class="card-header bg-guinda border-0 py-4 px-3 text-center">
                                 <span class="badge {{ $detalle->estatus == 'Atendida' ? 'bg-success' : 'text-dark' }} rounded-pill px-3 py-1 mb-3" style="{{ $detalle->estatus != 'Atendida' ? 'background-color: #eab64d;' : '' }}">

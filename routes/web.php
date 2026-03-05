@@ -19,6 +19,8 @@ use App\Http\Controllers\BuscadorController;
 // --- IMPORTAMOS LOS NUEVOS CONTROLADORES DE ACTIVIDADES ---
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\DetalleActividadController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,9 +47,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['force.change'])->group(function () {
 
         // Dashboard
-        Route::get('/', function () {
-            return view('dashboard');
-        })->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified']) // Si usas jetstream/breeze, deja 'verified', si no, solo 'auth'
+    ->name('dashboard');
+    
 
         // MÓDULO USUARIOS
         Route::post('/usuarios/{usuario}/notificacion', [UsuarioController::class, 'notificacion'])->name('usuario.notificacion');
