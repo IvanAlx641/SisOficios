@@ -231,6 +231,11 @@
     </div>
 
     @foreach ($oficios as $oficio)
+        @php
+            // LÓGICA: Obtenemos la respuesta si ya existe
+            $respuesta = $oficio->respuestasOficios->first();
+        @endphp
+
         <div class="modal fade" id="modalRespuesta{{ $oficio->id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content border-0 shadow">
@@ -239,7 +244,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body p-4 bg-white">
-
 
                         <div class="row">
                             <div class="col-md-6 mb-2">
@@ -268,17 +272,27 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="{{ route('respuestas.store', $oficio->id) }}" method="POST" novalidate>
-                            @csrf
-                            <input type="hidden" name="oficio_id" value="{{ $oficio->id }}">
 
+                        {{-- LÓGICA: Cambia la ruta si existe la respuesta --}}
+                        <form
+                            action="{{ $respuesta ? route('respuestas.update', $respuesta->id) : route('respuestas.store', $oficio->id) }}"
+                            method="POST" novalidate>
+                            @csrf
+
+                            {{-- LÓGICA: Método PUT para editar --}}
+                            @if ($respuesta)
+                                @method('PUT')
+                            @endif
+
+                            <input type="hidden" name="oficio_id" value="{{ $oficio->id }}">
 
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-guinda2 small">Fecha de la respuesta:<span
                                             class="text-danger">*</span></label>
+                                    {{-- LÓGICA: Value actualizado --}}
                                     <input type="date" name="fecha_respuesta"
-                                        value="{{ old('fecha_respuesta', date('Y-m-d')) }}"
+                                        value="{{ old('fecha_respuesta', $respuesta ? \Carbon\Carbon::parse($respuesta->fecha_respuesta)->format('Y-m-d') : date('Y-m-d')) }}"
                                         class="form-control border-guinda @error('fecha_respuesta') is-invalid @enderror">
                                     @error('fecha_respuesta')
                                         <div class="invalid-feedback fw-bold">{{ $message }}</div>
@@ -288,8 +302,9 @@
                                 <div class="col-md-8">
                                     <label class="form-label fw-bold text-guinda2 small">Núm. de oficio de
                                         respuesta:<span class="text-danger">*</span></label>
+                                    {{-- LÓGICA: Value actualizado --}}
                                     <input type="text" name="numero_oficio_respuesta"
-                                        value="{{ old('numero_oficio_respuesta') }}"
+                                        value="{{ old('numero_oficio_respuesta', $respuesta->numero_oficio_respuesta ?? '') }}"
                                         class="form-control border-guinda @error('numero_oficio_respuesta') is-invalid @enderror"
                                         placeholder="Ej. 21808000020000L-001/2026">
                                     @error('numero_oficio_respuesta')
@@ -304,8 +319,9 @@
                                         class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
                                         <option value="">Seleccione a quién va dirigido...</option>
                                         @foreach ($usuarios as $id => $nombre)
+                                            {{-- LÓGICA: Condición de selección actualizada --}}
                                             <option value="{{ $id }}"
-                                                {{ old('dirigido_a_id') == $id ? 'selected' : '' }}>
+                                                {{ old('dirigido_a_id', $respuesta->dirigido_a_id ?? '') == $id ? 'selected' : '' }}>
                                                 {{ mb_strtoupper($nombre) }}</option>
                                         @endforeach
                                     </select>
@@ -321,8 +337,9 @@
                                         class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
                                         <option value="">Seleccione quién firma...</option>
                                         @foreach ($usuarios as $id => $nombre)
+                                            {{-- LÓGICA: Condición de selección actualizada --}}
                                             <option value="{{ $id }}"
-                                                {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
+                                                {{ old('firmado_por_id', $respuesta->firmado_por_id ?? '') == $id ? 'selected' : '' }}>
                                                 {{ mb_strtoupper($nombre) }}</option>
                                         @endforeach
                                     </select>
@@ -330,12 +347,14 @@
                                         <div class="invalid-feedback fw-bold">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="col-md-12">
                                     <label class="form-label fw-bold text-guinda2 small">URL del documento de respuesta
                                         (Opcional)
                                         :</label>
+                                    {{-- LÓGICA: Value actualizado --}}
                                     <input type="url" name="url_oficio_respuesta"
-                                        value="{{ old('url_oficio_respuesta') }}"
+                                        value="{{ old('url_oficio_respuesta', $respuesta->url_oficio_respuesta ?? '') }}"
                                         class="form-control border-guinda @error('url_oficio_respuesta') is-invalid @enderror"
                                         placeholder="https://...">
                                     @error('url_oficio_respuesta')
@@ -346,9 +365,10 @@
                                 <div class="col-md-12 mb-2">
                                     <label class="form-label fw-bold text-guinda2 small">Descripción de la
                                         respuesta:<span class="text-danger">*</span></label>
+                                    {{-- LÓGICA: Textarea interior actualizado --}}
                                     <textarea name="descripción_respuesta_oficio" rows="5"
                                         placeholder="Escriba la descripción de la respuesta aquí..."
-                                        class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio') }}</textarea>
+                                        class="form-control border-guinda @error('descripción_respuesta_oficio') is-invalid @enderror">{{ old('descripción_respuesta_oficio', $respuesta->descripción_respuesta_oficio ?? '') }}</textarea>
                                     @error('descripción_respuesta_oficio')
                                         <div class="invalid-feedback fw-bold">{{ $message }}</div>
                                     @enderror
@@ -357,7 +377,6 @@
                             <div class="d-flex align-items-center pt-3 border-top mt-2">
                                 <button type="submit"
                                     class="btn btn-guardar-modal rounded-pill px-4 py-2 me-3 shadow-sm">Guardar
-
                                 </button>
                                 <button type="button" class="btn-cancelar" data-bs-dismiss="modal">Cancelar</button>
                             </div>
