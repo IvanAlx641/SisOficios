@@ -115,12 +115,11 @@
             .app-title-text { display: block; }
         }
 
-        /* --- ESTILOS DE FUENTE UNIFICADA PARA HEADER --- */
         .app-title-text, 
         .user-name-text {
             font-family: inherit;
-            font-size: 1.15rem !important; /* Mismo tamaño */
-            font-weight: 600 !important;   /* Mismo grosor */
+            font-size: 1.15rem !important; 
+            font-weight: 600 !important;   
             letter-spacing: 0.5px;
         }
 
@@ -144,9 +143,8 @@
         .searchable-options { max-height: 200px; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
         .searchable-option { padding: 0.5rem 1rem; cursor: pointer; display: block; color: #212529; text-decoration: none; }
         .searchable-option:hover { background-color: #f8f9fa; color: #1e2125; }
-
-        .body-wrapper .container-fluid { padding-top: 0 !important; }
-        .body-wrapper { margin-top: 0 !important; padding-top: 0 !important; }
+        
+        /* ELIMINADAS LAS REGLAS QUE PEGARON EL CONTENIDO HACIA ARRIBA */
     </style>
 
     <title>Sistema de Oficios</title>
@@ -293,7 +291,6 @@
                                 </li>
                             </ul>
                         </li>
-
                     </ul>
                 </nav>
             </div>
@@ -510,8 +507,8 @@
                 </div>
             </aside>
             
-            <div class="body-wrapper">
-                <div class="container-fluid">
+            <div class="body-wrapper pt-4">
+                <div class="container-fluid mt-3">
 
                     <div class="mb-3">
                         @if (session('success'))
@@ -569,7 +566,7 @@
                         var bsAlert = new bootstrap.Alert(alert);
                         bsAlert.close();
                     });
-                }, 5000); // 5 SEGUNDOS
+                }, 5000); 
             }
         });
     </script>
