@@ -219,10 +219,10 @@
                                 <select name="dirigido_a_id" id="dirigido_a_{{ $oficio->id }}"
                                     class="form-select border-guinda {{ old('form_action') == 'create' && $errors->has('dirigido_a_id') ? 'is-invalid' : '' }}">
                                     <option value="">Seleccione a quién va dirigido...</option>
-                                    @foreach ($usuarios as $id => $nombre)
-                                        <option value="{{ $id }}"
-                                            {{ old('dirigido_a_id') == $id ? 'selected' : '' }}>
-                                            {{ mb_strtoupper($nombre) }}</option>
+                                    @foreach ($oficio->solicitantes as $solicitante)
+                                        <option value="{{ $solicitante->id }}"
+                                            {{ old('dirigido_a_id') == $solicitante->id ? 'selected' : '' }}>
+                                            {{ mb_strtoupper($solicitante->nombre) }}</option>
                                     @endforeach
                                 </select>
                                 @if (old('form_action') == 'create' && $errors->has('dirigido_a_id'))
@@ -237,7 +237,7 @@
                                 <select name="firmado_por_id" id="firmado_por_{{ $oficio->id }}"
                                     class="form-select border-guinda {{ old('form_action') == 'create' && $errors->has('firmado_por_id') ? 'is-invalid' : '' }}">
                                     <option value="">Seleccione quién firma...</option>
-                                    @foreach ($usuarios as $id => $nombre)
+                                    @foreach ($titulares as $id => $nombre)
                                         <option value="{{ $id }}"
                                             {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
                                             {{ mb_strtoupper($nombre) }}</option>

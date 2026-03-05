@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Oficio;
 use App\Models\RespuestaOficio;
 use App\Models\User;
+use App\Models\Solicitante; // <-- AGREGADO
+use App\Models\UnidadAdministrativa;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use App\Models\UnidadAdministrativa;
 
 class RespuestaController extends Controller
 {
@@ -33,7 +34,6 @@ class RespuestaController extends Controller
             $query->whereDate('fecha_recepcion', '<=', $request->fecha_recepcion_fin);
         }
 
-        // NUEVO: Filtro "Dirigido a"
         if ($request->filled('dirigido_id') && $request->dirigido_id !=0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
@@ -49,19 +49,19 @@ class RespuestaController extends Controller
                  ->paginate(50)
                  ->withQueryString(); 
 
-        // Catálogos para selects
-        $usuarios = User::orderBy('nombre')->pluck('nombre', 'id');
+        // NUEVO: Catálogos separados para los selects
+        $titulares = User::where('rol', 'Titular de área')->orderBy('nombre')->pluck('nombre', 'id');
+        $solicitantesList = Solicitante::whereNull('inactivo')->orderBy('nombre')->pluck('nombre', 'id');
 
-        // NUEVO: Catálogo de unidades para el buscador
         $unidades = UnidadAdministrativa::whereNull('inactivo')
             ->orderBy('nombre_unidad_administrativa')
             ->pluck('nombre_unidad_administrativa', 'id');
 
-        return view('respuestas.index', compact('oficios', 'request', 'usuarios', 'unidades'));
+        return view('respuestas.index', compact('oficios', 'request', 'titulares', 'solicitantesList', 'unidades'));
     }
+
     public function show(Oficio $oficio): View
     {
-        // Cargamos todas las relaciones necesarias para la cabecera y la tabla
         $oficio->load([
             'solicitantes',
             'sistema',
@@ -69,16 +69,16 @@ class RespuestaController extends Controller
             'respuestasOficios.dirigidoA'
         ]);
 
-        $usuarios = User::orderBy('nombre')->pluck('nombre', 'id');
+        // NUEVO: Catálogos separados
+        $titulares = User::where('rol', 'Titular de área')->orderBy('nombre')->pluck('nombre', 'id');
+        $solicitantesList = Solicitante::whereNull('inactivo')->orderBy('nombre')->pluck('nombre', 'id');
 
-        return view('detallerespuestas.index', compact('oficio', 'usuarios'));
+        return view('detallerespuestas.index', compact('oficio', 'titulares', 'solicitantesList'));
     }
+
     public function destroy(RespuestaOficio $respuesta)
     {
-        // Guardamos el ID del oficio antes de borrar la respuesta para poder redireccionar
         $oficio_id = $respuesta->oficio_id;
-
-        // Eliminamos la respuesta
         $respuesta->delete();
 
         $oficio = Oficio::find($oficio_id);
@@ -88,16 +88,16 @@ class RespuestaController extends Controller
 
         return redirect()->back()->with('success', 'La respuesta ha sido eliminada correctamente.');
     }
+
     public function store(Request $request, Oficio $oficio): RedirectResponse
     {
         $rules = [
             'fecha_respuesta' => 'required|date',
             'numero_oficio_respuesta' => 'required|string|max:255',
             'firmado_por_id' => 'required|exists:users,id',
-            'dirigido_a_id' => 'required|exists:users,id',
+            'dirigido_a_id' => 'required|exists:csolicitantes,id', // <-- CAMBIO A csolicitantes (o la tabla que corresponda)
             'url_oficio_respuesta' => 'nullable|url',
             'descripción_respuesta_oficio' => 'required|string',
-
         ];
         $messages = [
             'fecha_respuesta.required'              => 'El campo fecha de la respuesta es obligatoria.',
@@ -110,7 +110,6 @@ class RespuestaController extends Controller
             'descripción_respuesta_oficio.required' => 'El campo descripción de la respuesta es obligatoria.',
         ];
 
-        // 3. Ejecutamos la validación
         $request->validate($rules, $messages);
 
         RespuestaOficio::create([
@@ -125,7 +124,6 @@ class RespuestaController extends Controller
             'usuario_creacion_id' => auth()->id(),
         ]);
 
-        // Si agregar una respuesta debe cambiar el estatus del oficio a 'Atendido', descomenta lo siguiente:
         if ($oficio->estatus !== 'Atendido') {
             $oficio->update([
                 'estatus' => 'Atendido',
@@ -133,34 +131,29 @@ class RespuestaController extends Controller
                 'usuario_modificacion_id' => auth()->id()
             ]);
         }
+        
         if ($oficio->solicitud_conjunta === 'X') {
-            // Si tiene 'X', viaja a la pantalla de historial/detalle de ese oficio
             return redirect()->route('detallerespuestas.index', $oficio->id)
                 ->with('success', '¡Respuesta registrada! Al ser solicitud conjunta, puede gestionar el historial aquí.');
         }
 
-        // Si NO es conjunta, regresa al index general
         return redirect()->route('respuestas.index')
             ->with('success', '¡Respuesta registrada exitosamente! El oficio ha sido Atendido.');
-        return redirect()->back()->with('success', '¡Respuesta registrada exitosamente!');
     }
+
     public function update(Request $request, $id)
     {
-        // 1. Validar los datos que vienen del formulario del modal
         $request->validate([
             'fecha_respuesta'              => 'required|date',
             'numero_oficio_respuesta'      => 'required|string|max:255',
-            'dirigido_a_id'                => 'required|exists:users,id', // Asumiendo que va a la tabla de usuarios
+            'dirigido_a_id'                => 'required|exists:csolicitantes,id', // <-- CAMBIO A csolicitantes
             'firmado_por_id'               => 'required|exists:users,id',
             'url_oficio_respuesta'         => 'nullable|url',
             'descripción_respuesta_oficio' => 'required|string',
         ]);
 
-        // 2. Buscar el registro en la base de datos
-        // NOTA: Cambia "RespuestaOficio" por el nombre real de tu modelo si se llama distinto (ej. "Respuesta")
         $respuesta = \App\Models\RespuestaOficio::findOrFail($id);
 
-        // 3. Actualizar la información
         $respuesta->update([
             'fecha_respuesta'              => $request->fecha_respuesta,
             'numero_oficio_respuesta'      => $request->numero_oficio_respuesta,
@@ -170,7 +163,6 @@ class RespuestaController extends Controller
             'descripción_respuesta_oficio' => $request->descripción_respuesta_oficio,
         ]);
 
-        // 4. Regresar a la vista anterior con un mensaje de éxito
         return back()->with('success', 'La respuesta se ha actualizado correctamente.');
     }
 }

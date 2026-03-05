@@ -318,11 +318,12 @@
                                     <select name="dirigido_a_id" id="dirigido_a_{{ $oficio->id }}"
                                         class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
                                         <option value="">Seleccione a quién va dirigido...</option>
-                                        @foreach ($usuarios as $id => $nombre)
-                                            {{-- LÓGICA: Condición de selección actualizada --}}
-                                            <option value="{{ $id }}"
-                                                {{ old('dirigido_a_id', $respuesta->dirigido_a_id ?? '') == $id ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($nombre) }}</option>
+                                        {{-- Recorremos únicamente los solicitantes de este oficio --}}
+                                        @foreach ($oficio->solicitantes as $solicitante)
+                                            <option value="{{ $solicitante->id }}"
+                                                {{ old('dirigido_a_id', $respuesta->dirigido_a_id ?? '') == $solicitante->id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($solicitante->nombre) }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('dirigido_a_id')
@@ -336,8 +337,7 @@
                                     <select name="firmado_por_id" id="firmado_por_{{ $oficio->id }}"
                                         class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
                                         <option value="">Seleccione quién firma...</option>
-                                        @foreach ($usuarios as $id => $nombre)
-                                            {{-- LÓGICA: Condición de selección actualizada --}}
+                                        @foreach ($titulares as $id => $nombre)
                                             <option value="{{ $id }}"
                                                 {{ old('firmado_por_id', $respuesta->firmado_por_id ?? '') == $id ? 'selected' : '' }}>
                                                 {{ mb_strtoupper($nombre) }}</option>
@@ -347,7 +347,6 @@
                                         <div class="invalid-feedback fw-bold">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                                 <div class="col-md-12">
                                     <label class="form-label fw-bold text-guinda2 small">URL del documento de respuesta
                                         (Opcional)
