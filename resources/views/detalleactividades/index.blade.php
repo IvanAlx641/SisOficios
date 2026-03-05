@@ -8,8 +8,8 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold text-guinda mb-0">Actividades
                     <a href="{{ route('actividad.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
-                    <i class="ti ti-arrow-back-up fs-3"></i>
-                </a>
+                        <i class="ti ti-arrow-back-up fs-3"></i>
+                    </a>
                 </h4>
                 
                 <div class="d-flex gap-2">

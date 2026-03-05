@@ -4,9 +4,15 @@
 <div class="container-fluid">
     
     <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body py-4 text-center border-bottom bg-light d-flex flex-column align-items-center justify-content-center position-relative">
+
+        <div class="card-body py-4  border-bottom bg-light d-flex flex-column  justify-content-center position-relative">
             
-            <h5 class="fw-bold text-guinda mb-0">Oficio: {{ $oficio->numero_oficio }}</h5>
+            <h5 class="fw-bold text-guinda mb-0">Oficio: {{ $oficio->numero_oficio }}
+                <a href="{{ route('buscador.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
+                        <i class="ti ti-arrow-back-up fs-3"></i>
+                    </a>
+            </h5>
+
             
             <div class="position-absolute end-0 me-4">
                 @php
@@ -18,7 +24,7 @@
                         default => 'bg-secondary text-white',
                     };
                 @endphp
-                <span class="badge {{ $badgeClass }} rounded-pill px-3 py-2 fs-6">{{ $oficio->estatus ?? 'Atendido' }}</span>
+                <span class="badge {{ $badgeClass }} rounded-pill px-3 py-2 fs-3">{{ $oficio->estatus ?? 'Atendido' }}</span>
             </div>
         </div>
 
@@ -166,11 +172,7 @@
                 @endforelse
             </div>
 
-            <div class="text-end border-top pt-4 mt-2">
-                <a href="{{ route('buscador.index') }}" class="btn btn-outline-guinda rounded-pill px-4 shadow-sm">
-                    Regresar
-                </a>
-            </div>
+            
 
         </div>
     </div>

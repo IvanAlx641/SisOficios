@@ -136,7 +136,7 @@
                                                     default => 'bg-secondary text-white',
                                                 };
                                             @endphp
-                                            <span class="badge {{ $badgeClass }} rounded-pill w-auto"
+                                            <span class="badge {{ $badgeClass }} rounded-pill "
                                                 style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
                                         </div>
                                     </td>
