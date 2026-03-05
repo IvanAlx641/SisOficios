@@ -34,6 +34,11 @@ class TurnoController extends Controller
             'tipoRequerimiento',
             'responsablesOficios.responsable'
         ]);
+        if (auth()->user()->rol === 'Titular de área') {
+            // Solo ve los oficios dirigidos a su propia área
+            $query->where('dirigido_id', auth()->user()->unidad_administrativa_id);
+        }
+
 
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . mb_strtoupper($request->numero_oficio) . '%');

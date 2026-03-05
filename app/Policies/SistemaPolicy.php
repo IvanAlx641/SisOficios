@@ -8,80 +8,21 @@ use Illuminate\Auth\Access\Response;
 
 class SistemaPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    private function tienePermiso(User $user): bool
     {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
+        // QUITAMOS AL CAPTURISTA DE AQUÍ Y CORREGIMOS "Titular de área"
+        return in_array($user->rol, [
+            'Administrador TI',
+            'Titular de área',
+            'Responsable'
+        ]);
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Sistema $sistema): bool
-    {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Sistema $sistema): bool
-    {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Sistema $sistema): bool
-    {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Sistema $sistema): bool
-    {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Sistema $sistema): bool
-    {
-        return ($user->rol == 'Capturista' ||
-                $user->rol == 'Titular' ||
-                $user->rol == 'Responsable' ||
-                $user->rol == 'Administrador TI');
-    }
+    public function viewAny(User $user): bool { return $this->tienePermiso($user); }
+    public function view(User $user, Sistema $sistema): bool { return $this->tienePermiso($user); }
+    public function create(User $user): bool { return $this->tienePermiso($user); }
+    public function update(User $user, Sistema $sistema): bool { return $this->tienePermiso($user); }
+    public function delete(User $user, Sistema $sistema): bool { return $this->tienePermiso($user); }
+    public function restore(User $user, Sistema $sistema): bool { return $this->tienePermiso($user); }
+    public function forceDelete(User $user, Sistema $sistema): bool { return $this->tienePermiso($user); }
 }

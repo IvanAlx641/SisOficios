@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UnidadAdministrativa; // <--- IMPORTAMOS EL MODELO
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ use App\Mail\RecuperarContrasena;
 
 class UsuarioController extends Controller
 {
-    // Roles permitidos
+    // Roles permitidos (Esto se mantiene igual)
     protected $roles = [
         'Administrador TI' => 'Administrador TI',
         'Titular de área' => 'Titular de área',
@@ -23,16 +24,7 @@ class UsuarioController extends Controller
         'Analista' => 'Analista',
     ];
 
-    // Catálogo Temporal
-    protected $unidades = [
-        1 => 'DIRECCIÓN GENERAL',
-        2 => 'UNIDAD DE TRANSPARENCIA',
-        3 => 'DIRECCIÓN DE TECNOLOGÍAS',
-        4 => 'DEPARTAMENTO DE RECURSOS HUMANOS',
-        5 => 'CONTRALORÍA INTERNA'
-    ];
-
-    // --- MENSAJES AJUSTADOS AL FORMATO DE LA IMAGEN ---
+    // --- MENSAJES DE ERROR ---
     protected $mensajes = [
         'nombre.required' => 'El campo nombre completo es obligatorio.',
         'nombre.min' => 'El campo nombre completo debe tener al menos 5 caracteres.',
@@ -51,6 +43,13 @@ class UsuarioController extends Controller
     public function index(Request $request): View
     {
         $query = User::query();
+
+        // --- FILTRO DE SEGURIDAD POR ROL ---
+        if (auth()->user()->rol === 'Titular de área') {
+            // El titular solo ve a los de su unidad, y NUNCA ve a los Admin TI
+            $query->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id)
+                ->where('rol', '!=', 'Administrador TI');
+        }
 
         if ($request->filled('nombre')) {
             $query->where('nombre', 'like', '%' . $request->nombre . '%');
@@ -77,7 +76,18 @@ class UsuarioController extends Controller
     {
         $usuario = new User();
         $roles = $this->roles;
-        $unidades = $this->unidades;
+        
+        // --- NUEVA LÓGICA DE UNIDADES: Consultar a la BD ---
+        // Traemos todas las unidades activas y las ordenamos alfabéticamente
+        $unidades = UnidadAdministrativa::whereNull('inactivo')
+            ->orderBy('nombre_unidad_administrativa', 'asc')
+            ->pluck('nombre_unidad_administrativa', 'id');
+
+        // --- REGLA: El Titular no puede crear Administradores TI ---
+        if (auth()->user()->rol === 'Titular de área') {
+            unset($roles['Administrador TI']);
+        }
+
         return view('usuarios.form', compact('usuario', 'roles', 'unidades'));
     }
 
@@ -108,7 +118,17 @@ class UsuarioController extends Controller
     public function edit(User $usuario): View
     {
         $roles = $this->roles;
-        $unidades = $this->unidades;
+        
+        // --- NUEVA LÓGICA DE UNIDADES: Consultar a la BD ---
+        $unidades = UnidadAdministrativa::whereNull('inactivo')
+            ->orderBy('nombre_unidad_administrativa', 'asc')
+            ->pluck('nombre_unidad_administrativa', 'id');
+
+        // --- REGLA: El Titular no puede ver ni asignar el rol Admin TI ---
+        if (auth()->user()->rol === 'Titular de área') {
+            unset($roles['Administrador TI']);
+        }
+
         return view('usuarios.form', compact('usuario', 'roles', 'unidades'));
     }
 
@@ -143,22 +163,15 @@ class UsuarioController extends Controller
 
         if ($usuario->email_verified_at != null) {
             $token = Password::createToken($usuario);
-            
-            // --- CORRECCIÓN AQUÍ ---
-            // Agregamos $usuario como primer parámetro
             Mail::to($usuario->email)->send(new RecuperarContrasena($usuario, $token, $usuario->email));
-            
             return redirect()->route('usuario.index')->with('success', 'Enlace de recuperación enviado.');
         } else {
-            // Esta parte estaba bien, pero revisa si CredencialesNuevoUsuario también pide el objeto usuario
             $passwordTemporal = Str::random(9);
             $usuario->update([
                 'password' => Hash::make($passwordTemporal),
                 'usuario_modificacion_id' => auth()->id()
             ]); 
-            
             Mail::to($usuario->email)->send(new CredencialesNuevoUsuario($usuario, $passwordTemporal));
-            
             return redirect()->route('usuario.index')->with('success', 'Credenciales temporales enviadas.');
         }
     }
@@ -179,25 +192,20 @@ class UsuarioController extends Controller
 
     public function destroy(User $usuario)
     {
-        // 1. Autorización de Laravel
         $this->authorize('delete', $usuario);
 
-        // 2. Regla: No puedes eliminarte a ti mismo
         if ($usuario->id == auth()->id()) {
             return redirect()->route('usuario.index')->with('error', 'No puedes eliminar tu propio usuario mientras estás en sesión.');
         }
 
-        // 3. Regla: Verificar si tiene Actividades asignadas
         if ($usuario->responsablesActividades()->exists()) {
             return redirect()->route('usuario.index')->with('error', 'El usuario no se puede eliminar porque tiene Actividades registradas asociadas a él.');
         }
 
-        // 4. Regla: Verificar si tiene Oficios asignados
         if ($usuario->responsablesOficios()->exists()) {
             return redirect()->route('usuario.index')->with('error', 'El usuario no se puede eliminar porque es Responsable de uno o más Oficios en el sistema.');
         }
 
-        // 5. Si pasa todas las validaciones, lo eliminamos
         $usuario->delete();
         
         return redirect()->route('usuario.index')->with('success', 'Usuario eliminado correctamente del sistema.');

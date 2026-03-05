@@ -26,16 +26,33 @@ class SeguimientoController extends Controller
             'oficiosVinculados'
         ]);
 
+        // ==========================================
+        // 🛡️ FILTRO DE SEGURIDAD: RESPONSABLE Y TITULAR
+        // ==========================================
+        $usuario = auth()->user();
+
+        // Si es Responsable, SOLO ve los oficios donde él es el responsable asignado
+        if ($usuario->rol === 'Responsable') {
+            $query->whereHas('responsablesOficios', function($q) use ($usuario) {
+                $q->where('responsable_id', $usuario->id);
+            });
+        } 
+        // Si es Titular de área, SOLO ve los oficios dirigidos a su área
+        elseif ($usuario->rol === 'Titular de área') {
+            $query->where('dirigido_id', $usuario->unidad_administrativa_id);
+        }
+        // ==========================================
+
+
+        // --- FILTROS DE BÚSQUEDA ---
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');
         }
 
-        // CORRECCIÓN 1: Agregamos la validación del "0"
         if ($request->filled('dirigido_id') && $request->dirigido_id != 0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
-        // ¡Tus fechas aquí ya estaban perfectas!
         if ($request->filled('fecha_recepcion')) {
             $query->whereDate('fecha_recepcion', '>=', $request->fecha_recepcion);
         }
@@ -51,7 +68,6 @@ class SeguimientoController extends Controller
             $query->whereIn('estatus', ['Turnado', 'Concluido', 'En validación']);
         }
 
-        // CORRECCIÓN 2: Agregamos withQueryString() para que no se borren los filtros al cambiar de página
         $oficios = $query->orderBy('id', 'desc')
             ->paginate(50)
             ->withQueryString();
@@ -67,7 +83,6 @@ class SeguimientoController extends Controller
 
     public function storeAvance(Request $request, $responsableOficioId): RedirectResponse
     {
-        // Validación con mensajes en español
         $request->validate([
             'estatus' => 'required|in:Pendiente,En Desarrollo,En validación,Publicado',
             'observaciones' => 'required|string|max:2000',
@@ -90,21 +105,17 @@ class SeguimientoController extends Controller
 
     public function concluir(Request $request, Oficio $oficio): RedirectResponse
     {
-        // 1. Reglas base
         $reglas = [
             'fecha_conclusion' => 'required|date',
             'propuesta_respuesta' => 'required|string',
         ];
 
-        // 2. Regla dinámica para el archivo
-        // Si no tiene un documento previo, es OBLIGATORIO subir uno nuevo.
         if (empty($oficio->soporte_documental)) {
             $reglas['soporte_documental'] = 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480';
         } else {
             $reglas['soporte_documental'] = 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480';
         }
 
-        // 3. Ejecutamos la validación
         $request->validate($reglas, [
             'fecha_conclusion.required' => 'El campo fecha de conclusión es obligatorio.',
             'propuesta_respuesta.required' => 'El campo texto de la propuesta es obligatorio.',
@@ -113,7 +124,6 @@ class SeguimientoController extends Controller
             'soporte_documental.max' => 'El campo soporte documental no debe pesar más de 20MB.'
         ]);
 
-        // ... EL RESTO DE TU CÓDIGO SE QUEDA IGUAL ...
         $dataUpdate = [
             'estatus' => 'Concluido',
             'fecha_conclusion' => $request->fecha_conclusion,

@@ -10,60 +10,17 @@ class SolicitantePolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determinar si el usuario puede ver el listado de solicitantes.
-     */
-    public function viewAny(User $user): bool
+    // Función auxiliar para no repetir código
+    private function tienePermiso(User $user): bool
     {
-        // Siguiendo tu lógica: Solo el Administrador TI puede gestionar esto
-        return $user->rol === 'Administrador TI';
+        return in_array($user->rol, ['Administrador TI', 'Capturista']);
     }
 
-    /**
-     * Determinar si el usuario puede ver un solicitante específico.
-     */
-    public function view(User $user, Solicitante $solicitante): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determinar si el usuario puede crear solicitantes.
-     */
-    public function create(User $user): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determinar si el usuario puede actualizar/editar un solicitante.
-     */
-    public function update(User $user, Solicitante $solicitante): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determinar si el usuario puede eliminar un solicitante.
-     */
-    public function delete(User $user, Solicitante $solicitante): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determinar si el usuario puede restaurar (si usas SoftDeletes).
-     */
-    public function restore(User $user, Solicitante $solicitante): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determinar si el usuario puede eliminar permanentemente.
-     */
-    public function forceDelete(User $user, Solicitante $solicitante): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
+    public function viewAny(User $user): bool { return $this->tienePermiso($user); }
+    public function view(User $user, Solicitante $solicitante): bool { return $this->tienePermiso($user); }
+    public function create(User $user): bool { return $this->tienePermiso($user); }
+    public function update(User $user, Solicitante $solicitante): bool { return $this->tienePermiso($user); }
+    public function delete(User $user, Solicitante $solicitante): bool { return $this->tienePermiso($user); }
+    public function restore(User $user, Solicitante $solicitante): bool { return $this->tienePermiso($user); }
+    public function forceDelete(User $user, Solicitante $solicitante): bool { return $this->tienePermiso($user); }
 }

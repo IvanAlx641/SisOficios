@@ -49,17 +49,25 @@
 
                     <div class="col-md-4">
                         <label class="form-label fw-bold text-guinda2 small">Responsable: <span class="text-danger">*</span></label>
-                        <select name="responsable_id" id="select_responsable" class="form-select border-guinda @error('responsable_id') is-invalid @enderror" required {{ isset($isResponsable) && $isResponsable ? 'readonly' : '' }}>
-                            @if(!isset($isResponsable) || !$isResponsable)
+                        
+                        {{-- 🛡️ LÓGICA DE BLOQUEO PARA EL RESPONSABLE --}}
+                        @if(auth()->user()->rol === 'Responsable')
+                            <input type="hidden" name="responsable_id" value="{{ auth()->id() }}">
+                            <select id="select_responsable" class="form-select border-guinda bg-light" disabled>
+                                <option>{{ mb_strtoupper(auth()->user()->nombre) }}</option>
+                            </select>
+                        @else
+                            <select name="responsable_id" id="select_responsable" class="form-select border-guinda @error('responsable_id') is-invalid @enderror" required>
                                 <option value="">Seleccione un responsable...</option>
-                            @endif
-                            @foreach($responsables as $id => $nombre)
-                                <option value="{{ $id }}" {{ old('responsable_id', $actividad->responsable_id) == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}</option>
-                            @endforeach
-                        </select>
-                        @error('responsable_id')
-                            <span class="invalid-feedback fw-bold">{{ $message }}</span>
-                        @enderror
+                                @foreach($responsables as $id => $nombre)
+                                    <option value="{{ $id }}" {{ old('responsable_id', $actividad->responsable_id) == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}</option>
+                                @endforeach
+                            </select>
+                            @error('responsable_id')
+                                <span class="invalid-feedback fw-bold">{{ $message }}</span>
+                            @enderror
+                        @endif
+
                     </div>
 
                     <div class="col-md-4">
@@ -212,8 +220,11 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Inicializar ambos selectores
-        convertirSelectABuscador('select_responsable');
+        // Solo convertimos el responsable a buscador SI NO es el rol Responsable
+        @if(auth()->user()->rol !== 'Responsable')
+            convertirSelectABuscador('select_responsable');
+        @endif
+        
         convertirSelectABuscador('select_sistema');
     });
 </script>

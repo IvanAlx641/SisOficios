@@ -24,12 +24,15 @@ class ResponsableController extends Controller
         $oficio = Oficio::with(['areaDirigido', 'solicitantes', 'sistema', 'tipoRequerimiento'])
             ->findOrFail($oficioId);
 
-        // Obtenemos los responsables activos
+        // ==========================================
+        // 🛡️ SEGURIDAD EN EL SELECT DE RESPONSABLES
+        // ==========================================
         $responsablesQuery = User::select('id', 'nombre')
             ->whereNull('inactivo')
             ->where('rol', 'Responsable'); 
             
-        if (auth()->user()->rol == 'Titular') {
+        // CORRECCIÓN: El rol se llama "Titular de área"
+        if (auth()->user()->rol === 'Titular de área') {
             $responsablesQuery->where('unidad_administrativa_id', auth()->user()->unidad_administrativa_id);
         }
 
@@ -37,18 +40,26 @@ class ResponsableController extends Controller
             ->pluck('nombre', 'id')
             ->toArray();
 
+        // Los responsables que YA fueron asignados a este oficio
         $responsablesOficios = ResponsableOficio::with('responsable.unidadAdministrativa')
             ->where('oficio_id', $oficioId)
             ->get();
 
-        // AQUÍ RECUPERAMOS LA ESTADÍSTICA QUE FALTABA
-        $estadisticaRespuestas = ResponsableOficio::selectRaw('responsable_id, nombre, genera_respuesta, COUNT(*) as total')
+        // ==========================================
+        // 📊 SEGURIDAD EN LA ESTADÍSTICA (CONTADORES)
+        // ==========================================
+        $queryEstadisticas = ResponsableOficio::selectRaw('responsables_oficios.responsable_id, users.nombre, responsables_oficios.genera_respuesta, COUNT(*) as total')
             ->leftJoin('users', 'responsables_oficios.responsable_id', '=', 'users.id')
-            ->whereNotNull('genera_respuesta')
-            ->groupBy('responsable_id', 'nombre', 'genera_respuesta')
+            ->whereNotNull('responsables_oficios.genera_respuesta');
+
+        // Si es Titular, filtramos las estadísticas para que solo cuente a los responsables de su área
+        if (auth()->user()->rol === 'Titular de área') {
+            $queryEstadisticas->where('users.unidad_administrativa_id', auth()->user()->unidad_administrativa_id);
+        }
+
+        $estadisticaRespuestas = $queryEstadisticas->groupBy('responsables_oficios.responsable_id', 'users.nombre', 'responsables_oficios.genera_respuesta')
             ->get();
 
-        // LA AGREGAMOS AL COMPACT PARA MANDARLA A LA VISTA
         return view('responsables.index', compact('oficio', 'responsables', 'responsablesOficios', 'estadisticaRespuestas'));
     }
 
@@ -103,7 +114,6 @@ class ResponsableController extends Controller
     {
         $oficio_id = session('oficio_id');
         
-        // Regla única combinada (Evitar que asignen a la misma persona dos veces al mismo oficio)
         $uniqueRule = Rule::unique('responsables_oficios', 'responsable_id')
             ->where('oficio_id', $oficio_id);
             
@@ -118,7 +128,6 @@ class ResponsableController extends Controller
             'responsable_id.unique' => 'Este usuario ya fue asignado a este oficio.',
         ]);
 
-        // Validación para que solo 1 persona pueda tener "genera_respuesta" = 'X'
         $validator->after(function ($validator) use ($request, $id, $oficio_id) {
             if ($request->has('genera_respuesta')) {
                 $query = ResponsableOficio::where('oficio_id', $oficio_id)

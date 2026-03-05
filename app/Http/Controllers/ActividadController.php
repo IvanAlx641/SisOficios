@@ -18,6 +18,10 @@ class ActividadController extends Controller
         $query = Actividad::with(['responsable', 'sistema', 'detalleActividades.tipoRequerimiento'])
             ->withCount('detalleActividades');
 
+            if (auth()->user()->rol === 'Responsable') {
+            $query->where('responsable_id', auth()->id());
+        }
+
         // Filtros
         if ($request->filled('fecha_inicial')) {
             $query->whereDate('fecha_actividad', '>=', $request->fecha_inicial);

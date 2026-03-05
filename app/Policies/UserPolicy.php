@@ -9,64 +9,37 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any models.
-     * (Ver el listado de usuarios)
-     */
+    // ¿Quién puede ver la tabla de usuarios?
     public function viewAny(User $user): bool
     {
-        return $user->rol === 'Administrador TI';
+        // Admin TI ya pasó. Permitimos al Titular.
+        return $user->rol === 'Titular de área';
     }
 
-    /**
-     * Determine whether the user can view the model.
-     * (Ver detalle de un usuario específico)
-     */
+    // ¿Quién puede ver el detalle/editar un usuario específico?
     public function view(User $user, User $model): bool
     {
-        return $user->rol === 'Administrador TI';
+        // El Titular solo puede ver/editar a los de SU propia área
+        return $user->rol === 'Titular de área' && $user->unidad_administrativa_id === $model->unidad_administrativa_id;
     }
 
-    /**
-     * Determine whether the user can create models.
-     * (Entrar al formulario de crear)
-     */
+    // ¿Quién puede crear nuevos usuarios?
     public function create(User $user): bool
     {
-        return $user->rol === 'Administrador TI';
+        return $user->rol === 'Titular de área';
     }
 
-    /**
-     * Determine whether the user can update the model.
-     * (Editar usuarios y Enviar Credenciales)
-     */
+    // ¿Quién puede guardar los cambios de un usuario?
     public function update(User $user, User $model): bool
     {
-        return $user->rol === 'Administrador TI';
+        // Igual que view: El Titular solo puede actualizar a los de su área
+        return $user->rol === 'Titular de área' && $user->unidad_administrativa_id === $model->unidad_administrativa_id;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     * (Eliminar usuarios)
-     */
+    // ¿Quién puede eliminar un usuario?
     public function delete(User $user, User $model): bool
     {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, User $model): bool
-    {
-        return $user->rol === 'Administrador TI';
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, User $model): bool
-    {
-        return $user->rol === 'Administrador TI';
+        // El Titular solo puede borrar a los de su área
+        return $user->rol === 'Titular de área' && $user->unidad_administrativa_id === $model->unidad_administrativa_id;
     }
 }

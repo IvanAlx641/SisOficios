@@ -52,6 +52,10 @@
                     
                     <div class="d-flex flex-wrap gap-4 p-3 border rounded-3 bg-light">
                         @foreach($roles as $key => $label)
+                            @if(auth()->user()->rol === 'Titular de área' && $key === 'Administrador TI')
+                                @continue
+                            @endif
+
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input @error('rol') is-invalid @enderror" type="radio" name="rol" 
                                     id="rol_{{ $key }}" value="{{ $key }}" 
@@ -71,18 +75,30 @@
 
                 <div class="col-md-12 mt-4" id="divDependencia">
                     <label class="form-label fw-bold text-guinda2">Unidad administrativa: <span class="text-danger">*</span></label>
-                    <select name="unidad_administrativa_id" id="selectDependencia" 
-                            class="form-select @error('unidad_administrativa_id') is-invalid @enderror" required>
-                        <option value="">Selecciona una unidad administrativa</option>
-                        @foreach($unidades as $id => $nombre)
-                            <option value="{{ $id }}" {{ old('unidad_administrativa_id', $usuario->unidad_administrativa_id) == $id ? 'selected' : '' }}>
-                                {{ $nombre }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('unidad_administrativa_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    
+                    @if(auth()->user()->rol === 'Titular de área')
+                        
+                        <input type="hidden" name="unidad_administrativa_id" value="{{ auth()->user()->unidad_administrativa_id }}">
+                        
+                        <select id="selectDependencia" class="form-select bg-light text-secondary" disabled>
+                            <option>{{ $unidades[auth()->user()->unidad_administrativa_id] ?? 'Mi unidad predeterminada' }}</option>
+                        </select>
+                        
+                    @else
+                        <select name="unidad_administrativa_id" id="selectDependencia" 
+                                class="form-select @error('unidad_administrativa_id') is-invalid @enderror" required>
+                            <option value="">Selecciona una unidad administrativa</option>
+                            @foreach($unidades as $id => $nombre)
+                                <option value="{{ $id }}" {{ old('unidad_administrativa_id', $usuario->unidad_administrativa_id) == $id ? 'selected' : '' }}>
+                                    {{ $nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('unidad_administrativa_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    @endif
+
                 </div>
 
                 @if($usuario->exists)
@@ -212,16 +228,21 @@
         if (rol === 'Administrador TI') {
             // Oculta el contenedor (incluyendo nuestro nuevo buscador)
             divDep.style.visibility = 'hidden'; 
-            selectDep.required = false;
-            selectDep.value = ""; 
             
-            // NUEVO: Reseteamos también el texto visual del buscador para que no se quede con el nombre anterior
+            // Verificamos que el select no esté deshabilitado antes de modificarle atributos
+            if(!selectDep.disabled) {
+                selectDep.required = false;
+                selectDep.value = ""; 
+            }
+            
             const trigger = divDep.querySelector('.searchable-trigger');
             if(trigger) trigger.textContent = 'Selecciona una unidad administrativa';
             
         } else {
             divDep.style.visibility = 'visible';
-            selectDep.required = true;
+            if(!selectDep.disabled) {
+                selectDep.required = true;
+            }
         }
     }
 
@@ -245,10 +266,13 @@
     
     // INICIALIZACIÓN
     document.addEventListener("DOMContentLoaded", function() {
-        // 1. Primero convertimos el select en buscador
-        convertirSelectABuscador('selectDependencia');
+        
+        // 1. Convertimos el select en buscador (SOLO SI NO ES TITULAR, para no romper el select bloqueado)
+        @if(auth()->user()->rol !== 'Titular de área')
+            convertirSelectABuscador('selectDependencia');
+        @endif
 
-        // 2. Luego aplicamos la lógica del rol (esto ocultará el buscador si es Admin TI)
+        // 2. Aplicamos la lógica del rol (esto ocultará el buscador si es Admin TI)
         const rolSeleccionado = document.querySelector('input[name="rol"]:checked');
         if (rolSeleccionado) {
             toggleDependencia(rolSeleccionado.value);

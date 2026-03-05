@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,8 +14,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-        \App\Models\User::class => \App\Policies\UserPolicy::class,
-        \App\Models\TipoRequerimiento::class => \App\Policies\TipoRequerimientoPolicy::class,
     ];
 
     /**
@@ -25,6 +23,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // LLAVE MAESTRA: El Administrador TI tiene permiso a TODO.
+        Gate::before(function ($user, $ability) {
+            if ($user->rol === 'Administrador TI') {
+                return true;
+            }
+        });
     }
 }

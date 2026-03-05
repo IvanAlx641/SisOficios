@@ -22,6 +22,16 @@ class BuscadorController extends Controller
             'tipoRequerimiento',
             'respuestasOficios'
         ]);
+        if (auth()->user()->rol === 'Titular de área') {
+            // El titular SOLO ve los oficios que fueron dirigidos a su unidad
+            $query->where('dirigido_id', auth()->user()->unidad_administrativa_id);
+        } 
+        elseif (auth()->user()->rol === 'Responsable') {
+            // El Responsable SOLO ve los oficios donde está asignado
+            $query->whereHas('responsablesOficios', function ($q) {
+                $q->where('responsable_id', auth()->id());
+            });
+        }
 
         // 2. Aplicamos los filtros
         // 2. Aplicamos los filtros

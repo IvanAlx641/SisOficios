@@ -16,19 +16,14 @@
 
     <style>
         :root {
-            /* Sobrescribimos el color PRIMARIO de Bootstrap (el azul por defecto) */
             --bs-primary: #9D2449; 
-            --bs-primary-rgb: 177, 38, 49; /* Necesario para las opacidades de Bootstrap */
-            
-            /* Color secundario (Dorado suave) */
+            --bs-primary-rgb: 177, 38, 49; 
             --bs-secondary: #BC955C;
             --bs-secondary-rgb: 188, 149, 92;
-
-            /* Opcional: Ajustar el color de los enlaces */
             --bs-link-color: #9D2449;
             --bs-link-hover-color: #801B24;
         }
-        /* --- 1. MEJORA VISUAL (Fuentes) --- */
+
         body {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -40,14 +35,12 @@
             object-fit: contain;
         }
 
-        /* Ocultar elementos innecesarios */
         .moon,
         .sun,
         .lang-flag {
             display: none !important;
         }
 
-        /* Estilo del Círculo de Usuario */
         .user-initial-circle {
             width: 40px !important;
             height: 40px !important;
@@ -67,41 +60,25 @@
             box-shadow: none !important;
         }
 
-        /* --- 2. SOLUCIÓN DEFINITIVA AL MENU (Cerrar Sesión) --- */
         .custom-dropdown-pos {
             position: absolute !important;
-
-            /* ALINEACIÓN EXACTA:
-               Usamos -10px o 0px dependiendo de tu gusto.
-               Si '0' no llega al borde de la imagen, ponle un valor negativo como '-15px'. */
             right: -15px !important;
-
             left: auto !important;
             top: 100% !important;
-
-            /* TAMAÑO Y ESTÉTICA */
             min-width: 300px !important;
-            /* Más ancha para que se vea elegante */
             margin-top: 15px !important;
-            /* Separación visual de la barra roja */
             border-radius: 12px !important;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
             border: 1px solid rgba(0, 0, 0, 0.05) !important;
             padding: 0 !important;
-            /* Limpieza interna */
-
-            /* ESTABILIDAD (Evita que salte al hacer clic) */
             transform: none !important;
             will-change: transform;
         }
 
-        /* EL PUENTE INVISIBLE (Magia para que no se cierre)
-           Crea una zona segura entre el nombre y el cuadro blanco */
         .custom-dropdown-pos::before {
             content: '';
             position: absolute;
             top: -20px;
-            /* Cubre el hueco hacia arriba */
             left: 0;
             width: 100%;
             height: 20px;
@@ -109,28 +86,17 @@
             display: block;
         }
 
-        /* Animación suave de entrada */
         .dropdown-menu.show {
             display: block !important;
             animation: fadeInMenu 0.2s ease-out forwards;
         }
 
         @keyframes fadeInMenu {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 3. MÓVIL (RESPONSIVE) --- */
-        .sidebartoggler {
-            display: none;
-        }
+        .sidebartoggler { display: none; }
 
         @media (max-width: 1199px) {
             .sidebartoggler {
@@ -140,45 +106,28 @@
                 font-size: 1.5rem;
                 cursor: pointer;
             }
-
-            .header-container {
-                padding-left: 15px !important;
-                padding-right: 15px !important;
-            }
-
-            .app-title-text {
-                display: none;
-            }
-
-            /* Ajuste específico para móvil para que no se salga de la pantalla */
-            .custom-dropdown-pos {
-                right: -10px !important;
-                min-width: 260px !important;
-            }
+            .header-container { padding-left: 15px !important; padding-right: 15px !important; }
+            .app-title-text { display: none; }
+            .custom-dropdown-pos { right: -10px !important; min-width: 260px !important; }
         }
 
         @media (min-width: 576px) {
-            .app-title-text {
-                display: block;
-            }
+            .app-title-text { display: block; }
         }
 
-        /* Contenedor relativo para posicionar el dropdown */
-        .searchable-dropdown-wrapper {
-            position: relative;
+        /* --- ESTILOS DE FUENTE UNIFICADA PARA HEADER --- */
+        .app-title-text, 
+        .user-name-text {
+            font-family: inherit;
+            font-size: 1.15rem !important; /* Mismo tamaño */
+            font-weight: 600 !important;   /* Mismo grosor */
+            letter-spacing: 0.5px;
         }
 
-        /* El input que simula ser el select */
-        .searchable-trigger {
-            text-align: left;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        /* La lista desplegable con el buscador */
+        .searchable-dropdown-wrapper { position: relative; }
+        .searchable-trigger { text-align: left; background-color: #fff; cursor: pointer; }
         .searchable-menu {
             display: none;
-            /* Oculto por defecto */
             position: absolute;
             top: 100%;
             left: 0;
@@ -191,42 +140,13 @@
             padding: 0.5rem;
             margin-top: 0.1rem;
         }
+        .searchable-menu.show { display: block; }
+        .searchable-options { max-height: 200px; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
+        .searchable-option { padding: 0.5rem 1rem; cursor: pointer; display: block; color: #212529; text-decoration: none; }
+        .searchable-option:hover { background-color: #f8f9fa; color: #1e2125; }
 
-        .searchable-menu.show {
-            display: block;
-        }
-
-        /* Contenedor de las opciones con scroll */
-        .searchable-options {
-            max-height: 200px;
-            overflow-y: auto;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .searchable-option {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            display: block;
-            color: #212529;
-            text-decoration: none;
-        }
-
-        .searchable-option:hover {
-            background-color: #f8f9fa;
-            color: #1e2125;
-        }
-
-        .body-wrapper .container-fluid {
-            padding-top: 0 !important;
-        }
-
-        /* Si todavía hay espacio, fuerza todo */
-        .body-wrapper {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
+        .body-wrapper .container-fluid { padding-top: 0 !important; }
+        .body-wrapper { margin-top: 0 !important; padding-top: 0 !important; }
     </style>
 
     <title>Sistema de Oficios</title>
@@ -239,28 +159,24 @@
     </div>
 
     <div id="main-wrapper">
-        //- MENU VERTICAL (MÓVIL) -//
+        
         <aside class="left-sidebar with-vertical">
             <div>
                 <nav class="sidebar-nav scroll-sidebar" data-simplebar>
                     <ul id="sidebarnav">
 
+                        @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Capturista']))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:user-id-line-duotone" class="aside-icon"></iconify-icon>
-                                <span class="hide-menu">Administracion</span>
+                                <span class="hide-menu">Administración</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('usuario.index') }}" class="sidebar-link">
                                         <i class="ti ti-user"></i>
                                         <span class="hide-menu">Usuarios</span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('solicitante.index') }}" class="sidebar-link">
-                                        <i class="ti ti-file-pencil"></i>
-                                        <span class="hide-menu">Solicitantes</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -275,8 +191,19 @@
                                         <span class="hide-menu">Sistemas</span>
                                     </a>
                                 </li>
+                                @endif
+
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
+                                <li class="sidebar-item">
+                                    <a href="{{ route('solicitante.index') }}" class="sidebar-link">
+                                        <i class="ti ti-file-pencil"></i>
+                                        <span class="hide-menu">Solicitantes</span>
+                                    </a>
+                                </li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
 
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -284,30 +211,42 @@
                                 <span class="hide-menu">Oficios</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('oficio.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-plus"></i>
                                         <span class="hide-menu">Registro</span>
                                     </a>
                                 </li>
+                                @endif
+
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('turno.index') }}" class="sidebar-link">
                                         <i class="ti ti-tournament"></i>
                                         <span class="hide-menu">Turno</span>
                                     </a>
                                 </li>
+                                @endif
+
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Responsable']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('seguimiento.index') }}" class="sidebar-link">
                                         <i class="ti ti-arrow-guide"></i>
                                         <span class="hide-menu">Seguimiento</span>
                                     </a>
                                 </li>
+                                @endif
+
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('respuestas.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-symlink"></i>
                                         <span class="hide-menu">Respuesta</span>
                                     </a>
                                 </li>
+                                @endif
+
                                 <li class="sidebar-item">
                                     <a href="{{ route('buscador.index') }}" class="sidebar-link">
                                         <i class="ti ti-file-search"></i>
@@ -317,6 +256,7 @@
                             </ul>
                         </li>
 
+                        @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
@@ -331,6 +271,7 @@
                                 </li>
                             </ul>
                         </li>
+                        @endif
 
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -352,6 +293,7 @@
                                 </li>
                             </ul>
                         </li>
+
                     </ul>
                 </nav>
             </div>
@@ -377,14 +319,13 @@
                                         alt="logo" class="logo-custom" style="height: 40px;" />
                                 </a>
 
-                                <span class="text-white fw-bold fs-4 ms-3 app-title-text">
-                                    Sistema de Oficios
+                                <span class="text-white app-title-text ms-3">
+                                    SISTEMA DE OFICIOS
                                 </span>
 
                                 <a href="/" class="text-white d-flex align-items-center ms-3 d-none d-sm-flex"
                                     title="Dashboard">
-                                    <iconify-icon icon="solar:home-2-linear" width="24"
-                                        height="24"></iconify-icon>
+                                    <iconify-icon icon="solar:home-2-linear" width="24" height="24"></iconify-icon>
                                 </a>
                             </div>
 
@@ -393,11 +334,12 @@
                                     <li class="nav-item dropdown position-relative">
                                         <a class="nav-link d-flex align-items-center p-0" href="javascript:void(0)"
                                             id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span class="d-none d-lg-block text-nowrap text-white small me-3">
-                                                {{ Auth::user()->nombre ?? 'Usuario' }}
+                                            
+                                            <span class="d-none d-lg-block text-nowrap text-white me-3 user-name-text text-uppercase">
+                                                {{ Auth::user()->nombre ?? 'USUARIO' }}
                                             </span>
 
-                                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center small"
+                                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5"
                                                 style="width: 40px; height: 40px; min-width: 40px; flex-shrink: 0; line-height: 0;">
                                                 {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
                                             </div>
@@ -406,10 +348,10 @@
                                         <div class="dropdown-menu dropdown-menu-end shadow border-0 custom-dropdown-pos"
                                             aria-labelledby="drop2" style="min-width: 210px;">
                                             <div class="py-3 border-bottom text-center">
-                                                <h5 class="mb-1 fs-4 text-dark fw-semibold">
+                                                <h5 class="mb-1 fs-4 text-dark fw-semibold text-uppercase">
                                                     {{ Auth::user()->nombre ?? 'Usuario' }}</h5>
-                                                <p class="mb-0 fs-2 text-muted">{{ Auth::user()->email ?? 'email' }}
-                                                </p>
+                                                <p class="mb-0 fs-2 text-muted">{{ Auth::user()->email ?? 'email' }}</p>
+                                                <span class="badge bg-light text-secondary mt-2 border">{{ Auth::user()->rol }}</span>
                                             </div>
                                             <div class="p-3">
                                                 <form action="{{ route('logout') }}" method="POST">
@@ -435,22 +377,18 @@
                     <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar container-fluid">
                         <ul id="sidebarnav">
 
+                            @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Capturista']))
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <iconify-icon icon="solar:user-id-line-duotone" class="aside-icon"></iconify-icon>
-                                    <span class="hide-menu">Administracion</span>
+                                    <span class="hide-menu">Administración</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('usuario.index') }}" class="sidebar-link">
                                             <i class="ti ti-user"></i>
                                             <span class="hide-menu">Usuarios</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a href="{{ route('solicitante.index') }}" class="sidebar-link">
-                                            <i class="ti ti-file-pencil"></i>
-                                            <span class="hide-menu">Solicitantes</span>
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
@@ -465,8 +403,19 @@
                                             <span class="hide-menu">Sistemas</span>
                                         </a>
                                     </li>
+                                    @endif
+
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
+                                    <li class="sidebar-item">
+                                        <a href="{{ route('solicitante.index') }}" class="sidebar-link">
+                                            <i class="ti ti-file-pencil"></i>
+                                            <span class="hide-menu">Solicitantes</span>
+                                        </a>
+                                    </li>
+                                    @endif
                                 </ul>
                             </li>
+                            @endif
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -474,30 +423,42 @@
                                     <span class="hide-menu">Oficios</span>
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('oficio.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-plus"></i>
                                             <span class="hide-menu">Registro</span>
                                         </a>
                                     </li>
+                                    @endif
+
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('turno.index') }}" class="sidebar-link">
                                             <i class="ti ti-tournament"></i>
                                             <span class="hide-menu">Turno</span>
                                         </a>
                                     </li>
+                                    @endif
+
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Responsable']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('seguimiento.index') }}" class="sidebar-link">
                                             <i class="ti ti-arrow-guide"></i>
                                             <span class="hide-menu">Seguimiento</span>
                                         </a>
                                     </li>
+                                    @endif
+
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Capturista']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('respuestas.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-symlink"></i>
                                             <span class="hide-menu">Respuesta</span>
                                         </a>
                                     </li>
+                                    @endif
+
                                     <li class="sidebar-item">
                                         <a href="{{ route('buscador.index') }}" class="sidebar-link">
                                             <i class="ti ti-file-search"></i>
@@ -507,6 +468,7 @@
                                 </ul>
                             </li>
 
+                            @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
@@ -521,6 +483,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            @endif
 
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -546,6 +509,7 @@
                     </nav>
                 </div>
             </aside>
+            
             <div class="body-wrapper">
                 <div class="container-fluid">
 
@@ -611,30 +575,22 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Buscamos específicamente los enlaces del menú vertical (Móvil) que tienen flechita
             var mobileMenuLinks = document.querySelectorAll('.left-sidebar.with-vertical .sidebar-link.has-arrow');
 
             mobileMenuLinks.forEach(function(link) {
                 link.addEventListener('click', function(e) {
-                    // Prevenir que navegue a #
                     e.preventDefault();
-
-                    // Seleccionar el submenú (la lista <ul> que sigue al enlace)
                     var nextUl = this.nextElementSibling;
 
                     if (nextUl && nextUl.tagName === 'UL') {
-                        // Verificar si está abierto o cerrado
-                        var isOpen = nextUl.style.display === 'block' || nextUl.classList.contains(
-                            'show');
+                        var isOpen = nextUl.style.display === 'block' || nextUl.classList.contains('show');
 
                         if (isOpen) {
-                            // CERRAR
                             nextUl.style.display = 'none';
                             nextUl.classList.remove('in', 'show');
                             this.classList.remove('active');
                             this.setAttribute('aria-expanded', 'false');
                         } else {
-                            // ABRIR
                             nextUl.style.display = 'block';
                             nextUl.classList.add('in', 'show');
                             this.classList.add('active');
@@ -646,53 +602,39 @@
         });
     </script>
     <script>
-        /**
-         * Convierte un SELECT normal en un Dropdown con Buscador.
-         * @param {string} idSelect - El ID del select original (ej: 'dependencia_id')
-         */
         function convertirSelectABuscador(idSelect) {
             const originalSelect = document.getElementById(idSelect);
             if (!originalSelect) return;
 
-            // 1. Si ya existe un buscador previo para este select, lo borramos para regenerarlo
-            // (Esto es útil para cuando se actualiza vía AJAX)
             const wrapperPrevio = originalSelect.parentNode.querySelector('.searchable-dropdown-wrapper');
             if (wrapperPrevio) {
                 wrapperPrevio.remove();
-                originalSelect.style.display = 'block'; // Reset temporal
+                originalSelect.style.display = 'block'; 
             }
 
-            // 2. Crear la estructura HTML del buscador
             const wrapper = document.createElement('div');
             wrapper.className = 'searchable-dropdown-wrapper';
 
-            // Botón que muestra la opción seleccionada
             const trigger = document.createElement('button');
             trigger.className = 'form-select searchable-trigger';
-            trigger.type = 'button'; // Importante para no enviar formulario al click
-            // Texto inicial: lo que tenga el select seleccionado o el placeholder
+            trigger.type = 'button'; 
             const selectedOption = originalSelect.options[originalSelect.selectedIndex];
             trigger.textContent = selectedOption ? selectedOption.text : 'Seleccione una opción';
 
-            // Menú desplegable
             const menu = document.createElement('div');
             menu.className = 'searchable-menu';
 
-            // Input buscador
             const inputSearch = document.createElement('input');
             inputSearch.className = 'form-control mb-2';
             inputSearch.type = 'text';
             inputSearch.placeholder = 'Buscar...';
 
-            // Lista de opciones container
             const optionsList = document.createElement('div');
             optionsList.className = 'searchable-options';
 
-            // 3. Llenar la lista basándonos en el SELECT original
             function poblarOpciones() {
-                optionsList.innerHTML = ''; // Limpiar
+                optionsList.innerHTML = ''; 
                 Array.from(originalSelect.options).forEach(option => {
-                    // Omitir la opción vacía de "Seleccione..." si no tiene valor
                     if (option.value === "") return;
 
                     const item = document.createElement('div');
@@ -700,21 +642,13 @@
                     item.textContent = option.text;
                     item.dataset.value = option.value;
 
-                    // Al hacer click en una opción
                     item.addEventListener('click', () => {
-                        // Actualizar el SELECT original (OCULTO)
                         originalSelect.value = option.value;
-
-                        // Disparar evento 'change' en el select original (CRUCIAL para tu AJAX)
                         originalSelect.dispatchEvent(new Event('change'));
-
-                        // Actualizar visualmente el botón
                         trigger.textContent = option.text;
-
-                        // Cerrar menú
                         menu.classList.remove('show');
-                        inputSearch.value = ''; // Reset buscador
-                        filtrarOpciones(''); // Reset filtro
+                        inputSearch.value = ''; 
+                        filtrarOpciones(''); 
                     });
 
                     optionsList.appendChild(item);
@@ -722,7 +656,6 @@
             }
             poblarOpciones();
 
-            // 4. Lógica de Filtrado
             function filtrarOpciones(texto) {
                 const items = optionsList.querySelectorAll('.searchable-option');
                 const filtro = texto.toLowerCase();
@@ -736,9 +669,7 @@
                 filtrarOpciones(e.target.value);
             });
 
-            // 5. Mostrar/Ocultar Menú
             trigger.addEventListener('click', (e) => {
-                // Cerrar otros menús abiertos si los hubiera
                 document.querySelectorAll('.searchable-menu').forEach(m => {
                     if (m !== menu) m.classList.remove('show');
                 });
@@ -746,20 +677,17 @@
                 if (menu.classList.contains('show')) inputSearch.focus();
             });
 
-            // Cerrar al hacer click fuera
             document.addEventListener('click', (e) => {
                 if (!wrapper.contains(e.target)) {
                     menu.classList.remove('show');
                 }
             });
 
-            // 6. Ensamblaje en el DOM
             menu.appendChild(inputSearch);
             menu.appendChild(optionsList);
             wrapper.appendChild(trigger);
             wrapper.appendChild(menu);
 
-            // Insertar el wrapper después del select y ocultar el select original
             originalSelect.parentNode.insertBefore(wrapper, originalSelect.nextSibling);
             originalSelect.style.display = 'none';
         }
