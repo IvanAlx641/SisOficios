@@ -222,6 +222,7 @@
                         </li>
                         @endif
 
+                        @if(in_array(Auth::user()->rol, ['Administrador TI', 'Analista', 'Titular de área', 'Responsable']))
                         <li class="sidebar-item">
                             <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                 <iconify-icon icon="solar:diagram-up-broken" class="aside-icon"></iconify-icon>
@@ -229,26 +230,27 @@
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('informes.oficios') }}" class="sidebar-link">
                                         <i class="ti ti-file-analytics"></i>
                                         <span class="hide-menu">Oficios</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">
+                                    <a href="{{ route('informes.actividades') }}" class="sidebar-link">
                                         <i class="ti ti-home-stats"></i>
                                         <span class="hide-menu">Actividades</span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
+                        @endif
+
                     </ul>
                 </nav>
             </div>
         </aside>
 
         <div class="page-wrapper">
-
             <header class="topbar rounded-0 border-0 bg-morena-primary">
                 <div class="app-header border-0 shadow-none">
                     <nav class="navbar navbar-expand-xl container-fluid p-0 header-container" style="font-family: inherit;">
@@ -276,7 +278,7 @@
 
                             <div class="d-flex align-items-center justify-content-end ms-auto">
                                 
-                                <span class="d-none d-lg-block text-white user-name-text text-uppercase text-end text-truncate me-3" style="max-width: 250px;">
+                                <span class="d-none d-lg-block text-white user-name-text text-uppercase text-end  me-3" style="max-width: 250px;">
                                     {{ Auth::user()->nombre ?? 'USUARIO' }}
                                 </span>
 
@@ -412,6 +414,7 @@
                             </li>
                             @endif
 
+                            @if(in_array(Auth::user()->rol, ['Administrador TI', 'Analista', 'Titular de área', 'Responsable']))
                             <li class="sidebar-item">
                                 <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
                                     <iconify-icon icon="solar:diagram-up-broken" class="aside-icon"></iconify-icon>
@@ -419,19 +422,21 @@
                                 </a>
                                 <ul aria-expanded="false" class="collapse first-level">
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('informes.oficios') }}" class="sidebar-link">
                                             <i class="ti ti-file-analytics"></i>
                                             <span class="hide-menu">Oficios</span>
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a href="#" class="sidebar-link">
+                                        <a href="{{ route('informes.actividades') }}" class="sidebar-link">
                                             <i class="ti ti-home-stats"></i>
                                             <span class="hide-menu">Actividades</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
+                            @endif
+
                         </ul>
                     </nav>
                 </div>

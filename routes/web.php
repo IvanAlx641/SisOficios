@@ -19,6 +19,10 @@ use App\Http\Controllers\BuscadorController;
 // --- IMPORTAMOS LOS NUEVOS CONTROLADORES DE ACTIVIDADES ---
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\DetalleActividadController;
+
+// --- IMPORTAMOS LOS NUEVOS CONTROLADORES DE OFICIOS ---
+use App\Http\Controllers\InformeOficioController;
+use App\Http\Controllers\InformeActividadController;
 use App\Http\Controllers\DashboardController;
 
 
@@ -28,18 +32,18 @@ use App\Http\Controllers\DashboardController;
 |--------------------------------------------------------------------------
 */
 
-// === 1. RUTAS PÚBLICAS ===
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // === 1. RUTAS PÚBLICAS ===
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+    Route::get('forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
-// === 2. RUTAS PROTEGIDAS ===
-Route::middleware(['auth'])->group(function () {
+    // === 2. RUTAS PROTEGIDAS ===
+    Route::middleware(['auth'])->group(function () {
 
     Route::get('/cambiar-password', [FirstLoginController::class, 'showChangeForm'])->name('password.change');
     Route::post('/cambiar-password', [FirstLoginController::class, 'updatePassword'])->name('password.update_initial');
@@ -128,5 +132,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('detalleactividad', DetalleActividadController::class)
             ->parameters(['detalleactividad' => 'detalleactividad'])
             ->except(['create', 'show']); // Excluimos las que no usamos para no hacer ruido
+
+
+        // --- MÓDULO INFORMES ---
+        Route::get('/informes/oficios', [InformeOficioController::class, 'index'])->name('informes.oficios');
+        Route::get('/informes/actividades', [InformeActividadController::class, 'index'])->name('informes.actividades');
     });
 });
