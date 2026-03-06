@@ -20,7 +20,7 @@ class RespuestaController extends Controller
             'solicitantes',
             'sistema',
             'respuestasOficios.firmadoPor'
-        ]);
+        ])->has('solicitantes');;
 
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');

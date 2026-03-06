@@ -33,7 +33,7 @@ class TurnoController extends Controller
             'sistema',
             'tipoRequerimiento',
             'responsablesOficios.responsable'
-        ]);
+        ])->has('responsablesOficios');
         if (auth()->user()->rol === 'Titular de área') {
             // Solo ve los oficios dirigidos a su propia área
             $query->where('dirigido_id', auth()->user()->unidad_administrativa_id);

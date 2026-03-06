@@ -4,10 +4,11 @@
     <div class="card border-0 shadow-sm rounded-3">
          <div class="card-body pt-3 pb-2 bg-light d-flex justify-content-between align-items-center border-bottom">
                 <div class="d-flex align-items-center">
-                    <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
                     <a href="{{ route('oficio.index') }}" class="text-guinda text-decoration-none me-3" title="Volver al listado">
                         <i class="ti ti-arrow-back-up fs-3"></i>
                     </a>
+                    <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
+                    
                 </div>
                 <div class="col-6 text-end d-flex justify-content-end gap-2">
 
@@ -22,20 +23,6 @@
                     @endif
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="card-body p-4 bg-white">
             
             <ul class="nav nav-tabs border-bottom-0">

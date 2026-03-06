@@ -5,13 +5,11 @@
 
         <div class="card-header bg-light border-bottom-0 pt-4 px-4">
             <div class="d-flex align-items-center">
-                    <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
-                    <a href="{{ route('oficio.index') }}" class="text-guinda text-decoration-none me-3" title="Volver al listado">
-                        <i class="ti ti-arrow-back-up fs-3"></i>
-                    </a>
-                </div>
-
-
+                <a href="{{ route('oficio.index') }}" class="text-guinda text-decoration-none me-3" title="Volver al listado">
+                <i class="ti ti-arrow-back-up fs-3"></i>
+                </a>
+                <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
+            </div>
         </div>
 
         <div class="card-body p-4 bg-white">

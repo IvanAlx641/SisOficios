@@ -5,12 +5,12 @@
     
     <div class="card border-0 shadow-sm mb-4">
 
-        <div class="card-body py-4  border-bottom bg-light d-flex flex-column  justify-content-center position-relative">
-            
-            <h5 class="fw-bold text-guinda mb-0">Oficio: {{ $oficio->numero_oficio }}
-                <a href="{{ route('buscador.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
+        <div class="card-body py-4  border-bottom bg-light d-flex position-relative">
+            <a href="{{ route('buscador.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
                         <i class="ti ti-arrow-back-up fs-3"></i>
                     </a>
+            <h5 class="fw-bold text-guinda mb-0">Oficio: {{ $oficio->numero_oficio }}
+                
             </h5>
 
             

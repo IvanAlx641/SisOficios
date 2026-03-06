@@ -6,13 +6,14 @@
 
         <div class="card-header bg-light border-bottom-0 pt-4 px-4">
             <div class="d-flex align-items-center">
-                
+                <a href="{{ route('turno.index') }}" class="text-guinda text-decoration-none gap-3 me-2"
+                    title="Volver al listado">
+                    <i class="ti ti-arrow-back-up fs-3"></i>
+                </a>
                 <h4 class="fw-bold text-guinda mb-0">
                     Turno
                 </h4>
-                <a href="{{ route('turno.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
-                    <i class="ti ti-arrow-back-up fs-3"></i>
-                </a>
+
             </div>
         </div>
 
@@ -76,15 +77,14 @@
 
 
                     <div class="col-12">
-                        <div class="d-flex align-items-start">
+                        <div class="align-items-start">
                             <span class="small text-muted me-2 pt-2">Solicitantes:</span>
-                            <div class="flex-grow-1 mt-2">
+                            <div class="flex-grow-1">
                                 @if ($oficio->solicitantes->count() > 0)
-                                    <ul class="list-unstyled mb-0  p-2">
+                                    <ul class="list-unstyled mt-2 mb-0">
                                         @foreach ($oficio->solicitantes as $solicitante)
                                             <li>
-
-                                                <span class="fw-bold">{{ $solicitante->nombre }}</span>
+                                                <span class="text-dark small">{{ $solicitante->nombre }}</span>
                                                 <span class="text-muted small">({{ $solicitante->cargo }})</span>
                                             </li>
                                         @endforeach
@@ -96,15 +96,13 @@
                         </div>
                     </div>
                 </div>
-
-
                 <form action="{{ route('turno.update', $oficio->id) }}" method="POST" novalidate>
                     @csrf
                     @method('PUT')
 
-                    <div class="mt-4">
+                    <div class="mt-2">
 
-                        <div class="col-md-6 mt-4">
+                        <div class="col-md-6">
                             <label class="form-label fw-bold text-guinda2">Sistema: <span
                                     class="text-danger">*</span></label>
                             <select name="sistema_id" id="sistema_id"
@@ -175,7 +173,7 @@
                         </div>
 
                         <div class="col-md-12">
-                            <label class="form-label fw-bold text-guinda2 ">Observaciones</label>
+                            <label class="form-label fw-bold text-guinda2 ">Observaciones:</label>
                             <textarea name="observaciones_turno"
                                 class="form-control border-guinda @error('observaciones_turno') is-invalid @enderror" rows="3"
                                 placeholder="Escriba las observaciones del turno...">{{ old('observaciones_turno', $oficio->observaciones_turno) }}</textarea>

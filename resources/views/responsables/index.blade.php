@@ -8,12 +8,11 @@
             <div class="row align-items-center">
                 <div class="col-9">
                     <div class="d-flex align-items-center">
-                        
-                        <h4 class="fw-bold mb-0 text-guinda">Turno</h4>
                         <a href="{{ route('turno.index') }}" class="text-guinda text-decoration-none me-2"
                             title="Volver al listado">
                             <i class="ti ti-arrow-back-up fs-3"></i>
                         </a>
+                        <h4 class="fw-bold mb-0 text-guinda">Turno</h4>
                     </div>
                 </div>
                 <div class="col-3 text-end">
@@ -85,16 +84,16 @@
                     </div>
 
                     <div class="col-12">
-                        <div class="d-flex align-items-start">
+                        <div class="align-items-start">
                             <span class="small text-muted me-2 pt-2">Solicitantes:</span>
                             <div class="flex-grow-1">
                                 @if ($oficio->solicitantes->count() > 0)
-                                    <ul class="list-unstyled mb-0  p-2 ">
+                                    <ul class="list-unstyled mb-0">
                                         @foreach ($oficio->solicitantes as $solicitante)
                                             <li>
 
-                                                <span class="fw-bold">{{ $solicitante->nombre }}</span>
-                                                <span class="text-muted small">({{ $solicitante->cargo }})</span>
+                                                <span class="text-muted">{{ $solicitante->nombre }}</span>
+                                                <span class="text-dark small">({{ $solicitante->cargo }})</span>
                                             </li>
                                         @endforeach
                                     </ul>

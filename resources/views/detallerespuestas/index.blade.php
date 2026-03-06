@@ -182,7 +182,6 @@
                         </div>
                     </div>
 
-
                     <form action="{{ route('respuestas.store', $oficio->id) }}" method="POST" novalidate>
                         @csrf
                         <input type="hidden" name="oficio_id" value="{{ $oficio->id }}">
@@ -191,7 +190,7 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold small">Fecha de la respuesta:<span
-                                        class="text-danger">*</span></label></label>
+                                        class="text-danger">*</span></label>
                                 <input type="date" name="fecha_respuesta"
                                     value="{{ old('fecha_respuesta', date('Y-m-d')) }}"
                                     class="form-control border-guinda {{ old('form_action') == 'create' && $errors->has('fecha_respuesta') ? 'is-invalid' : '' }}">
@@ -202,7 +201,7 @@
 
                             <div class="col-md-8">
                                 <label class="form-label fw-bold small">Núm. de oficio de respuesta:<span
-                                        class="text-danger">*</span></label></label>
+                                        class="text-danger">*</span></label>
                                 <input type="text" name="numero_oficio_respuesta"
                                     value="{{ old('numero_oficio_respuesta') }}"
                                     class="form-control border-guinda {{ old('form_action') == 'create' && $errors->has('numero_oficio_respuesta') ? 'is-invalid' : '' }}"
@@ -214,39 +213,39 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label fw-bold small">Dirigido a:<span
+                                <label class="form-label fw-bold text-guinda2 small">Dirigido a:<span
                                         class="text-danger">*</span></label>
                                 <select name="dirigido_a_id" id="dirigido_a_{{ $oficio->id }}"
-                                    class="form-select border-guinda {{ old('form_action') == 'create' && $errors->has('dirigido_a_id') ? 'is-invalid' : '' }}">
+                                    class="form-select border-guinda @error('dirigido_a_id') is-invalid @enderror">
                                     <option value="">Seleccione a quién va dirigido...</option>
+                                    {{-- Recorremos únicamente los solicitantes de este oficio --}}
                                     @foreach ($oficio->solicitantes as $solicitante)
                                         <option value="{{ $solicitante->id }}"
-                                            {{ old('dirigido_a_id') == $solicitante->id ? 'selected' : '' }}>
-                                            {{ mb_strtoupper($solicitante->nombre) }}</option>
+                                            {{ old('dirigido_a_id', $respuesta->dirigido_a_id ?? '') == $solicitante->id ? 'selected' : '' }}>
+                                            {{ mb_strtoupper($solicitante->nombre) }}
+                                        </option>
                                     @endforeach
                                 </select>
-                                @if (old('form_action') == 'create' && $errors->has('dirigido_a_id'))
-                                    <div class="invalid-feedback fw-bold d-block">{{ $errors->first('dirigido_a_id') }}
-                                    </div>
-                                @endif
+                                @error('dirigido_a_id')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label fw-bold small">Firmado por:<span
+                                <label class="form-label fw-bold text-guinda2 small">Firmado por:<span
                                         class="text-danger">*</span></label>
                                 <select name="firmado_por_id" id="firmado_por_{{ $oficio->id }}"
-                                    class="form-select border-guinda {{ old('form_action') == 'create' && $errors->has('firmado_por_id') ? 'is-invalid' : '' }}">
+                                    class="form-select border-guinda @error('firmado_por_id') is-invalid @enderror">
                                     <option value="">Seleccione quién firma...</option>
                                     @foreach ($titulares as $id => $nombre)
                                         <option value="{{ $id }}"
-                                            {{ old('firmado_por_id') == $id ? 'selected' : '' }}>
+                                            {{ old('firmado_por_id', $respuesta->firmado_por_id ?? '') == $id ? 'selected' : '' }}>
                                             {{ mb_strtoupper($nombre) }}</option>
                                     @endforeach
                                 </select>
-                                @if (old('form_action') == 'create' && $errors->has('firmado_por_id'))
-                                    <div class="invalid-feedback fw-bold d-block">{{ $errors->first('firmado_por_id') }}
-                                    </div>
-                                @endif
+                                @error('firmado_por_id')
+                                    <div class="invalid-feedback fw-bold">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="col-md-12">
@@ -263,7 +262,7 @@
 
                             <div class="col-md-12 mb-2">
                                 <label class="form-label fw-bold small">Descripción de la respuesta:<span
-                                        class="text-danger">*</span></label></label>
+                                        class="text-danger">*</span></label>
                                 <textarea name="descripción_respuesta_oficio" rows="5"
                                     placeholder="Escriba la descripción de la respuesta aquí..."
                                     class="form-control border-guinda {{ old('form_action') == 'create' && $errors->has('descripción_respuesta_oficio') ? 'is-invalid' : '' }}">{{ old('descripción_respuesta_oficio') }}</textarea>
@@ -327,10 +326,10 @@
                                     <select name="dirigido_a_id"
                                         class="form-select border-guinda {{ old('form_action') == 'edit_' . $respuesta->id && $errors->has('dirigido_a_id') ? 'is-invalid' : '' }}">
                                         <option value="">Seleccione a quién va dirigido...</option>
-                                        @foreach ($usuarios as $id => $nombre)
-                                            <option value="{{ $id }}"
-                                                {{ old('dirigido_a_id', $respuesta->dirigido_a_id) == $id ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($nombre) }}</option>
+                                        @foreach ($oficio->solicitantes as $solicitante)
+                                            <option value="{{ $solicitante->id }}"
+                                                {{ old('dirigido_a_id', $respuesta->dirigido_a_id) == $solicitante->id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($solicitante->nombre) }}</option>
                                         @endforeach
                                     </select>
                                     @if (old('form_action') == 'edit_' . $respuesta->id && $errors->has('dirigido_a_id'))
@@ -343,7 +342,7 @@
                                     <select name="firmado_por_id"
                                         class="form-select border-guinda {{ old('form_action') == 'edit_' . $respuesta->id && $errors->has('firmado_por_id') ? 'is-invalid' : '' }}">
                                         <option value="">Seleccione quién firma...</option>
-                                        @foreach ($usuarios as $id => $nombre)
+                                        @foreach ($titulares as $id => $nombre)
                                             <option value="{{ $id }}"
                                                 {{ old('firmado_por_id', $respuesta->firmado_por_id) == $id ? 'selected' : '' }}>
                                                 {{ mb_strtoupper($nombre) }}</option>

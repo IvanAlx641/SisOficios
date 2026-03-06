@@ -24,10 +24,10 @@ class SeguimientoController extends Controller
             'responsablesOficios.responsable',
             'responsablesOficios.seguimientos',
             'oficiosVinculados'
-        ]);
+        ])->has('responsablesOficios');
 
         // ==========================================
-        // 🛡️ FILTRO DE SEGURIDAD: RESPONSABLE Y TITULAR
+        //  FILTRO DE SEGURIDAD: RESPONSABLE Y TITULAR
         // ==========================================
         $usuario = auth()->user();
 
@@ -48,7 +48,7 @@ class SeguimientoController extends Controller
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');
         }
-
+        
         if ($request->filled('dirigido_id') && $request->dirigido_id != 0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
