@@ -267,11 +267,13 @@
 /* =========================================
 7. LAYOUT Y COMPONENTES
    ========================================= */
-/* Ajuste de Bordes del Template */
+/* Ajuste borde */
 .topbar, .app-header {
     border-bottom: none !important;
     box-shadow: none !important;
 }
+
+
 
 /* Logo */
 .logo-custom {
