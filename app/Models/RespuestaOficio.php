@@ -47,7 +47,7 @@ class RespuestaOficio extends Model
     // A quién va dirigida la respuesta
     public function dirigidoA()
     {
-        return $this->belongsTo(User::class, 'dirigido_a_id');
+        return $this->belongsTo(Solicitante::class, 'dirigido_a_id');
     }
     public function respuestasOficios()
     {

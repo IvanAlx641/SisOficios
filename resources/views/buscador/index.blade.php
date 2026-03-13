@@ -1,39 +1,56 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container-fluid">
+    <style>
+        /* Ajustes responsivos exclusivos para celulares */
+        @media (max-width: 767.98px) {
+            .badge-filtro-btn {
+                font-size: 0.7rem !important;
+                padding: 0.3rem 0.5rem !important;
+            }
+
+            /* Forzamos a que el botón se vea bien en móvil */
+            .btn-buscar-responsive {
+                width: 100% !important;
+                margin-top: 10px;
+            }
+        }
+    </style>
+
+    <div class="container-fluid px-2 px-md-3">
         <div class="card w-100 position-relative border-0 shadow-sm mb-4">
             <div class="card-body pt-3 pb-2 bg-light border-bottom">
                 <h4 class="fw-bold mb-0 text-guinda">Buscador de oficios</h4>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-3 p-md-4">
                 <form id="formBusqueda" method="GET" action="{{ route('buscador.index') }}">
                     <div class="row g-3 align-items-end">
 
-                        <div class="col-md-2">
-                            <label class="form-label text-guinda2 small fw-bold">Número de oficio:</label>
-                            <input type="text" name="numero_oficio" class="form-control border-guinda "
+                        <div class="col-12 col-md-2">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Número de oficio:</label>
+                            <input type="text" name="numero_oficio" class="form-control border-guinda"
                                 value="{{ request('numero_oficio') }}">
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
+                        <div class="col-12 col-md-4">
+                            <div class="row g-2 align-items-end">
+                                <div class="col-12 col-sm-6">
+                                    <label class="form-label fw-bold text-guinda2 small mb-0">Fecha de recepción
+                                        del:</label>
                                     <input type="date" name="fecha_recepcion" class="form-control border-guinda"
                                         value="{{ $request->fecha_recepcion }}">
                                 </div>
-                                <div class="col-6">
-                                    <label class="form-label fw-bold text-guinda2 small">al:</label>
+                                <div class="col-12 col-sm-6">
+                                    <label class="form-label fw-bold text-guinda2 small mb-0">al:</label>
                                     <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
                                         value="{{ $request->fecha_recepcion_fin }}">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label text-guinda2 small fw-bold">Dirigido a:</label>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Dirigido a:</label>
                             <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda text-secondary"
                                 onchange="this.form.submit()">
                                 <option value="Todos">Todos</option>
@@ -45,8 +62,8 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label text-guinda2 small fw-bold">Solicitado por:</label>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Solicitado por:</label>
                             <select name="solicitado_por_id" id="filtro_solicitado"
                                 class="form-select border-guinda text-secondary" onchange="this.form.submit()">
                                 <option value="Todos">Todos</option>
@@ -58,8 +75,8 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2 mt-3">
-                            <label class="form-label text-guinda2 small fw-bold">Estatus:</label>
+                        <div class="col-12 col-md-2">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Estatus:</label>
                             <select name="estatus" id="filtro_estatus" class="form-select border-guinda text-secondary"
                                 onchange="this.form.submit()">
                                 @foreach (['Todos', 'Pendiente', 'Turnado', 'Concluido', 'Atendido', 'Cancelado'] as $est)
@@ -69,8 +86,8 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2 mt-3">
-                            <label class="form-label text-guinda2 small fw-bold">Sistema:</label>
+                        <div class="col-12 col-md-2">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Sistema:</label>
                             <select name="sistema_id" id="filtro_sistema" class="form-select border-guinda text-secondary"
                                 onchange="this.form.submit()">
                                 <option value="Todos">Todos</option>
@@ -81,8 +98,8 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3 mt-3">
-                            <label class="form-label text-guinda2 small fw-bold">Tipo de requerimiento:</label>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Tipo de requerimiento:</label>
                             <select name="tipo_requerimiento_id" id="filtro_requerimiento"
                                 class="form-select border-guinda text-secondary" onchange="this.form.submit()">
                                 <option value="Todos">Todos</option>
@@ -94,15 +111,16 @@
                             </select>
                         </div>
 
-                        <div class="col-md-4 mt-3">
-                            <label class="form-label text-guinda2 small fw-bold">Descripción breve:</label>
-                            <input type="text" name="descripcion" class="form-control border-guinda "
+                        <div class="col-12 col-md-4">
+                            <label class="form-label text-guinda2 small fw-bold mb-0">Descripción breve:</label>
+                            <input type="text" name="descripcion" class="form-control border-guinda"
                                 value="{{ request('descripcion') }}">
                         </div>
 
-                        <div class="col-md-1 mt-3 text-end">
-                            <button type="submit"
-                                class="btn btn-outline-guinda w-100 fw-bold">Buscar</button>
+                        <div class="col-12 col-md-2 text-md-end mt-4 align-self-end">
+                            <button type="submit" class="btn btn-outline-guinda w-100 fw-bold btn-buscar-responsive">
+                                Buscar
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -112,35 +130,38 @@
         <div class="card w-100 position-relative border-0 shadow-sm mt-3">
             <div class="card-body p-0">
                 <div class="table-responsive" style="min-height: 400px;">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" style="min-width: 1100px;">
                         <thead class="bg-guinda text-white">
                             <tr>
-                                <th class="ps-4 py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Número de oficio</h6>
+                                <th class="ps-4 py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Número de oficio</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="text-white text-center form-label fw-bold small">Fecha de<br>recepción</h6>
+                                <th class="py-3 text-center text-nowrap">
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Fecha de<br>recepción
+                                    </h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Dirigido a</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Solicitado por</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Solicitado por</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="text-white text-center form-label fw-bold small">Fecha de<br>turno</h6>
+                                <th class="py-3 text-center text-nowrap">
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Fecha de<br>turno</h6>
                                 </th>
-                                <th class="py-3 text-left">
-                                    <h6 class="text-white text-left form-label fw-bold small">Sistema</h6>
+                                <th class="py-3 text-left text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Sistema</h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Tipo de requerimiento</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Tipo de requerimiento
+                                    </h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="text-white text-center form-label fw-bold small">Ver<br>oficio</h6>
+                                <th class="py-3 text-center text-nowrap">
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Ver<br>oficio</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="text-white text-center form-label fw-bold small">Oficio de<br>respuesta</h6>
+                                <th class="py-3 text-center text-nowrap">
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Oficio de<br>respuesta
+                                    </h6>
                                 </th>
                             </tr>
                         </thead>
@@ -150,9 +171,7 @@
                                     <td class="ps-4">
                                         <div class="d-flex flex-column">
                                             <a href="{{ route('buscador.show', $oficio->id) }}"
-                                                class="link-hover-guinda text-muted text-left fw-bold d-block mb-1">
-                                                {{ $oficio->numero_oficio }}
-                                            </a>
+                                                class="link-hover-guinda text-muted text-left fw-bold d-block mb-1">{{ $oficio->numero_oficio }}</a>
                                             @php
                                                 $badgeClass = match ($oficio->estatus ?? 'Atendido') {
                                                     'Pendiente' => 'bg-warning text-white',
@@ -163,17 +182,15 @@
                                                     default => 'bg-secondary text-white',
                                                 };
                                             @endphp
-                                            <span class="badge {{ $badgeClass }} rounded-pill "
+                                            <span class="badge {{ $badgeClass }} rounded-pill"
                                                 style="width: fit-content; font-size: 0.75rem;">{{ $oficio->estatus }}</span>
                                         </div>
                                     </td>
-
                                     <td class="text-center text-wrap small">
                                         {{ $oficio->fecha_recepcion ? \Carbon\Carbon::parse($oficio->fecha_recepcion)->format('d/m/Y') : '-' }}
                                     </td>
                                     <td class="small text-wrap text-left text-uppercase">
                                         {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? 'N/A' }}</td>
-
                                     <td class="small text-wrap">
                                         @if ($oficio->solicitantes->count() > 1)
                                             <div class="custom-hover-wrapper position-relative d-inline-block">
@@ -181,12 +198,11 @@
                                                     {{ mb_strtoupper($oficio->solicitantes->first()->nombre) }} <i
                                                         class="ti ti-arrow-down text-guinda fw-bold ms-1"></i>
                                                 </div>
-                                                <div
-                                                    class="custom-hover-card shadow-lg border rounded bg-white text-start">
+                                                <div class="custom-hover-card shadow-lg border rounded bg-white text-start position-absolute z-3"
+                                                    style="display: none; top: 100%; left: 0; min-width: 200px;">
                                                     <div
                                                         class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
-                                                        Solicitantes
-                                                    </div>
+                                                        Solicitantes</div>
                                                     <div class="px-3 py-2 text-wrap small">
                                                         @foreach ($oficio->solicitantes as $sol)
                                                             <div class="text-uppercase mb-1"><i
@@ -203,26 +219,22 @@
                                             <span class="fst-italic text-wrap">Sin asignar</span>
                                         @endif
                                     </td>
-
                                     <td class="text-center text-wrap small">
                                         {{ $oficio->fecha_turno ? \Carbon\Carbon::parse($oficio->fecha_turno)->format('d/m/Y') : '-' }}
                                     </td>
-                                    <td class="text-left small text-wrap">
-                                        {{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</td>
+                                    <td class="text-left small text-wrap">{{ $oficio->sistema->sigla_sistema ?? 'N/A' }}
+                                    </td>
                                     <td class="small text-left text-wrap">
                                         {{ $oficio->tipoRequerimiento->tipo_requerimiento ?? 'N/A' }}</td>
-
                                     <td class="text-center">
                                         @if ($oficio->url_oficio)
                                             <a href="{{ asset($oficio->url_oficio) }}" class="text-guinda fs-4"
-                                                title="Ver documento oficial" target="_blank">
-                                                <i class="ti ti-eye"></i>
-                                            </a>
+                                                title="Ver documento oficial" target="_blank"><i
+                                                    class="ti ti-eye"></i></a>
                                         @else
                                             <span class="text-wrap"><i class="ti ti-eye-off"></i></span>
                                         @endif
                                     </td>
-
                                     <td class="text-center">
                                         @if ($oficio->respuestasOficios && $oficio->respuestasOficios->count() > 0)
                                             @php
@@ -238,7 +250,6 @@
                                                 }
                                                 $popoverHtml .= '</ul>';
                                             @endphp
-
                                             <button type="button" class="btn border-0 text-guinda p-0"
                                                 data-bs-toggle="popover" data-bs-trigger="focus"
                                                 title="Oficios de respuesta" data-bs-html="true"
@@ -253,17 +264,18 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="text-center py-5 text-muted">No se encontraron oficios con
-                                        esos criterios de búsqueda.</td>
+                                    <td colspan="9" class="text-center py-5 text-muted">No se encontraron oficios.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                <div class="p-3 border-top">{{ $oficios->appends($request->all())->links() }}</div>
+                <div class="p-3 border-top d-flex justify-content-center justify-content-md-end">
+                    {{ $oficios->appends($request->all())->links() }}</div>
             </div>
         </div>
     </div>
+
 
     <style>
         /* Estilos Estándar Institucionales */

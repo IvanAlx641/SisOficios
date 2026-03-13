@@ -161,15 +161,12 @@
                                     <label class="btn btn-outline-gold px-4" for="estatus_eliminado">Eliminado</label>
                                 </div>
 
-                                @error('estatus')
-                                    <span class="text-danger ms-2 align-middle"
-                                        style="font-size: 0.875em;">{{ $message }}</span>
-                                @enderror
-
-                            </div>
-                            @error('estatus')
+                               @error('estatus')
                                 <div class="invalid-feedback d-block mt-2 fw-semibold">{{ $message }}</div>
                             @enderror
+
+                            </div>
+                            
                         </div>
 
                         <div class="col-md-12">
@@ -184,7 +181,7 @@
 
                     </div>
 
-                    <div class="d-flex justify-content-start align-items-center gap-3 mt-4 pt-3 border-top">
+                    <div class="d-flex justify-content-start align-items-center gap-3 mt-3 pt-3 ">
                         <button type="submit" class="btn btn-guinda rounded-pill px-5 shadow-sm">
                             Guardar
                         </button>

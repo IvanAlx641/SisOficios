@@ -5,11 +5,12 @@
         <div class="card w-100 position-relative border-0 shadow-sm mb-3">
             <div class="card-body pt-3 pb-2 bg-light d-flex justify-content-between align-items-center border-bottom">
                 <div class="d-flex align-items-center">
-                    <h4 class="fw-bold mb-0 text-guinda">Respuesta</h4>
                     <a href="{{ route('respuestas.index') }}" class="text-guinda text-decoration-none me-3"
                         title="Volver al listado">
                         <i class="ti ti-arrow-back-up fs-3"></i>
                     </a>
+                    <h4 class="fw-bold mb-0 text-guinda">Respuesta</h4>
+                    
                 </div>
                 <button class="btn btn-guinda shadow-sm rounded-pill" data-bs-toggle="modal"
                     data-bs-target="#modalAgregarRespuesta">
@@ -90,7 +91,7 @@
                                 <tr>
                                     <td class="ps-4">
                                         <a href="#"
-                                            class="fw-bold fs-4 link-oficio-gris text-guinda text-decoration-none"
+                                            class="fw-bold fs-3 link-oficio-gris text-guinda text-decoration-none"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalEditarRespuesta{{ $respuesta->id }}"
                                             title="Editar respuesta">
@@ -323,7 +324,7 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small">Dirigido a:</label>
-                                    <select name="dirigido_a_id"
+                                    <select name="dirigido_a_id" id="dirigido_a_edit_{{ $respuesta->id }}"
                                         class="form-select border-guinda {{ old('form_action') == 'edit_' . $respuesta->id && $errors->has('dirigido_a_id') ? 'is-invalid' : '' }}">
                                         <option value="">Seleccione a quién va dirigido...</option>
                                         @foreach ($oficio->solicitantes as $solicitante)
@@ -339,7 +340,7 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold small">Firmado por:</label>
-                                    <select name="firmado_por_id"
+                                    <select name="firmado_por_id" id="firmado_por_edit_{{ $respuesta->id }}"
                                         class="form-select border-guinda {{ old('form_action') == 'edit_' . $respuesta->id && $errors->has('firmado_por_id') ? 'is-invalid' : '' }}">
                                         <option value="">Seleccione quién firma...</option>
                                         @foreach ($titulares as $id => $nombre)

@@ -1,30 +1,40 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container-fluid">
+    <style>
+        /* Ajustes responsivos exclusivos para celulares (no afectan la vista en PC) */
+        @media (max-width: 767.98px) {
+            .badge-filtro-btn {
+                font-size: 0.7rem !important;
+                padding: 0.3rem 0.5rem !important;
+            }
+        }
+    </style>
+
+    <div class="container-fluid px-2 px-md-3">
 
         <div class="card w-100 position-relative border-0 shadow-sm mb-3">
             <div class="card-body pt-3 pb-2 bg-light d-flex justify-content-between align-items-center">
                 <h4 class="fw-bold mb-0 text-guinda">Seguimiento</h4>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-3 p-md-4">
                 <form action="{{ route('seguimiento.index') }}" method="GET" id="filterForm">
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-12 col-md-3">
                             <label class="form-label fw-bold text-guinda2 small">Número de oficio:</label>
                             <input type="text" name="numero_oficio" class="form-control border-guinda"
                                 placeholder="Buscar por número..." value="{{ $request->numero_oficio }}">
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="row g-2">
-                                <div class="col-6">
+                        <div class="col-12 col-md-4">
+                            <div class="row g-2 align-items-end">
+                                <div class="col-12 col-sm-6">
                                     <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
                                     <input type="date" name="fecha_recepcion" class="form-control border-guinda"
                                         value="{{ $request->fecha_recepcion }}">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label class="form-label fw-bold text-guinda2 small">al:</label>
                                     <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
                                         value="{{ $request->fecha_recepcion_fin }}">
@@ -32,7 +42,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-12 col-md-3">
                             <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
                             <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda">
                                 <option value="0">Todas las unidades</option>
@@ -45,31 +55,37 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2 text-end">
+                        <div class="col-12 col-md-2 text-md-end mt-3 mt-md-0">
                             <button type="submit" class="btn btn-outline-guinda w-100 fw-bold">
                                 Buscar
                             </button>
                         </div>
 
                         <div class="row mt-4">
-                            <div class="col-md-12 d-flex align-items-center flex-wrap">
-                                <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
+                            <div class="col-12 d-flex flex-column flex-md-row align-items-md-center gap-2 gap-md-3">
+                                <label class="form-label fw-bold text-guinda2 mb-0">Estatus:</label>
 
-                                <div class="btn-group shadow-sm flex-wrap" role="group">
-                                    <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
-                                        onchange="this.form.submit()"
-                                        {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
-                                    <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
+                                <div class="d-flex w-100 w-md-auto" style="overflow-x: auto; padding-bottom: 2px;">
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
+                                            onchange="this.form.submit()"
+                                            {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
+                                        <label
+                                            class="btn btn-outline-secondary btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                            for="st_todos">Todos</label>
 
-                                    <input type="radio" class="btn-check" name="estatus" value="Turnado" id="st_turnado"
-                                        onchange="this.form.submit()" {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
-                                    <label class="btn btn-outline-info btn-sm px-3 py-2" for="st_turnado">Turnados</label>
-                                    <input type="radio" class="btn-check" name="estatus" value="Concluido"
-                                        id="st_concluido" onchange="this.form.submit()"
-                                        {{ $request->estatus == 'Conluido' ? 'checked' : '' }}>
-                                    <label class="btn btn-outline-success btn-sm px-3 py-2"
-                                        for="st_concluido">Concluidos</label>
+                                        <input type="radio" class="btn-check" name="estatus" value="Turnado"
+                                            id="st_turnado" onchange="this.form.submit()"
+                                            {{ $request->estatus == 'Turnado' ? 'checked' : '' }}>
+                                        <label class="btn btn-outline-info btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                            for="st_turnado">Turnados</label>
 
+                                        <input type="radio" class="btn-check" name="estatus" value="Concluido"
+                                            id="st_concluido" onchange="this.form.submit()"
+                                            {{ $request->estatus == 'Concluido' ? 'checked' : '' }}>
+                                        <label class="btn btn-outline-success btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                            for="st_concluido">Concluidos</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -81,38 +97,42 @@
         <div class="card w-100 position-relative border-0 shadow-sm mt-3">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0" style="min-width: 1150px;">
                         <thead class="bg-guinda text-white">
                             <tr>
-                                <th class="ps-4 py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Número de oficio</h6>
+                                <th class="ps-4 py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Número de oficio</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="text-white form-label fw-bold small">Fecha de<br>recepción</h6>
+                                <th class="py-3 text-center text-nowrap">
+                                    <h6 class="text-white form-label fw-bold small mb-0">Fecha de<br>recepción</h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white text-left  form-label fw-bold small">Dirigido a</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white  text-left form-label fw-bold small">Solicitado por</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Solicitado por</h6>
                                 </th>
-                                <th class="py-3 text-center">
-                                    <h6 class="text-white form-label fw-bold small">Fecha de<br>turno</h6>
+                                <th class="py-3 text-center text-nowrap">
+                                    <h6 class="text-white form-label fw-bold small mb-0">Fecha de<br>turno</h6>
                                 </th>
-                                <th class="py-3 text-left text-left ">
-                                    <h6 class="text-white form-label fw-bold small">Sistema</h6>
+                                <th class="py-3 text-left text-nowrap">
+                                    <h6 class="text-white form-label fw-bold small mb-0">Sistema</h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white text-left  form-label fw-bold small">Tipo de<br>requerimiento</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Tipo de<br>requerimiento
+                                    </h6>
                                 </th>
-                                <th class="py-3">
-                                    <h6 class="text-white text-left  form-label fw-bold small">Responsables</h6>
+                                <th class="py-3 text-nowrap">
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Responsables</h6>
                                 </th>
-                                <th class="text-center py-3">
-                                    <h6 class="text-white form-label fw-bold small">Ver<br>oficio</h6>
+                                <th class="text-center py-3 text-nowrap">
+                                    <h6 class="text-white form-label fw-bold small mb-0">Ver<br>oficio</h6>
                                 </th>
-                                <th class="text-center py-3">
-                                    <h6 class="text-white form-label fw-bold small">Concluir</h6>
+                                <th class="text-center py-3 text-nowrap">
+                                    <h6 class="text-white form-label fw-bold small mb-0">Solicitar<br>Respuesta</h6>
+                                </th>
+                                <th class="text-center py-3 text-nowrap">
+                                    <h6 class="text-white form-label fw-bold small mb-0">Concluir</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -139,12 +159,12 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-left  text-wrap small">
+                                    <td class="text-left text-wrap small">
                                         {{ $oficio->fecha_recepcion->format('d/m/Y') }}</td>
                                     <td class="small text-wrap text-uppercase">
                                         {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? '-' }}</td>
 
-                                    <td class="small text-left  text-wrap">
+                                    <td class="small text-left text-wrap">
                                         @if ($oficio->solicitantes->count() > 1)
                                             <div class="custom-hover-wrapper position-relative d-inline-block">
                                                 <div class="text-uppercase" style="cursor: pointer;">
@@ -157,7 +177,7 @@
                                                         class="bg-light px-3 py-2 border-bottom text-guinda fw-bold small rounded-top">
                                                         Solicitantes
                                                     </div>
-                                                    <div class="px-3 py-2  text-left  text-wrap small">
+                                                    <div class="px-3 py-2 text-left text-wrap small">
                                                         @foreach ($oficio->solicitantes as $sol)
                                                             <div class="text-uppercase mb-1">{{ $sol->nombre }}</div>
                                                         @endforeach
@@ -175,7 +195,7 @@
                                     <td class="text-center text-wrap small">
                                         {{ !empty($oficio->fecha_turno) ? \Carbon\Carbon::parse($oficio->fecha_turno)->format('d/m/Y') : 'Pendiente' }}
                                     </td>
-                                    <td class="text-left  text-wrap small">
+                                    <td class="text-left text-wrap small">
                                         {{ $oficio->sistema->sigla_sistema ?? 'N/A' }}</td>
                                     <td class="small text-wrap">
                                         {{ $oficio->tipoRequerimiento->nombre ?? 'Cambios menores' }}</td>
@@ -219,6 +239,19 @@
                                     </td>
 
                                     <td class="text-center">
+                                        @if($oficio->estatus === 'Concluido')
+                                            <a href="{{ route('seguimiento.notificar', $oficio->id) }}" 
+                                               class="btn border-0 bg-transparent text-guinda fs-4" 
+                                               title="Notificar para generar respuesta">
+                                                <i class="ti ti-mail"></i>
+                                            </a>
+                                        @else
+                                            <button class="btn border-0 bg-transparent text-muted fs-4" disabled title="El oficio debe estar Concluido">
+                                                <i class="ti ti-mail-off"></i>
+                                            </button>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         @if ($oficio->estatus == 'Turnado')
                                             <button class="btn border-0 bg-transparent text-guinda fs-4"
                                                 data-bs-toggle="modal" data-bs-target="#modalConcluir{{ $oficio->id }}"
@@ -236,7 +269,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center py-5">
+                                    <td colspan="11" class="text-center py-5">
                                         <i class="ti ti-timeline fs-1 text-muted d-block mb-2"></i>
                                         <span class="text-muted">No hay oficios en seguimiento.</span>
                                     </td>
@@ -245,7 +278,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="p-3 d-flex justify-content-end">
+                <div class="p-3 d-flex justify-content-center justify-content-md-end">
                     {!! $oficios->appends($request->all())->links() !!}
                 </div>
             </div>
@@ -1023,6 +1056,4 @@
             if (div) div.remove();
         }
     </script>
-    
-
 @endsection

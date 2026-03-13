@@ -79,7 +79,7 @@ use App\Http\Controllers\DashboardController;
         // 1. Oficios Principal (CRUD)
         Route::resource('oficio', OficioController::class)
             ->parameters(['oficio' => 'oficio']);
-
+        Route::get('/oficio/{id}/notificar', [OficioController::class, 'notificar'])->name('oficio.notificar');
         // 2. Sub-módulo Solicitantes del Oficio
         Route::get('oficiosolicitante', [OficioSolicitanteController::class, 'index'])->name('oficiosolicitante.index');
         Route::post('oficiosolicitante', [OficioSolicitanteController::class, 'store'])->name('oficiosolicitante.store');
@@ -90,7 +90,7 @@ use App\Http\Controllers\DashboardController;
             ->parameters(['turno' => 'turno'])
             ->names('turno')
             ->only(['index', 'edit', 'update']);
-
+        Route::get('/turno/{id}/notificar', [TurnoController::class, 'notificar'])->name('turno.notificar');
         // --- SUB-MÓDULO RESPONSABLES ---
         Route::resource('responsable', ResponsableController::class)
             ->parameters(['responsable' => 'responsable'])
@@ -99,7 +99,7 @@ use App\Http\Controllers\DashboardController;
         // --- MÓDULO SEGUIMIENTO (TIMELINE Y CONCLUSIÓN) ---
         // 1. Index principal
         Route::get('seguimiento', [SeguimientoController::class, 'index'])->name('seguimiento.index');
-
+        Route::get('/seguimiento/{id}/notificar', [SeguimientoController::class, 'notificarRespuesta'])->name('seguimiento.notificar');
         // 2. Guardar nuevo avance en el timeline (Recibe el ID del responsable_oficio)
         Route::post('seguimiento/{responsableOficioId}/avance', [SeguimientoController::class, 'storeAvance'])->name('seguimiento.avance.store');
 

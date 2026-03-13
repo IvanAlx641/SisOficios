@@ -2,39 +2,60 @@
 
 @section('content')
 
-    <div class="container-fluid">
+    <style>
+        /* Ajustes responsivos exclusivos para celulares (no afectan la vista en PC) */
+        @media (max-width: 767.98px) {
+            .badge-filtro-btn {
+                font-size: 0.7rem !important;
+                padding: 0.3rem 0.5rem !important;
+            }
+
+            .btn-nuevo-responsive {
+                font-size: 0.85rem !important;
+                padding-top: 0.4rem !important;
+                padding-bottom: 0.4rem !important;
+                width: auto !important;
+                /* Evita que ocupe todo el espacio en pantallas pequeñas */
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
+            }
+        }
+    </style>
+
+    <div class="container-fluid px-2 px-md-3">
 
         <div class="card w-100 position-relative border-0 shadow-sm mb-3">
             <div class="card-body pt-2 py-3 bg-light">
                 <div class="row align-items-center">
-                    <div class="col-9">
+                    <div class="col-7 col-md-9">
                         <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
                     </div>
-                    <div class="col-3 text-end">
-                        <a href="{{ route('oficio.create') }}" class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill">
+                    <div class="col-5 col-md-3 text-end">
+                        <a href="{{ route('oficio.create') }}"
+                            class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill btn-nuevo-responsive">
                             Nuevo
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body p-3 p-md-4">
                 <form action="{{ route('oficio.index') }}" method="GET" id="filterForm">
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-12 col-md-3">
                             <label class="form-label fw-bold text-guinda2 small">Número de oficio:</label>
                             <input type="text" name="numero_oficio" class="form-control border-guinda"
                                 placeholder="Buscar por número..." value="{{ $request->numero_oficio }}">
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="row g-2">
-                                <div class="col-6">
+                        <div class="col-12 col-md-4">
+                            <div class="row g-2 align-items-end">
+                                <div class="col-12 col-sm-6">
                                     <label class="form-label fw-bold text-guinda2 small">Fecha de recepción del:</label>
                                     <input type="date" name="fecha_recepcion" class="form-control border-guinda"
                                         value="{{ $request->fecha_recepcion }}">
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-sm-6">
                                     <label class="form-label fw-bold text-guinda2 small">al:</label>
                                     <input type="date" name="fecha_recepcion_fin" class="form-control border-guinda"
                                         value="{{ $request->fecha_recepcion_fin }}">
@@ -42,7 +63,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-12 col-md-3">
                             <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
                             <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda">
                                 <option value="0">Todas las unidades</option>
@@ -55,7 +76,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2 text-end">
+                        <div class="col-12 col-md-2 text-md-end mt-3 mt-md-0">
                             <button type="submit" class="btn btn-outline-guinda w-100 fw-bold">
                                 Buscar
                             </button>
@@ -63,29 +84,35 @@
                     </div>
 
                     <div class="row mt-4">
-                        <div class="col-md-12 d-flex align-items-center flex-wrap">
-                            <label class="form-label fw-bold text-guinda2 me-3 mb-0">Estatus:</label>
+                        <div class="col-12 d-flex flex-column flex-md-row align-items-md-center gap-2 gap-md-3">
+                            <label class="form-label fw-bold text-guinda2 mb-0">Estatus:</label>
 
-                            <div class="btn-group shadow-sm flex-wrap" role="group">
-                                <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
-                                    onchange="this.form.submit()"
-                                    {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
-                                <label class="btn btn-outline-secondary btn-sm px-3 py-2" for="st_todos">Todos</label>
+                            <div class="d-flex w-100 w-md-auto" style="overflow-x: auto; padding-bottom: 2px;">
+                                <div class="btn-group shadow-sm" role="group">
+                                    <input type="radio" class="btn-check" name="estatus" value="Todos" id="st_todos"
+                                        onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Todos' || !$request->filled('estatus') ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-secondary btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                        for="st_todos">Todos</label>
 
-                                <input type="radio" class="btn-check" name="estatus" value="Pendiente" id="st_pendiente"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-warning btn-sm px-3 py-2 text-whit"
-                                    for="st_pendiente">Pendientes</label>
+                                    <input type="radio" class="btn-check" name="estatus" value="Pendiente"
+                                        id="st_pendiente" onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Pendiente' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-warning btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                        for="st_pendiente">Pendientes</label>
 
+                                    <input type="radio" class="btn-check" name="estatus" value="Eliminado"
+                                        id="st_eliminado" onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-gold btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                        for="st_eliminado">Eliminados</label>
 
-
-                                <input type="radio" class="btn-check" name="estatus" value="Eliminado" id="st_eliminado"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Eliminado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-gold btn-sm px-3 py-2" for="st_eliminado">Eliminados</label>
-
-                                <input type="radio" class="btn-check" name="estatus" value="Cancelado" id="st_cancelado"
-                                    onchange="this.form.submit()" {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
-                                <label class="btn btn-outline-danger btn-sm px-3 py-2" for="st_cancelado">Cancelados</label>
+                                    <input type="radio" class="btn-check" name="estatus" value="Cancelado"
+                                        id="st_cancelado" onchange="this.form.submit()"
+                                        {{ $request->estatus == 'Cancelado' ? 'checked' : '' }}>
+                                    <label class="btn btn-outline-danger btn-sm px-3 py-2 badge-filtro-btn text-nowrap"
+                                        for="st_cancelado">Cancelados</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,29 +123,32 @@
         <div class="card w-100 position-relative overflow-hidden border-0 shadow-sm mt-3">
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
+                    <table class="table table-hover mb-0 align-middle" style="min-width: 900px;">
                         <thead class="bg-guinda text-white">
                             <tr>
                                 <th class="ps-4 py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Número de oficio</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Número de oficio</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Fecha de recepción</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Fecha de recepción</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Dirigido a</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Solicitado por</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Solicitado por</h6>
                                 </th>
                                 <th class="py-3">
-                                    <h6 class="text-white text-left form-label fw-bold small">Asignado a</h6>
+                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Asignado a</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Ver oficio</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Notificar</h6>
                                 </th>
                                 <th class="text-center py-3">
-                                    <h6 class="text-white text-center form-label fw-bold small">Eliminar</h6>
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Ver oficio</h6>
+                                </th>
+                                <th class="text-center py-3">
+                                    <h6 class="text-white text-center form-label fw-bold small mb-0">Eliminar</h6>
                                 </th>
                             </tr>
                         </thead>
@@ -197,6 +227,14 @@
                                     </td>
 
                                     <td class="text-center">
+                                        <a href="{{ route('oficio.notificar', $oficio->id) }}"
+                                            class="btn btn-outline-secondary border-0 bg-transparent text-primary"
+                                            title="Notificar registro por correo">
+                                            <i class="ti ti-mail fs-5"></i>
+                                        </a>
+                                    </td>
+
+                                    <td class="text-center">
                                         <a href="{{ $oficio->url_oficio }}" target="_blank"
                                             class="btn btn-outline-guinda border-0 bg-transparent"
                                             title="Ver documento PDF">
@@ -218,7 +256,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center py-5">
+                                    <td colspan="8" class="text-center py-5">
                                         <i class="ti ti-files fs-1 text-muted mb-2 d-block"></i>
                                         <div class="text-muted">No se encontraron oficios registrados.</div>
                                     </td>
@@ -227,7 +265,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4 px-4 pb-3 d-flex justify-content-end">
+                <div class="mt-4 px-3 px-md-4 pb-3 d-flex justify-content-center justify-content-md-end">
                     {!! $oficios->appends($request->all())->links() !!}
                 </div>
             </div>
@@ -235,7 +273,6 @@
     </div>
 
     <script>
-        // Tu script searchable-dropdown sigue igual...
         function convertirSelectABuscador(idSelect) {
             const originalSelect = document.getElementById(idSelect);
             if (!originalSelect) return;
@@ -336,42 +373,32 @@
     </script>
 
     <style>
-        /* 1. El contenedor padre debe ser relativo */
         .custom-hover-wrapper {
             position: relative;
             display: inline-block;
         }
 
-        /* 2. La tarjeta flotante oculta por defecto */
         .custom-hover-card {
             visibility: hidden;
             opacity: 0;
             position: absolute;
             top: 100%;
-            /* Aparece justo debajo del nombre */
             left: 0;
             z-index: 1050;
-            /* Asegura que flote sobre la tabla y otros elementos */
             min-width: 220px;
-            /* Ancho para que los nombres quepan bien */
             margin-top: 5px;
-            /* Un pequeño espacio de separación */
             transition: opacity 0.2s ease, visibility 0.2s ease;
-            /* Efecto suave al aparecer/desaparecer */
         }
 
-        /* 3. Mostrar la tarjeta al pasar el cursor sobre el wrapper */
         .custom-hover-wrapper:hover .custom-hover-card {
             visibility: visible;
             opacity: 1;
         }
 
-        /* 4. (Truco) Un "puente" invisible para que no se cierre si mueves el mouse rápido entre el nombre y la tarjeta */
         .custom-hover-card::before {
             content: '';
             position: absolute;
             top: -10px;
-            /* Cubre el espacio vacío arriba de la tarjeta */
             left: 0;
             width: 100%;
             height: 10px;

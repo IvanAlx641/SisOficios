@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+// --- IMPORTS CORREGIDOS ---
+use Illuminate\Support\Facades\Auth; // Facade correcta para Auth
+use Illuminate\Support\Facades\Log;  // Facade correcta para Log
+use Illuminate\Support\Facades\Mail; // Facade correcta para Mail (Faltaba esta)
+use App\Mail\NotificarTurnoMailable; // Ruta correcta hacia tu Mailable
+// --------------------------
+
 use App\Models\Oficio;
 use App\Models\UnidadAdministrativa;
 use Illuminate\Http\Request;
@@ -17,7 +24,7 @@ class TurnoController extends Controller
         'sistema_id.exists' => 'El campo sistema es requerido.',
         'tipo_requerimiento_id.required' => 'El campo tipo de requerimiento es requerido.',
         'tipo_requerimiento_id.exists' => 'El campo tipo de requerimiento es requerido.',
-        'estatus.required' => 'Debe seleccionar un estatus.',
+        'estatus.required' => 'El campo estatus es requqerido.',
         'estatus.in' => 'El estatus seleccionado no es válido.',
         'observaciones_turno.max' => 'Las observaciones no pueden exceder los 2000 caracteres.',
     ];
@@ -33,18 +40,19 @@ class TurnoController extends Controller
             'sistema',
             'tipoRequerimiento',
             'responsablesOficios.responsable'
-        ])->has('responsablesOficios');
+        ])->has('solicitantes');
+        
         if (auth()->user()->rol === 'Titular de área') {
             // Solo ve los oficios dirigidos a su propia área
             $query->where('dirigido_id', auth()->user()->unidad_administrativa_id);
         }
 
-
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . mb_strtoupper($request->numero_oficio) . '%');
         }
-
-        if ($request->filled('dirigido_id') && $request->dirigido_id != '0') { // Asegurarnos de que no sea '0' (Todas las unidades)
+        
+        // Asegurarnos de que no sea '0' (Todas las unidades)
+        if ($request->filled('dirigido_id') && $request->dirigido_id != '0') {
             $query->where('dirigido_id', $request->dirigido_id);
         }
 
@@ -56,10 +64,11 @@ class TurnoController extends Controller
         if ($request->filled('fecha_recepcion_fin')) {
             $query->whereDate('fecha_recepcion', '<=', $request->fecha_recepcion_fin);
         }
+        
         // 1. Excluimos definitivamente los estatus que no queremos ver nunca
         $query->whereNotIn('estatus', ['Atendido', 'Concluido']);
 
-        // 2. --- FILTRO DE ESTATUS MEJORADO ---
+        // 2. --- FILTRO DE ESTATUS ---
         if ($request->filled('estatus') && $request->estatus !== 'Todos') {
             // Ya no necesitamos el "if" especial para concluidos, 
             // simplemente filtramos por el estatus que el usuario seleccione.
@@ -69,7 +78,46 @@ class TurnoController extends Controller
 
         return view('turnos.index', compact('oficios', 'unidades', 'request'));
     }
+    
+    public function notificar($id)
+    {
+        try {
+            // 1. Buscamos el oficio con las relaciones necesarias
+            $oficio = Oficio::with(['solicitantes', 'areaDirigido', 'responsablesOficios.responsable'])->findOrFail($id);
 
+            // 2. Obtenemos al emisor (quien dio clic al botón, usualmente el Titular)
+            $emisor = Auth::user();
+
+            $enviados = 0;
+
+            // 3. Recorremos a los responsables y enviamos el correo INDIVIDUAL a cada uno
+            foreach ($oficio->responsablesOficios as $ro) {
+                // Verificamos que el responsable exista y tenga un correo válido
+                if ($ro->responsable && $ro->responsable->email) {
+                    
+                    $destinatario = $ro->responsable; // Capturamos a quien va a recibir el correo
+
+                    // Enviamos pasando los 3 datos: el oficio, quién lo turnó y a quién va dirigido
+                    Mail::to($destinatario->email)->send(new NotificarTurnoMailable($oficio, $emisor, $destinatario));
+                    
+                    $enviados++;
+                }
+            }
+
+            // 4. Verificamos si logramos enviar al menos un correo
+            if ($enviados === 0) {
+                return redirect()->back()->with('error', 'No se puede notificar: Los responsables asignados no cuentan con un correo electrónico registrado.');
+            }
+
+            // 5. Retornamos con éxito
+            return redirect()->back()->with('success', 'Se ha enviado la notificación de turno por correo a los responsables asignados.');
+            
+        } catch (\Exception $e) {
+            // Regresamos el "Rayo X" por si hay fallas en la prueba
+            return redirect()->back()->with('error', 'ERROR REAL DETECTADO: ' . $e->getMessage() . ' en la línea ' . $e->getLine());
+        }
+    }
+    
     public function edit(Oficio $turno): View
     {
         $oficio = $turno;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Oficio;
+use App\Models\User;
 use App\Models\Seguimiento;
 use App\Models\ResponsableOficio;
 use App\Models\UnidadAdministrativa;
@@ -10,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use App\Mail\NotificarSeguimientoMailable;
 
 class SeguimientoController extends Controller
 {
@@ -24,8 +29,8 @@ class SeguimientoController extends Controller
             'responsablesOficios.responsable',
             'responsablesOficios.seguimientos',
             'oficiosVinculados'
-        ])->has('responsablesOficios');
-
+        ])->has('responsablesOficios')
+            ->has('solicitantes');
         // ==========================================
         //  FILTRO DE SEGURIDAD: RESPONSABLE Y TITULAR
         // ==========================================
@@ -33,10 +38,10 @@ class SeguimientoController extends Controller
 
         // Si es Responsable, SOLO ve los oficios donde él es el responsable asignado
         if ($usuario->rol === 'Responsable') {
-            $query->whereHas('responsablesOficios', function($q) use ($usuario) {
+            $query->whereHas('responsablesOficios', function ($q) use ($usuario) {
                 $q->where('responsable_id', $usuario->id);
             });
-        } 
+        }
         // Si es Titular de área, SOLO ve los oficios dirigidos a su área
         elseif ($usuario->rol === 'Titular de área') {
             $query->where('dirigido_id', $usuario->unidad_administrativa_id);
@@ -48,7 +53,7 @@ class SeguimientoController extends Controller
         if ($request->filled('numero_oficio')) {
             $query->where('numero_oficio', 'like', '%' . $request->numero_oficio . '%');
         }
-        
+
         if ($request->filled('dirigido_id') && $request->dirigido_id != 0) {
             $query->where('dirigido_id', $request->dirigido_id);
         }
@@ -102,7 +107,44 @@ class SeguimientoController extends Controller
 
         return redirect()->back()->with('success', 'Avance registrado en la línea de tiempo.');
     }
+    /**
+     * Notifica al responsable asignado para generar respuesta.
+     */
+    public function notificarRespuesta($id)
+    {
+        try {
+            $oficio = Oficio::with(['responsablesOficios.responsable', 'sistema'])->findOrFail($id);
+            
+            if ($oficio->estatus !== 'Concluido') {
+                return redirect()->back()->with('error', 'El oficio debe estar en estatus "Concluido" para solicitar una respuesta.');
+            }
 
+            // Capturamos a Jesús Daniel (quien dio el clic)
+            $emisor = Auth::user(); 
+            $enviados = 0;
+
+            // Recorremos a los responsables y enviamos un correo INDIVIDUAL a cada uno
+            foreach ($oficio->responsablesOficios as $ro) {
+                if ($ro->genera_respuesta === 'X' && $ro->responsable && $ro->responsable->email) {
+                    
+                    $destinatario = $ro->responsable; // Capturamos a quien recibe el correo
+
+                    // Le pasamos las 3 cosas al Mailable: Oficio, Quien envía y Quien recibe
+                    Mail::to($destinatario->email)->send(new NotificarSeguimientoMailable($oficio, $emisor, $destinatario));
+                    $enviados++;
+                }
+            }
+
+            if ($enviados === 0) {
+                return redirect()->back()->with('error', 'No se encontró ningún responsable marcado para "Elaborar respuesta" con un correo electrónico válido.');
+            }
+
+            return redirect()->back()->with('success', 'Se ha enviado la notificación al responsable asignado correctamente.');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'ERROR REAL DETECTADO: ' . $e->getMessage() . ' en la línea ' . $e->getLine());
+        }
+    }
     public function concluir(Request $request, Oficio $oficio): RedirectResponse
     {
         $reglas = [

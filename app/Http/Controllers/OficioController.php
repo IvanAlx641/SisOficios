@@ -7,7 +7,11 @@ use App\Models\UnidadAdministrativa;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth; // Facade correcta para Auth
+use Illuminate\Support\Facades\Log;  // Facade correcta para Log
+use Illuminate\Support\Facades\Mail; // Facade correcta para Mail (Faltaba esta)
+use App\Mail\NotificarRegistroMailable; // 
 class OficioController extends Controller
 {
     // Mensajes de error en español
@@ -15,10 +19,10 @@ class OficioController extends Controller
         'required' => 'El campo :attribute es obligatorio.',
         'unique' => 'Este número de oficio ya existe.',
         'date' => 'Ingrese una fecha válida.',
-        'url' => 'Ingrese una URL válida (http://...).',
+        'url' => 'Ingrese una URL válida (http(s)://...).',
         'integer' => 'Seleccione una opción válida.',
     ];
-
+    //Mensaje solicitante
     public function index(Request $request): View|RedirectResponse
     {
         // --- CANDADO: Evitar salir sin solicitantes ---
@@ -79,7 +83,50 @@ class OficioController extends Controller
 
         return view('oficios.index', compact('oficios', 'request', 'unidades'));
     }
+    public function notificar($id)
+    {
+        try {
+            $oficio = Oficio::with(['solicitantes', 'areaDirigido'])->findOrFail($id);
+            $emisor = Auth::user(); 
 
+            // 1. Buscamos a los Titulares
+            $titulares = User::where('rol', 'Titular de área')
+                ->where('unidad_administrativa_id', $oficio->dirigido_id)
+                ->whereNotNull('email')
+                ->get();
+
+            // 2. Buscamos a los Admins TI
+            $adminsTI = User::where('rol', 'Administrador TI')
+                ->whereNotNull('email')
+                ->get();
+
+            // --- INICIO DE RAYOS X ---
+            // Si no encuentra al titular de esa área, que detenga todo y nos avise por qué
+            if ($titulares->isEmpty()) {
+                $nombreArea = optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'Desconocida';
+                return redirect()->back()->with('error', "El oficio es Dirigido A '{$nombreArea}', no existe 'Titular de área' que pertenezca a esa unidad y tenga correo.");
+            }
+            // --- FIN DE RAYOS X ---
+
+            // 3. Juntamos ambas listas
+            $destinatarios = $titulares->merge($adminsTI)->unique('id');
+
+            if ($destinatarios->isEmpty()) {
+                return redirect()->back()->with('error', 'No se puede notificar: No se encontró al Titular de Área asignada ni al Administrador de TI.');
+            }
+
+            // 4. Enviamos los correos individualmente
+            foreach ($destinatarios as $destinatario) {
+                Mail::to($destinatario->email)->send(new NotificarRegistroMailable($oficio, $emisor, $destinatario));
+            }
+
+            return redirect()->back()->with('success', 'Se ha notificado el registro del oficio al Titular de Área y a TI.');
+            
+        } catch (\Exception $e) {
+            Log::error('Error al notificar registro de oficio: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Ocurrió un error al intentar enviar la notificación: ' . $e->getMessage());
+        }
+    }
     public function create(): View
     {
         $oficio = new Oficio();

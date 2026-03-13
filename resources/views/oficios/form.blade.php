@@ -6,7 +6,7 @@
         <div class="card-header bg-light border-bottom-0 pt-4 px-4">
             <div class="d-flex align-items-center">
                 <a href="{{ route('oficio.index') }}" class="text-guinda text-decoration-none me-3" title="Volver al listado">
-                <i class="ti ti-arrow-back-up fs-3"></i>
+                    <i class="ti ti-arrow-back-up fs-3"></i>
                 </a>
                 <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
             </div>
@@ -130,13 +130,13 @@
                     </div>
 
                 </div>
-
-                <div class="d-flex justify-content-start align-items-center gap-3 mt-5 pt-3 border-top">
+                <div class="d-flex justify-content-start align-items-center gap-3 mt-3 pt-3 ">
                     <button type="submit" class="btn btn-guinda rounded-pill px-4 shadow-sm">
                         {{ $oficio->exists ? 'Guardar' : 'Guardar' }}
                     </button>
                     <a href="{{ route('oficio.index') }}" class="btn-cancelar">Cancelar</a>
                 </div>
+
 
             </form>
         </div>

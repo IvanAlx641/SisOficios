@@ -19,7 +19,8 @@ class RespuestaController extends Controller
             'areaDirigido',
             'solicitantes',
             'sistema',
-            'respuestasOficios.firmadoPor'
+            'respuestasOficios.firmadoPor',
+            'respuestasOficios.dirigidoA'
         ])->has('solicitantes');;
 
         if ($request->filled('numero_oficio')) {

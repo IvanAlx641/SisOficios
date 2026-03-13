@@ -6,7 +6,7 @@
     <div class="card w-100 position-relative border-0 shadow-sm mb-5">
         <div class="card-body pt-3 pb-2 bg-light border-bottom d-flex justify-content-between align-items-center">
             <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
-            <a href="{{ route('actividad.create') }}" class="btn btn-guinda rounded-pill px-4 shadow-sm fw-bold">
+            <a href="{{ route('actividad.create') }}" class="btn btn-guinda w-20  py-2 shadow-sm rounded-pill btn-nuevo-responsive">
                 Nueva
             </a>
         </div>
@@ -47,11 +47,12 @@
                         </div>
 
                     <div class="col-md-2">
+                        <div class="col-12 text-md-end mt-3 mt-md-0">
+                        <button type="submit" class="btn btn-outline-guinda w-100 w-md-50 fw-bold">Buscar</button>
+                    </div>
                     </div>
 
-                    <div class="col-md-1 text-end">
-                        <button type="submit" class="btn btn-outline-guinda w-100 rounded-pill shadow-sm fw-bold">Buscar</button>
-                    </div>
+                    
 
                 <div class="row mt-4">
                         <div class="col-md-12 d-flex align-items-center flex-wrap">

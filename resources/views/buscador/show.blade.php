@@ -95,7 +95,7 @@
                 </div>
                 <div class="col-12 mb-3">
                     <span class="text-muted small fw-semibold">Responsable(s):</span> 
-                    <span class="text-guinda small fw-bold text-uppercase">
+                    <span class="text-dark small text-uppercase">
                         @forelse($oficio->responsablesOficios as $resp)
                             {{ $resp->responsable->nombre ?? 'ASG' }}@if(!$loop->last), @endif
                         @empty
@@ -152,7 +152,7 @@
                     <div class="col-md-6 mb-3">
                         <div class="mb-2"><span class="text-muted small fw-semibold">Fecha de respuesta:</span> <span class="text-dark small">{{ $respuesta->fecha_respuesta ? \Carbon\Carbon::parse($respuesta->fecha_respuesta)->format('d/m/Y') : '-' }}</span></div>
                         <div class="mb-2"><span class="text-muted small fw-semibold">Dirigido a:</span> <span class="text-dark small text-uppercase">{{ $respuesta->dirigidoA->nombre ?? '---' }}</span></div>
-                        <div class="mb-2"><span class="text-muted small fw-semibold">Firmado por:</span> <span class="text-guinda small text-uppercase fw-semibold">{{ $respuesta->firmadoPor->nombre ?? '---' }}</span></div>
+                        <div class="mb-2"><span class="text-muted small fw-semibold">Firmado por:</span> <span class="text-dark small text-uppercase">{{ $respuesta->firmadoPor->nombre ?? '---' }}</span></div>
                         <div class="mb-2"><span class="text-muted small fw-semibold">Descripción breve de la respuesta:</span> <span class="text-dark small">{{ $respuesta->descripción_respuesta_oficio ?? '---' }}</span></div>
                         <div class="mb-2 d-flex align-items-center">
                             <span class="text-muted small fw-semibold me-2">Ver acuse de respuesta:</span> 
