@@ -119,32 +119,47 @@ class SeguimientoController extends Controller
                 return redirect()->back()->with('error', 'El oficio debe estar en estatus "Concluido" para solicitar una respuesta.');
             }
 
-            // Capturamos a Jesús Daniel (quien dio el clic)
             $emisor = Auth::user(); 
-            $enviados = 0;
+            $destinatarios = collect(); // Creamos una colección vacía para juntar a todos
 
-            // Recorremos a los responsables y enviamos un correo INDIVIDUAL a cada uno
+            // 1. Buscamos a los Capturistas (asumo que es un rol en tu tabla users)
+            $capturistas = User::where('rol', 'Capturista')->whereNotNull('email')->get();
+            $destinatarios = $destinatarios->merge($capturistas);
+
+            // 2. Buscamos a los Titulares del área del responsable
             foreach ($oficio->responsablesOficios as $ro) {
-                if ($ro->genera_respuesta === 'X' && $ro->responsable && $ro->responsable->email) {
+                if ($ro->genera_respuesta === 'X' && $ro->responsable) {
+                    $titulares = User::where('rol', 'Titular de área')
+                        ->where('unidad_administrativa_id', $ro->responsable->unidad_administrativa_id)
+                        ->whereNotNull('email')
+                        ->get();
                     
-                    $destinatario = $ro->responsable; // Capturamos a quien recibe el correo
-
-                    // Le pasamos las 3 cosas al Mailable: Oficio, Quien envía y Quien recibe
-                    Mail::to($destinatario->email)->send(new NotificarSeguimientoMailable($oficio, $emisor, $destinatario));
-                    $enviados++;
+                    $destinatarios = $destinatarios->merge($titulares);
                 }
             }
 
-            if ($enviados === 0) {
-                return redirect()->back()->with('error', 'No se encontró ningún responsable marcado para "Elaborar respuesta" con un correo electrónico válido.');
+            // 3. Quitamos duplicados (por si alguien tiene más de un rol)
+            $destinatarios = $destinatarios->unique('id');
+
+            if ($destinatarios->isEmpty()) {
+                return redirect()->back()->with('error', 'No se encontró ningún Capturista ni Titular de Área con correo válido.');
             }
 
-            return redirect()->back()->with('success', 'Se ha enviado la notificación al responsable asignado correctamente.');
+            $enviados = 0;
+            // 4. Enviamos el correo a nuestra lista final
+            foreach ($destinatarios as $destinatario) {
+                Mail::to($destinatario->email)->send(new NotificarSeguimientoMailable($oficio, $emisor, $destinatario));
+                $enviados++;
+            }
+
+            return redirect()->back()->with('success', "Se ha enviado la notificación y el archivo adjunto a $enviados destinatarios (Titulares y Capturistas).");
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'ERROR REAL DETECTADO: ' . $e->getMessage() . ' en la línea ' . $e->getLine());
+            Log::error('Error al notificar respuesta: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
     }
+    
     public function concluir(Request $request, Oficio $oficio): RedirectResponse
     {
         $reglas = [

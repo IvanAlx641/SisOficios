@@ -85,7 +85,7 @@
         <div class="col-lg-12">
             <div class="card border-0 shadow-sm h-100 bg-white rounded-3">
                 <div class="card-header bg-white border-bottom-0 pt-4 text-center">
-                    <h5 class="fw-bold text-guinda mb-1">Ranking de Responsables</h5>
+                    <h5 class="fw-bold text-guinda mb-1"> Responsables</h5>
                     <small class="text-muted">Eje Y: Responsables | Eje X: Tareas asignadas</small>
                 </div>
                 <div class="card-body p-4">

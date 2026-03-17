@@ -83,50 +83,51 @@ class OficioController extends Controller
 
         return view('oficios.index', compact('oficios', 'request', 'unidades'));
     }
+
     public function notificar($id)
     {
         try {
+            // 1. Consultamos el oficio trayendo sus relaciones (solicitantes y el área a la que va dirigido)
             $oficio = Oficio::with(['solicitantes', 'areaDirigido'])->findOrFail($id);
             $emisor = Auth::user(); 
 
-            // 1. Buscamos a los Titulares
+            // --- AQUÍ ESTÁN LOS DATOS QUE PEDISTE ---
+            // - No de oficio: $oficio->numero_oficio
+            // - Descripción: $oficio->descripción_oficio
+            // - URL: $oficio->url_oficio
+            
+            // Extraemos a los Solicitantes: 
+            // Sacamos el nombre de cada solicitante y los unimos con una coma (por si es solicitud conjunta)
+            // *OJO: Cambia 'nombre' por el nombre real de la columna en tu tabla de solicitantes (ej. 'nombre_completo')
+            $nombresSolicitantes = $oficio->solicitantes->pluck('nombre')->join(', ');
+
+            // 2. Buscamos SOLO a los Titulares del área a la que va dirigido el oficio
             $titulares = User::where('rol', 'Titular de área')
                 ->where('unidad_administrativa_id', $oficio->dirigido_id)
                 ->whereNotNull('email')
                 ->get();
 
-            // 2. Buscamos a los Admins TI
-            $adminsTI = User::where('rol', 'Administrador TI')
-                ->whereNotNull('email')
-                ->get();
-
-            // --- INICIO DE RAYOS X ---
-            // Si no encuentra al titular de esa área, que detenga todo y nos avise por qué
+            // 3. Validación: Si no existe el titular o no tiene correo, detenemos el proceso y avisamos
             if ($titulares->isEmpty()) {
                 $nombreArea = optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'Desconocida';
                 return redirect()->back()->with('error', "El oficio es Dirigido A '{$nombreArea}', no existe 'Titular de área' que pertenezca a esa unidad y tenga correo.");
             }
-            // --- FIN DE RAYOS X ---
 
-            // 3. Juntamos ambas listas
-            $destinatarios = $titulares->merge($adminsTI)->unique('id');
-
-            if ($destinatarios->isEmpty()) {
-                return redirect()->back()->with('error', 'No se puede notificar: No se encontró al Titular de Área asignada ni al Administrador de TI.');
+            // 4. Enviamos el correo a los titulares encontrados
+            foreach ($titulares as $destinatario) {
+                // Al Mailable le pasamos el $oficio (que trae los 3 primeros datos) y la variable $nombresSolicitantes
+                Mail::to($destinatario->email)->send(new NotificarRegistroMailable($oficio, $emisor, $destinatario, $nombresSolicitantes));
             }
 
-            // 4. Enviamos los correos individualmente
-            foreach ($destinatarios as $destinatario) {
-                Mail::to($destinatario->email)->send(new NotificarRegistroMailable($oficio, $emisor, $destinatario));
-            }
-
-            return redirect()->back()->with('success', 'Se ha notificado el registro del oficio al Titular de Área y a TI.');
+            return redirect()->back()->with('success', 'Se ha notificado el registro del oficio al Titular de Área correctamente.');
             
         } catch (\Exception $e) {
             Log::error('Error al notificar registro de oficio: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Ocurrió un error al intentar enviar la notificación: ' . $e->getMessage());
         }
     }
+
+
     public function create(): View
     {
         $oficio = new Oficio();

@@ -16,12 +16,14 @@ class NotificarRegistroMailable extends Mailable
     public $oficio;
     public $emisor;
     public $destinatario;
+    public $nombresSolicitantes; 
 
-    public function __construct($oficio, $emisor, $destinatario)
+    public function __construct($oficio, $emisor, $destinatario, $nombresSolicitantes = null)
     {
         $this->oficio = $oficio;
         $this->emisor = $emisor;
         $this->destinatario = $destinatario;
+        $this->nombresSolicitantes = $nombresSolicitantes;
     }
 
     public function envelope(): Envelope
@@ -37,4 +39,6 @@ class NotificarRegistroMailable extends Mailable
             view: 'emails.oficios.registro',
         );
     }
+    
+    // Ya no necesitamos la función attachments() aquí
 }

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Attachment; // <--- Importante agregar esta línea
 use Illuminate\Queue\SerializesModels;
 
 class NotificarSeguimientoMailable extends Mailable
@@ -13,8 +14,8 @@ class NotificarSeguimientoMailable extends Mailable
     use Queueable, SerializesModels;
 
     public $oficio;
-    public $emisor;       // Quien envía (Jesús Daniel)
-    public $destinatario; // Quien recibe
+    public $emisor;       
+    public $destinatario; 
 
     public function __construct($oficio, $emisor, $destinatario)
     {
@@ -26,7 +27,7 @@ class NotificarSeguimientoMailable extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Oficio Concluido - Requiere Respuesta: ' . $this->oficio->numero_oficio,
+            subject: 'Oficio Concluido - Respuesta Generada: ' . $this->oficio->numero_oficio,
         );
     }
 
@@ -35,5 +36,19 @@ class NotificarSeguimientoMailable extends Mailable
         return new Content(
             view: 'emails.seguimiento.notificacion',
         );
+    }
+
+    // --- FUNCIÓN PARA ADJUNTAR EL PDF ---
+    public function attachments(): array
+    {
+        // Verificamos si realmente hay un archivo guardado
+        if ($this->oficio->soporte_documental) {
+            return [
+                // Usamos fromStorageDisk para que lo busque directo en 'storage/app/public'
+                Attachment::fromStorageDisk('public', $this->oficio->soporte_documental)
+            ];
+        }
+
+        return [];
     }
 }

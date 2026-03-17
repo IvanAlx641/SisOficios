@@ -7,27 +7,32 @@
         body { font-family: Arial, sans-serif; color: #333; line-height: 1.6; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-top: 4px solid #9D2449; }
         .header { text-align: center; margin-bottom: 20px; }
-        .content { background-color: #f9f9f9; padding: 15px; border-radius: 5px; }
-        .footer { margin-top: 20px; font-size: 12px; text-align: center; color: #777; }
+        .header img { max-width: 100%; height: auto; max-height: 80px; margin-bottom: 15px; }
+        .content { background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .footer { margin-top: 20px; font-size: 12px; text-align: center; color: #777; border-top: 1px solid #ddd; padding-top: 15px; }
         .highlight { font-weight: bold; color: #9D2449; }
+        ul { margin-top: 5px; padding-left: 20px; }
+        .btn { display: inline-block; padding: 10px 20px; color: #ffffff; background-color: #9D2449; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 15px; }
+        .text-center { text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h2>Nuevo Oficio Registrado</h2>
+            <img src="{{ $message->embed(public_path('materialpro/assets/images/morenaicons/logos.jpg')) }}" alt="Logos Institucionales">
+            <h2 style="margin: 0; color: #333;">
+                Nuevo oficio registrado 
+            </h2>
         </div>
         
-        <p>Hola, <strong>{{ $destinatario->nombre ?? 'Usuario' }}</strong></p>
+        <p>Estimado(a) <strong>{{ $destinatario->nombre ?? 'Titular de Área' }}</strong>,</p>
         
-        <p>Se le notifica que se ha registrado en el sistema el oficio <span class="highlight">{{ $oficio->numero_oficio }}</span>.</p>
+        <p>Se ha registrado un nuevo oficio <a href="{{ $oficio->url_oficio }}" style="color: #9D2449; text-decoration: none;">{{ $oficio->numero_oficio }}</a>.</p>
 
         <div class="content">
-            <p><strong>Detalles principales:</strong></p>
+            <p><strong>Detalles del oficio:</strong></p>
             <ul>
-                <li><strong>Registrado por:</strong> {{ $emisor->nombre ?? 'Usuario del Sistema' }}</li>
-                <li><strong>Dirigido a:</strong> {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}</li>
-                <li><strong>Fecha de recepción:</strong> {{ $oficio->fecha_recepcion ? $oficio->fecha_recepcion->format('d/m/Y') : 'N/A' }}</li>
+                <li><strong>Descripción:</strong> {{ $oficio->descripción_oficio }}</li>
             </ul>
 
             <p><strong>Solicitado por:</strong></p>
@@ -38,14 +43,14 @@
                     @endforeach
                 </ul>
             @else
-                <p><em>Sin solicitantes registrados.</em></p>
+                <p><em>{{ $nombresSolicitantes ?: 'Sin solicitantes registrados.' }}</em></p>
             @endif
+
+            
         </div>
 
-        <p>Por favor, ingrese al sistema para visualizar el documento PDF y dar el seguimiento correspondiente.</p>
-
         <div class="footer">
-            <p>Este es un mensaje automático generado por el Sistema de Gestión de Oficios. No responda a este correo.</p>
+            <p>&copy; {{ date('Y') }} Derechos Reservados. Secretaría de la Contraloría del Estado de México.</p>
         </div>
     </div>
 </body>

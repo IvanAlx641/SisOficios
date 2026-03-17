@@ -79,11 +79,17 @@ class TurnoController extends Controller
         return view('turnos.index', compact('oficios', 'unidades', 'request'));
     }
     
-    public function notificar($id)
+   public function notificar($id)
     {
         try {
-            // 1. Buscamos el oficio con las relaciones necesarias
-            $oficio = Oficio::with(['solicitantes', 'areaDirigido', 'responsablesOficios.responsable'])->findOrFail($id);
+            // 1. Buscamos el oficio con TODAS las relaciones necesarias, agregando sistema y tipoRequerimiento
+            $oficio = Oficio::with([
+                'solicitantes', 
+                'areaDirigido', 
+                'responsablesOficios.responsable',
+                'sistema',              // <--- Agregado
+                'tipoRequerimiento'     // <--- Agregado
+            ])->findOrFail($id);
 
             // 2. Obtenemos al emisor (quien dio clic al botón, usualmente el Titular)
             $emisor = Auth::user();
@@ -113,8 +119,9 @@ class TurnoController extends Controller
             return redirect()->back()->with('success', 'Se ha enviado la notificación de turno por correo a los responsables asignados.');
             
         } catch (\Exception $e) {
+            Log::error('Error al notificar turno: ' . $e->getMessage()); // Siempre es bueno loguear el error real
             // Regresamos el "Rayo X" por si hay fallas en la prueba
-            return redirect()->back()->with('error', 'ERROR REAL DETECTADO: ' . $e->getMessage() . ' en la línea ' . $e->getLine());
+            return redirect()->back()->with('error', 'Ocurrió un error al intentar enviar la notificación: ' . $e->getMessage());
         }
     }
     
