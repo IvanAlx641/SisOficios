@@ -24,7 +24,7 @@
             <div class="card-body px-3 px-md-4 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-7 col-md-9">
-                        <h4 class="fw-bold mb-0 text-guinda">Gestión de sistemas</h4>
+                        <h4 class="fw-bold mb-0 text-guinda">Sistemas</h4>
                     </div>
                     <div class="col-5 col-md-3 text-end">
                         <a href="{{ route('sistema.create') }}" class="btn btn-guinda w-75 py-2 shadow-sm rounded-pill btn-nuevo-responsive">

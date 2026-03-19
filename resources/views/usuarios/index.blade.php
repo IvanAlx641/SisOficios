@@ -28,7 +28,7 @@
             <div class="card-body pt-2 py-3 bg-light">
                 <div class="row align-items-center">
                     <div class="col-7 col-md-9">
-                        <h4 class="fw-bold mb-0 text-guinda">Gestión de usuarios</h4>
+                        <h4 class="fw-bold mb-0 text-guinda">Usuarios</h4>
                     </div>
 
                     <div class="col-5 col-md-3 text-end">

@@ -11,13 +11,13 @@
                     <select name="anio" class="form-select form-select-sm border-guinda">
                         <option value="">Todos los años</option>
                         @php
-                            $anioInicio = 2026;
-                            // Tomamos el año actual y le sumamos 1 por si apenas está empezando el año,
-                            // para que siempre haya margen de selección.
-                            $anioFin = max(date('Y') + 20, $anioInicio);
+                            $anioMinimo = 2026;
+                            // Nos aseguramos de tomar el año actual (o 2026 como mínimo de seguridad)
+                            $anioActual = max(date('Y'), $anioMinimo);
                         @endphp
 
-                        @for ($i = $anioInicio; $i <= $anioFin; $i++)
+                        {{-- Bucle inverso: del actual hacia atrás hasta 2026 --}}
+                        @for ($i = $anioActual; $i >= $anioMinimo; $i--)
                             <option value="{{ $i }}" {{ request('anio') == $i ? 'selected' : '' }}>
                                 {{ $i }}
                             </option>
@@ -25,20 +25,15 @@
                     </select>
                 </div>
                 <div class="col-auto">
-                    @if (request()->has('anio'))
-                        <a href="{{ url()->current() }}"
-                            class="btn btn-sm btn-outline-guinda rounded-pill shadow-sm fw-bold px-3">
-                            Limpiar
-                        </a>
-                    @endif
-                    <button type="submit" class="btn btn-sm btn-guinda rounded-pill shadow-sm fw-bold px-3 ms-2">
+                    {{-- Botón Filtrar con el estilo de Limpiar (outline) --}}
+                    <button type="submit" class="btn btn-sm btn-outline-guinda rounded-pill shadow-sm fw-bold px-3">
                         Filtrar
                     </button>
-                    
                 </div>
             </form>
         </div>
     </div>
+    
     <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="card shadow-sm border-0">
@@ -114,7 +109,6 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-4">
-
                         <div>
                             <h4 class="card-title fw-bold mb-0 text-guinda">Oficios por Sistema</h4>
                         </div>

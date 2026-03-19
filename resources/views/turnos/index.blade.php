@@ -47,18 +47,21 @@
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-3">
-                            <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
-                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda">
-                                <option value="0">Todas las unidades</option>
-                                @foreach ($unidades as $id => $nombre)
-                                    <option value="{{ $id }}"
-                                        {{ $request->dirigido_id == $id ? 'selected' : '' }}>
-                                        {{ $nombre }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        {{-- Condición usando tu estándar de roles --}}
+                        @if(Auth::user()->rol != 'Titular de área')
+                            <div class="col-12 col-md-3">
+                                <label class="form-label fw-bold text-guinda2 small">Dirigido a:</label>
+                                <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda">
+                                    <option value="0">Todas las unidades</option>
+                                    @foreach ($unidades as $id => $nombre)
+                                        <option value="{{ $id }}"
+                                            {{ $request->dirigido_id == $id ? 'selected' : '' }}>
+                                            {{ $nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
                         <div class="col-12 col-md-2 text-md-end mt-3 mt-md-0">
                             <button type="submit" class="btn btn-outline-guinda w-100 fw-bold">
@@ -122,9 +125,14 @@
                                 <th class="py-3 text-nowrap">
                                     <h6 class="text-white form-label text-center fw-bold small mb-0">Fecha de recepción</h6>
                                 </th>
-                                <th class="py-3 text-nowrap">
-                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
-                                </th>
+                                
+                                {{-- Condición para ocultar la cabecera usando tu estándar --}}
+                                @if(Auth::user()->rol != 'Titular de área')
+                                    <th class="py-3 text-nowrap">
+                                        <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
+                                    </th>
+                                @endif
+
                                 <th class="py-3 text-nowrap">
                                     <h6 class="text-white text-left form-label fw-bold small mb-0">Solicitado por</h6>
                                 </th>
@@ -180,12 +188,15 @@
                                         </div>
                                     </td>
 
-                                    <td>
-                                        <div class="small text-wrap text-left"
-                                            title="{{ optional($oficio->areaDirigido)->nombre_unidad_administrativa }}">
-                                            {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}
-                                        </div>
-                                    </td>
+                                    {{-- Condición para ocultar la celda usando tu estándar --}}
+                                    @if(Auth::user()->rol != 'Titular de área')
+                                        <td>
+                                            <div class="small text-wrap text-left"
+                                                title="{{ optional($oficio->areaDirigido)->nombre_unidad_administrativa }}">
+                                                {{ optional($oficio->areaDirigido)->nombre_unidad_administrativa ?? 'N/A' }}
+                                            </div>
+                                        </td>
+                                    @endif
 
                                     <td class="small text-wrap text-left">
                                         @if (isset($oficio->solicitantes) && $oficio->solicitantes->count() > 1)
@@ -309,7 +320,9 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             if (typeof convertirSelectABuscador === 'function') {
-                convertirSelectABuscador('filtro_dirigido');
+                if (document.getElementById('filtro_dirigido')) {
+                    convertirSelectABuscador('filtro_dirigido');
+                }
             }
         });
     </script>
@@ -328,16 +341,11 @@
             opacity: 0;
             position: absolute;
             top: 100%;
-            /* Aparece justo debajo del nombre */
             left: 0;
             z-index: 1050;
-            /* Asegura que flote sobre la tabla y otros elementos */
             min-width: 220px;
-            /* Ancho para que los nombres quepan bien */
             margin-top: 5px;
-            /* Un pequeño espacio de separación */
             transition: opacity 0.2s ease, visibility 0.2s ease;
-            /* Efecto suave al aparecer/desaparecer */
         }
 
         /* 3. Mostrar la tarjeta al pasar el cursor sobre el wrapper */
@@ -351,7 +359,6 @@
             content: '';
             position: absolute;
             top: -10px;
-            /* Cubre el espacio vacío arriba de la tarjeta */
             left: 0;
             width: 100%;
             height: 10px;

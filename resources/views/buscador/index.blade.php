@@ -49,18 +49,21 @@
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-3">
-                            <label class="form-label text-guinda2 small fw-bold mb-0">Dirigido a:</label>
-                            <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda text-secondary"
-                                onchange="this.form.submit()">
-                                <option value="Todos">Todos</option>
-                                @foreach ($unidades as $id => $nombre)
-                                    <option value="{{ $id }}"
-                                        {{ request('dirigido_id') == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        {{-- Condición para ocultar el filtro "Dirigido a" si es Titular de área o Responsable --}}
+                        @if(!in_array(Auth::user()->rol, ['Titular de área', 'Responsable']))
+                            <div class="col-12 col-md-3">
+                                <label class="form-label text-guinda2 small fw-bold mb-0">Dirigido a:</label>
+                                <select name="dirigido_id" id="filtro_dirigido" class="form-select border-guinda text-secondary"
+                                    onchange="this.form.submit()">
+                                    <option value="Todos">Todos</option>
+                                    @foreach ($unidades as $id => $nombre)
+                                        <option value="{{ $id }}"
+                                            {{ request('dirigido_id') == $id ? 'selected' : '' }}>{{ mb_strtoupper($nombre) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
                         <div class="col-12 col-md-3">
                             <label class="form-label text-guinda2 small fw-bold mb-0">Solicitado por:</label>
@@ -140,9 +143,14 @@
                                     <h6 class="text-white text-center form-label fw-bold small mb-0">Fecha de<br>recepción
                                     </h6>
                                 </th>
-                                <th class="py-3 text-nowrap">
-                                    <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
-                                </th>
+
+                                {{-- Condición para ocultar la cabecera en la tabla --}}
+                                @if(!in_array(Auth::user()->rol, ['Titular de área', 'Responsable']))
+                                    <th class="py-3 text-nowrap">
+                                        <h6 class="text-white text-left form-label fw-bold small mb-0">Dirigido a</h6>
+                                    </th>
+                                @endif
+
                                 <th class="py-3 text-nowrap">
                                     <h6 class="text-white text-left form-label fw-bold small mb-0">Solicitado por</h6>
                                 </th>
@@ -189,8 +197,14 @@
                                     <td class="text-center text-wrap small">
                                         {{ $oficio->fecha_recepcion ? \Carbon\Carbon::parse($oficio->fecha_recepcion)->format('d/m/Y') : '-' }}
                                     </td>
-                                    <td class="small text-wrap text-left text-uppercase">
-                                        {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? 'N/A' }}</td>
+
+                                    {{-- Condición para ocultar la celda en la tabla --}}
+                                    @if(!in_array(Auth::user()->rol, ['Titular de área', 'Responsable']))
+                                        <td class="small text-wrap text-left text-uppercase">
+                                            {{ $oficio->areaDirigido->nombre_unidad_administrativa ?? 'N/A' }}
+                                        </td>
+                                    @endif
+
                                     <td class="small text-wrap">
                                         @if ($oficio->solicitantes->count() > 1)
                                             <div class="custom-hover-wrapper position-relative d-inline-block">
@@ -444,6 +458,7 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             // AHORA APLICAMOS EL BUSCADOR A LOS 5 SELECTORES
+            // La función internamente verifica si el elemento existe antes de intentar convertirlo
             convertirSelectABuscador('filtro_dirigido');
             convertirSelectABuscador('filtro_solicitado');
             convertirSelectABuscador('filtro_estatus');

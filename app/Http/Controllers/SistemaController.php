@@ -59,8 +59,9 @@ class SistemaController extends Controller
         ], $this->mensajes);
 
         Sistema::create([
-            'nombre_sistema'      => mb_convert_case($request->nombre_sistema, MB_CASE_TITLE, "UTF-8"),
-            'sigla_sistema'       => mb_strtoupper($request->sigla_sistema, "UTF-8"),
+            // Se guarda exactamente como viene en el request
+            'nombre_sistema'      => $request->nombre_sistema,
+            'sigla_sistema'       => $request->sigla_sistema,
             'usuario_creacion_id' => auth()->id(),
         ]);
 
@@ -81,8 +82,9 @@ class SistemaController extends Controller
         ], $this->mensajes);
 
         $data = $request->all();
-        $data['nombre_sistema'] = mb_convert_case($request->nombre_sistema, MB_CASE_TITLE, "UTF-8");
-        $data['sigla_sistema']  = mb_strtoupper($request->sigla_sistema, "UTF-8");
+        // Se sobreescribe usando el valor exacto del request, sin alteraciones de mayúsculas/minúsculas
+        $data['nombre_sistema'] = $request->nombre_sistema;
+        $data['sigla_sistema']  = $request->sigla_sistema;
         $data['inactivo']       = $request->input('inactivo') === 'X' ? 'X' : null;
         $data['usuario_modificacion_id'] = auth()->id();
 
