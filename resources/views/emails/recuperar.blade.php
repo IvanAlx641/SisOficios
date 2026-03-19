@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Restablecer Contraseña</title>
+    <title>Restablecer contraseña</title>
     <style>
         body { font-family: Arial, sans-serif; color: #333; line-height: 1.6; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-top: 4px solid #9D2449; }
@@ -20,7 +20,7 @@
     <div class="container">
         <div class="header">
             <img src="{{ $message->embed(public_path('materialpro/assets/images/morenaicons/logos.jpg')) }}" alt="Logos Institucionales">
-            <h2 style="margin: 0; color: #333;">Restablecer Contraseña</h2>
+            <h2 style="margin: 0; color: #333;">Restablecer contraseña</h2>
         </div>
         
         <p>Estimado(a) <strong>Usuario</strong>,</p>
@@ -32,7 +32,7 @@
             <p>Para crear una nueva contraseña, por favor haga clic en el siguiente botón:</p>
             
             <div class="text-center">
-                <a href="{{ route('password.reset', $token) }}?email={{ $email }}" class="btn" style="color: #ffffff !important; text-decoration: none;">Restablecer Contraseña</a>
+                <a href="{{ route('password.reset', $token) }}?email={{ $email }}" class="btn" style="color: #ffffff !important; text-decoration: none;">Restablecer contraseña</a>
             </div>
 
             <div class="link-fallback">

@@ -48,7 +48,7 @@
                     <span class="value">{{ $usuario->email }}</span>
                 </p>
                 <p style="margin: 0;">
-                    <span class="label">Contraseña Temporal:</span>
+                    <span class="label">Contraseña temporal:</span>
                     <span class="value" style="color: #9D2449; font-size: 18px;">{{ $password }}</span>
                 </p>
             </div>

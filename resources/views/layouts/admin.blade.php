@@ -131,7 +131,7 @@
                                 <li class="sidebar-item">
                                     <a href="{{ route('tiporequerimiento.index') }}" class="sidebar-link">
                                         <i class="ti ti-checklist"></i>
-                                        <span class="hide-menu">Tipos de Requerimientos</span>
+                                        <span class="hide-menu">Tipos de requerimientos</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -323,7 +323,7 @@
                                     <li class="sidebar-item">
                                         <a href="{{ route('tiporequerimiento.index') }}" class="sidebar-link">
                                             <i class="ti ti-checklist"></i>
-                                            <span class="hide-menu">Tipos de Requerimientos</span>
+                                            <span class="hide-menu">Tipos de requerimientos</span>
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
@@ -370,7 +370,7 @@
                                     </li>
                                     @endif
 
-                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Responsable']))
+                                    @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
                                     <li class="sidebar-item">
                                         <a href="{{ route('seguimiento.index') }}" class="sidebar-link">
                                             <i class="ti ti-arrow-guide"></i>

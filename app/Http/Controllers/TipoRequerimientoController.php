@@ -66,7 +66,7 @@ class TipoRequerimientoController extends Controller
 
         // Guardar
         TipoRequerimiento::create([
-            'tipo_requerimiento' => mb_convert_case($request->tipo_requerimiento, MB_CASE_TITLE, "UTF-8"),
+            'tipo_requerimiento' => $request->tipo_requerimiento,
             'requerimiento_oficio' => $request->has('requerimiento_oficio') ? 'X' : null,
             'requerimiento_actividad' => $request->has('requerimiento_actividad') ? 'X' : null,
             'inactivo' => null, 
@@ -94,7 +94,7 @@ class TipoRequerimientoController extends Controller
 
         // Actualizar
         $tiporequerimiento->update([
-            'tipo_requerimiento' => mb_convert_case($request->tipo_requerimiento, MB_CASE_TITLE, "UTF-8"),
+            'tipo_requerimiento' => $request->tipo_requerimiento,
             'requerimiento_oficio' => $request->has('requerimiento_oficio') ? 'X' : null,
             'requerimiento_actividad' => $request->has('requerimiento_actividad') ? 'X' : null,
             'inactivo' => $request->input('inactivo') === 'X' ? 'X' : null,
@@ -107,22 +107,22 @@ class TipoRequerimientoController extends Controller
     }
 
     public function destroy(TipoRequerimiento $tiporequerimiento): RedirectResponse
-{
-    // 1. Verificamos si tiene oficios asociados
-    // count() es eficiente porque solo hace un SELECT COUNT(*)
-    if ($tiporequerimiento->oficios()->count() > 0) {
-        return redirect()->route('tiporequerimiento.index')
-            ->with('error', 'No se puede eliminar: Este tipo de requerimiento ya está siendo utilizado en uno o más oficios.');
-    }
+    {
+        // 1. Verificamos si tiene oficios asociados
+        // count() es eficiente porque solo hace un SELECT COUNT(*)
+        if ($tiporequerimiento->oficios()->count() > 0) {
+            return redirect()->route('tiporequerimiento.index')
+                ->with('error', 'No se puede eliminar: Este tipo de requerimiento ya está siendo utilizado en uno o más oficios.');
+        }
 
-    // 2. Si pasa la validación, eliminamos
-    try {
-        $tiporequerimiento->delete();
-        return redirect()->route('tiporequerimiento.index')
-            ->with('success', 'El registro ha sido eliminado exitosamente.');
-    } catch (\Exception $e) {
-        return redirect()->route('tiporequerimiento.index')
-            ->with('error', 'Ocurrió un error al intentar eliminar el registro.');
+        // 2. Si pasa la validación, eliminamos
+        try {
+            $tiporequerimiento->delete();
+            return redirect()->route('tiporequerimiento.index')
+                ->with('success', 'El registro ha sido eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('tiporequerimiento.index')
+                ->with('error', 'Ocurrió un error al intentar eliminar el registro.');
+        }
     }
 }
-} 

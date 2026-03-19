@@ -24,7 +24,7 @@ class TurnoController extends Controller
         'sistema_id.exists' => 'El campo sistema es requerido.',
         'tipo_requerimiento_id.required' => 'El campo tipo de requerimiento es requerido.',
         'tipo_requerimiento_id.exists' => 'El campo tipo de requerimiento es requerido.',
-        'estatus.required' => 'El campo estatus es requqerido.',
+        'estatus.required' => 'El campo estatus es requerido.',
         'estatus.in' => 'El estatus seleccionado no es válido.',
         'observaciones_turno.max' => 'Las observaciones no pueden exceder los 2000 caracteres.',
     ];
