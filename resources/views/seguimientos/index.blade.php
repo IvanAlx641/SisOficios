@@ -1,8 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
     <style>
-        /* Ajustes responsivos exclusivos para celulares (no afectan la vista en PC) */
+        /* Ajustes responsivos exclusivos para celulares */
         @media (max-width: 767.98px) {
             .badge-filtro-btn {
                 font-size: 0.7rem !important;
@@ -469,7 +471,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-light border-bottom-0 pb-0">
-                            <h5 class="modal-title fw-bold text-guinda">Nuevo Seguimiento</h5>
+                            <h5 class="modal-title fw-bold text-guinda">Nuevo seguimiento</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
@@ -525,7 +527,7 @@
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-light border-bottom-0 pb-0">
                         <h5 class="modal-title fw-bold text-guinda">
-                            {{ $oficio->estatus == 'Turnado' ? 'Concluir oficio:' : 'Editar oficio:' }} <span
+                            {{ $oficio->estatus == 'Turnado' ? 'Concluir oficio:' : 'Editar la conclusión del oficio:' }} <span
                                 class="text-guinda2">{{ $oficio->numero_oficio }}</span>
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -536,18 +538,20 @@
                             @csrf
                             <input type="hidden" name="error_modal_id" value="{{ $modalConcluirId }}">
 
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-guinda2 small">Fecha de conclusión:<span
-                                        class="text-danger">*</span></label>
-                                @php $hasFechaError = old('error_modal_id') == $modalConcluirId && $errors->has('fecha_conclusion'); @endphp
-                                <input type="date" name="fecha_conclusion"
-                                    class="form-control border-guinda {{ $hasFechaError ? 'is-invalid' : '' }}"
-                                    value="{{ old('fecha_conclusion', $oficio->fecha_conclusion ? $oficio->fecha_conclusion->format('Y-m-d') : date('Y-m-d')) }}"
-                                    required>
-                                @if ($hasFechaError)
-                                    <span
-                                        class="invalid-feedback fw-bold mt-1">{{ $errors->first('fecha_conclusion') }}</span>
-                                @endif
+                            <div class="row mb-3">
+                                <div class="col-md-5">
+                                    <label class="form-label fw-bold text-guinda2 small">Fecha de conclusión:<span
+                                            class="text-danger">*</span></label>
+                                    @php $hasFechaError = old('error_modal_id') == $modalConcluirId && $errors->has('fecha_conclusion'); @endphp
+                                    <input type="date" name="fecha_conclusion"
+                                        class="form-control border-guinda {{ $hasFechaError ? 'is-invalid' : '' }}"
+                                        value="{{ old('fecha_conclusion', $oficio->fecha_conclusion ? $oficio->fecha_conclusion->format('Y-m-d') : date('Y-m-d')) }}"
+                                        required>
+                                    @if ($hasFechaError)
+                                        <span
+                                            class="invalid-feedback fw-bold mt-1">{{ $errors->first('fecha_conclusion') }}</span>
+                                    @endif
+                                </div>
                             </div>
 
                             <div class="mb-3">
@@ -559,7 +563,7 @@
                                     @if ($oficio->soporte_documental)
                                         <a href="{{ asset('storage/' . $oficio->soporte_documental) }}" target="_blank"
                                             class="btn btn-sm btn-outline-guinda py-1 px-3 rounded-pill fw-bold">
-                                            <i class="ti ti-file-check fs-5 me-1" style="vertical-align: text-bottom;"></i> Ver documento
+                                            <i class="ti ti-file-check fs-5 me-1" style="vertical-align: text-bottom;"></i> Ver soporte documental
                                         </a>
                                     @endif
                                 </div>
@@ -585,12 +589,14 @@
 
                                 @php $hasPropError = old('error_modal_id') == $modalConcluirId && $errors->has('propuesta_respuesta'); @endphp
 
-                                <textarea name="propuesta_respuesta"
-                                    class="form-control border-guinda rounded-3 {{ $hasPropError ? 'is-invalid' : '' }}" rows="5" required>{{ old('propuesta_respuesta', $oficio->propuesta_respuesta) }}</textarea>
+                                <div class="bg-white border border-guinda rounded {{ $hasPropError ? 'border-danger' : '' }}">
+                                    <div class="quill-editor" data-id="{{ $oficio->id }}" style="height: 150px;">{!! old('propuesta_respuesta', $oficio->propuesta_respuesta) !!}</div>
+                                </div>
+                                
+                                <input type="hidden" name="propuesta_respuesta" id="hidden_propuesta_{{ $oficio->id }}" value="{{ old('propuesta_respuesta', $oficio->propuesta_respuesta) }}">
 
                                 @if ($hasPropError)
-                                    <span
-                                        class="invalid-feedback fw-bold mt-1">{{ $errors->first('propuesta_respuesta') }}</span>
+                                    <span class="invalid-feedback fw-bold mt-1 d-block">{{ $errors->first('propuesta_respuesta') }}</span>
                                 @endif
                             </div>
                             <div class="form-check mt-4 mb-3 d-flex align-items-center gap-2">
@@ -662,191 +668,71 @@
 
     <style>
         /* Estilos base de la paleta Guinda */
-        .border-guinda {
-            border-color: #9D2449 !important;
-        }
+        .border-guinda { border-color: #9D2449 !important; }
+        .btn-guinda-light { background-color: #F8E8EC; color: #9D2449; border: none; font-weight: bold; }
+        .btn-guinda-light:hover { background-color: #9D2449; color: white; }
+        .link-oficio-guinda { color: grey; text-decoration: none; transition: 0.2s; }
+        .link-oficio-guinda:hover { text-decoration: underline; color: #9D2449; }
+        .btn-guardar-modal { background-color: #9D2449; color: white; border: none; font-weight: 600; transition: all 0.2s ease; }
+        .btn-guardar-modal:hover { background-color: #7a1c38; color: white; }
+        .btn-cancelar { background: transparent; border: none; color: #6c757d; font-weight: 600; padding: 0; transition: all 0.2s ease; }
+        .btn-cancelar:hover { color: #9D2449; text-decoration: underline; }
+        .custom-hover-wrapper .custom-hover-card { visibility: hidden; opacity: 0; position: absolute; top: 100%; left: 0; z-index: 1050; min-width: 280px; transition: all 0.2s ease-in-out; margin-top: 10px; }
+        .custom-hover-wrapper:hover .custom-hover-card { visibility: visible; opacity: 1; margin-top: 5px; }
+        .stepper-wrapper { display: flex; justify-content: space-between; position: relative; }
+        .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; cursor: pointer; transition: transform 0.2s; }
+        .stepper-item:hover { transform: scale(1.05); }
+        .stepper-item::before { position: absolute; content: ""; border-bottom: 3px solid #e9ecef; width: 100%; top: 20px; left: -50%; z-index: 2; }
+        .stepper-item:first-child::before { content: none; }
+        .stepper-item .step-counter { position: relative; z-index: 5; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 50%; background: #e9ecef; color: #6c757d; margin-bottom: 8px; font-size: 1.2rem; transition: 0.3s ease; }
+        .stepper-item .step-name { font-size: 0.75rem; font-weight: 600; color: #6c757d; text-align: center; }
+        .stepper-item.completed .step-counter { background-color: #9D2449; color: white; }
+        .stepper-item.completed::before { border-color: #9D2449; }
+        .stepper-item.completed .step-name { color: #9D2449; }
+        .stepper-item.active .step-counter { box-shadow: 0 0 0 4px rgba(157, 36, 73, 0.25); }
+        .stepper-item.active:not(.completed) .step-counter { background-color: #F8E8EC; color: #9D2449; border: 2px solid #9D2449; }
+        .stepper-item.active .step-name { color: #9D2449; font-weight: bold; }
+        .bg-primary-subtle { background-color: #e7f1ff !important; }
+        .bg-info-subtle { background-color: #e4f7fb !important; }
+        .bg-warning-subtle { background-color: #fef7e0 !important; }
+        .bg-success-subtle { background-color: #e6f4ea !important; }
 
-        .btn-guinda-light {
-            background-color: #F8E8EC;
-            color: #9D2449;
-            border: none;
-            font-weight: bold;
-        }
-
-        .btn-guinda-light:hover {
-            background-color: #9D2449;
-            color: white;
-        }
-
-        .link-oficio-guinda {
-            color: grey;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-
-        .link-oficio-guinda:hover {
-            text-decoration: underline;
-            color: #9D2449;
-        }
-
-        /* CSS BOTONES MODAL GUARDAR/CANCELAR */
-        .btn-guardar-modal {
-            background-color: #9D2449;
-            color: white;
-            border: none;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .btn-guardar-modal:hover {
-            background-color: #7a1c38;
-            color: white;
-        }
-
-        .btn-cancelar {
-            background: transparent;
-            border: none;
-            color: #6c757d;
-            font-weight: 600;
-            padding: 0;
-            transition: all 0.2s ease;
-        }
-
-        .btn-cancelar:hover {
-            color: #9D2449;
-            text-decoration: underline;
-        }
-
-        /* CSS TARJETAS FLOTANTES (TOOLTIPS HOVER) */
-        .custom-hover-wrapper .custom-hover-card {
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1050;
-            min-width: 280px;
-            transition: all 0.2s ease-in-out;
-            margin-top: 10px;
-        }
-
-        .custom-hover-wrapper:hover .custom-hover-card {
-            visibility: visible;
-            opacity: 1;
-            margin-top: 5px;
-        }
-
-        /* CSS DEL STEPPER HORIZONTAL */
-        .stepper-wrapper {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        .stepper-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .stepper-item:hover {
-            transform: scale(1.05);
-        }
-
-        .stepper-item::before {
-            position: absolute;
-            content: "";
-            border-bottom: 3px solid #e9ecef;
-            width: 100%;
-            top: 20px;
-            left: -50%;
-            z-index: 2;
-        }
-
-        .stepper-item:first-child::before {
-            content: none;
-        }
-
-        .stepper-item .step-counter {
-            position: relative;
-            z-index: 5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e9ecef;
-            color: #6c757d;
-            margin-bottom: 8px;
-            font-size: 1.2rem;
-            transition: 0.3s ease;
-        }
-
-        .stepper-item .step-name {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #6c757d;
-            text-align: center;
-        }
-
-        /* ESTADO COMPLETADO */
-        .stepper-item.completed .step-counter {
-            background-color: #9D2449;
-            color: white;
-        }
-
-        .stepper-item.completed::before {
-            border-color: #9D2449;
-        }
-
-        .stepper-item.completed .step-name {
-            color: #9D2449;
-        }
-
-        /* ESTADO ACTIVO */
-        .stepper-item.active .step-counter {
-            box-shadow: 0 0 0 4px rgba(157, 36, 73, 0.25);
-        }
-
-        .stepper-item.active:not(.completed) .step-counter {
-            background-color: #F8E8EC;
-            color: #9D2449;
-            border: 2px solid #9D2449;
-        }
-
-        .stepper-item.active .step-name {
-            color: #9D2449;
-            font-weight: bold;
-        }
-
-        /* Colores para badges */
-        .bg-primary-subtle {
-            background-color: #e7f1ff !important;
-        }
-
-        .bg-info-subtle {
-            background-color: #e4f7fb !important;
-        }
-
-        .bg-warning-subtle {
-            background-color: #fef7e0 !important;
-        }
-
-        .bg-success-subtle {
-            background-color: #e6f4ea !important;
-        }
+        /* ESTILOS DE QUILL JS PARA EL MODAL */
+        .ql-toolbar.ql-snow { border: none !important; border-bottom: 1px solid #9D2449 !important; background: #f8f9fa; }
+        .ql-container.ql-snow { border: none !important; }
     </style>
 
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
     <script>
-        // -----------------------------------------------------------------
-        // MAGIA PARA REABRIR EL MODAL QUE TIENE ERRORES DE VALIDACIÓN
-        // -----------------------------------------------------------------
         document.addEventListener("DOMContentLoaded", function() {
+            
+            // 4. INICIALIZAR QUILL JS EN TODOS LOS MODALES
+            document.querySelectorAll('.quill-editor').forEach(function(editorEl) {
+                var id = editorEl.getAttribute('data-id');
+                var quill = new Quill(editorEl, {
+                    theme: 'snow',
+                    modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'bullet' }]] }
+                });
+                
+                // Encontrar el formulario padre de este editor específico
+                var form = editorEl.closest('form');
+                var hiddenInput = document.getElementById('hidden_propuesta_' + id);
+                
+                // Al hacer "Guardar", pasar lo que hay en el editor visual al input oculto
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        var content = quill.root.innerHTML.trim();
+                        // Si el editor está "vacío" Quill deja esto, así que lo limpiamos de verdad
+                        if (content === '<p><br></p>') {
+                            content = '';
+                        }
+                        hiddenInput.value = content;
+                    });
+                }
+            });
+
+            // MAGIA PARA REABRIR EL MODAL QUE TIENE ERRORES DE VALIDACIÓN
             @if (old('error_modal_id'))
                 var errorModalId = "{{ old('error_modal_id') }}";
                 var modalElement = document.getElementById(errorModalId);
@@ -856,6 +742,8 @@
                 }
             @endif
         });
+
+        // Limpieza de modales al cerrar
         var todosLosModales = document.querySelectorAll('.modal');
         todosLosModales.forEach(function(modal) {
             modal.addEventListener('hidden.bs.modal', function() {

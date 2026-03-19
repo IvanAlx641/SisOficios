@@ -207,18 +207,10 @@
 
                         @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
                         <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <a class="sidebar-link" href="{{ route('actividad.index') }}" aria-expanded="false">
                                 <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
                                 <span class="hide-menu">Actividades</span>
                             </a>
-                            <ul aria-expanded="false" class="collapse first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('actividad.index') }}" class="sidebar-link">
-                                        <i class="ti ti-file-like"></i>
-                                        <span class="hide-menu">Registro</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         @endif
 
@@ -397,22 +389,14 @@
                                 </ul>
                             </li>
 
-                            @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
-                            <li class="sidebar-item">
-                                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
-                                    <span class="hide-menu">Actividades</span>
-                                </a>
-                                <ul aria-expanded="false" class="collapse first-level">
-                                    <li class="sidebar-item">
-                                        <a href="{{ route('actividad.index') }}" class="sidebar-link">
-                                            <i class="ti ti-file-like"></i>
-                                            <span class="hide-menu">Registro</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            @endif
+                        @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ route('actividad.index') }}" aria-expanded="false">
+                                <iconify-icon icon="solar:file-check-linear" class="aside-icon"></iconify-icon>
+                                <span class="hide-menu">Actividades</span>
+                            </a>
+                        </li>
+                        @endif
 
                             @if(in_array(Auth::user()->rol, ['Administrador TI', 'Analista', 'Titular de área', 'Responsable']))
                             <li class="sidebar-item">
