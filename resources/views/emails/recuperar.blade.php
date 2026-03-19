@@ -26,7 +26,7 @@
         
         <p>Estimado(a) <strong>Usuario</strong>,</p>
         
-        <p>Se ha recibido una solicitud para restablecer la contraseña de su cuenta en el <strong>Sistema de Gestión de Oficios</strong>.</p>
+        <p>Se ha recibido una solicitud para restablecer la contraseña de su cuenta en el <strong>Sistema de Control de Oficios.</strong></p>
 
         <div class="content">
             <p>Cuenta asociada: <span class="highlight">{{ $email }}</span></p>

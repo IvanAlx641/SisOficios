@@ -17,7 +17,7 @@
         
         <div class="card w-100 position-relative border-0 shadow-sm mb-5">
             <div class="card-body pt-3 pb-2 bg-light border-bottom d-flex justify-content-between align-items-center">
-                <h4 class="fw-bold mb-0 text-guinda">Registro</h4>
+                <h4 class="fw-bold mb-0 text-guinda">Actividades</h4>
                 <a href="{{ route('actividad.create') }}" class="btn btn-guinda w-20  py-2 shadow-sm rounded-pill btn-nuevo-responsive">
                     Nueva
                 </a>
@@ -120,7 +120,7 @@
 
                             <div class="d-flex justify-content-between align-items-center mt-4 border-top pt-3">
                                 <span class="badge {{ $actividad->detalle_actividades_count > 0 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning' }} rounded-pill px-3 py-2 fw-bold">
-                                    {{ $actividad->detalle_actividades_count }} Tarea(s)
+                                    {{ $actividad->detalle_actividades_count }} Actividad(es)
                                 </span>
                                 
                                 <div class="d-flex gap-1">
@@ -138,7 +138,7 @@
                         @if($actividad->detalle_actividades_count > 0)
                             <div class="bg-white text-center pb-3">
                                 <button class="btn btn-sm btn-more-info rounded-pill px-4 fw-bold " type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetalles{{ $actividad->id }}" aria-expanded="false">
-                                    Ver Tareas <i class="ti ti-chevron-down ms-1 transition-icon"></i>
+                                    Ver actividades <i class="ti ti-chevron-down ms-1 transition-icon"></i>
                                 </button>
                             </div>
 

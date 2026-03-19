@@ -62,12 +62,12 @@
                                 <span class="badge {{ $detalle->estatus == 'Atendida' ? 'bg-success' : 'text-dark' }} rounded-pill px-3 py-1 mb-3" style="{{ $detalle->estatus != 'Atendida' ? 'background-color: #eab64d;' : '' }}">
                                     {{ $detalle->estatus }}
                                 </span>
-                                <h5 class="fw-bold mb-0 text-white text-uppercase" style="word-wrap: break-word;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento }}">
+                                <h5 class="fw-bold mb-0 text-white" style="word-wrap: break-word;" title="{{ optional($detalle->tipoRequerimiento)->tipo_requerimiento }}">
                                     {{ optional($detalle->tipoRequerimiento)->tipo_requerimiento ?? 'N/A' }}
                                 </h5>
                             </div>
                             <div class="card-body pt-4">
-                                <small class="text-muted fw-bold text-uppercase d-block mb-2" style="font-size: 0.75rem;">Descripción:</small>
+                                <small class="text-muted fw-bold  d-block mb-2" style="font-size: 0.75rem;">Descripción de la actividad:</small>
                                 <div class="text-black small mb-0 ">
                                     {!! $detalle->descripcion_actividad !!}
                                 </div>

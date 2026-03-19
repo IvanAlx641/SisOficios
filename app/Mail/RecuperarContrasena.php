@@ -22,7 +22,7 @@ class RecuperarContrasena extends Mailable
 
     public function build()
     {
-        return $this->subject('Restablecer Contraseña - Sistema de Gestión de Oficios')
+        return $this->subject('Restablecer contraseña - Sistema de Control de Oficios.')
                     ->view('emails.recuperar')
                     ->with([
                         // Aquí obligamos a la vista a recibir exactamente el nombre correcto
