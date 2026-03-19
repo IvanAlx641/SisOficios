@@ -11,22 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('respuestas_oficios', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('email')->unique();
-            $table->string('rol');
-            $table->string('inactivo', 1)->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->unsignedBigInteger('dependencia_id')->nullable();
-            $table->unsignedBigInteger('unidad_administrativa_id')->nullable();
+            $table->unsignedBigInteger('oficio_id');
+            $table->timestamp('fecha_respuesta');
+            $table->string('numero_oficio_respuesta');
+            $table->unsignedBigInteger('dirigido_a_id');
+            $table->unsignedBigInteger('firmado_por_id');
+            $table->string('url_oficio_respuesta');
+            $table->string('descripción_respuesta_oficio',4000);
+
             $table->timestamp('fecha_creacion')->nullable();
             $table->unsignedBigInteger('usuario_creacion_id')->nullable();
+            
             $table->timestamp('fecha_modificacion')->nullable();
             $table->unsignedBigInteger('usuario_modificacion_id')->nullable();
-            $table->timestamp('fecha_ultimo_acceso')->nullable();
-            $table->rememberToken();
         });
     }
 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('respuestas_oficios');
     }
 };

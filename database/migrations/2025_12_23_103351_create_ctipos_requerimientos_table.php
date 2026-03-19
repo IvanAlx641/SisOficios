@@ -11,22 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('ctipos_requerimientos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('email')->unique();
-            $table->string('rol');
-            $table->string('inactivo', 1)->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->unsignedBigInteger('dependencia_id')->nullable();
-            $table->unsignedBigInteger('unidad_administrativa_id')->nullable();
+            $table->string('tipo_requerimiento');
+            $table->string('requerimiento_oficio', 1)->nullable();
+            $table->string('requerimiento_actividad', 1)->nullable();
+            $table->string('inactivo', 1)->nullable();            
             $table->timestamp('fecha_creacion')->nullable();
             $table->unsignedBigInteger('usuario_creacion_id')->nullable();
             $table->timestamp('fecha_modificacion')->nullable();
             $table->unsignedBigInteger('usuario_modificacion_id')->nullable();
-            $table->timestamp('fecha_ultimo_acceso')->nullable();
-            $table->rememberToken();
         });
     }
 
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('ctipos_requerimientos');
     }
 };
