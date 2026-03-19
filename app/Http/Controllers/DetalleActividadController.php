@@ -24,8 +24,9 @@ class DetalleActividadController extends Controller
         $actividad = Actividad::with(['responsable', 'sistema'])->findOrFail(session('actividad_id'));
 
         // Catálogo de tipos de requerimiento
-        $tipoRequerimiento = TipoRequerimiento::whereNotNull('requerimiento_actividad')
-            ->whereNull('inactivo')
+        $tipoRequerimiento = TipoRequerimiento::whereNull('inactivo')
+            // 🚨 AQUÍ EL FILTRO MÁGICO PARA ACTIVIDADES 🚨
+            ->where('requerimiento_actividad', 'X') 
             ->orderBy('tipo_requerimiento', 'asc')
             ->pluck('tipo_requerimiento', 'id');    
 

@@ -129,7 +129,6 @@ class TurnoController extends Controller
     {
         $oficio = $turno;
 
-        // Regresamos a la columna 'sigla_sistema' original
         $sistemas = DB::table('csistemas')
             ->select('id', 'sigla_sistema')
             ->whereNull('inactivo')
@@ -137,10 +136,11 @@ class TurnoController extends Controller
             ->pluck('sigla_sistema', 'id')
             ->toArray();
 
-        // Regresamos a la columna 'tipo_requerimiento' original
         $tiposRequerimientos = DB::table('ctipos_requerimientos')
             ->select('id', 'tipo_requerimiento')
             ->whereNull('inactivo')
+            // 🚨 AQUÍ EL FILTRO MÁGICO PARA OFICIOS 🚨
+            ->where('requerimiento_oficio', 'X') 
             ->orderBy('tipo_requerimiento', 'asc')
             ->pluck('tipo_requerimiento', 'id')
             ->toArray();

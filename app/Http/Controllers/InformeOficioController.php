@@ -33,7 +33,7 @@ class InformeOficioController extends Controller
 
         // 3. LÓGICA DE LA DDL (Solo Admin TI y Capturista)
         $unidades = collect();
-        if (in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Capturista'])) {
+        if (in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Analista'])) {
             
             // Corrección: Usamos la columna y filtros correctos de tu base de datos
             $unidades = UnidadAdministrativa::whereNull('inactivo')

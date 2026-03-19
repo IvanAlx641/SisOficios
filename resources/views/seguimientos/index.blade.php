@@ -553,24 +553,28 @@
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-guinda2 small">Soporte documental:<span
                                         class="text-danger">*</span></label>
-                                @if ($oficio->soporte_documental)
-                                    <div class="mb-2">
+                                
+                                <div class="mb-2 d-flex flex-wrap gap-2">
+
+                                    @if ($oficio->soporte_documental)
                                         <a href="{{ asset('storage/' . $oficio->soporte_documental) }}" target="_blank"
-                                            class="badge bg-success text-decoration-none p-2 fs-6">
-                                            <i class="ti ti-file-check me-1"></i> Ver documento guardado
+                                            class="btn btn-sm btn-outline-guinda py-1 px-3 rounded-pill fw-bold">
+                                            <i class="ti ti-file-check fs-5 me-1" style="vertical-align: text-bottom;"></i> Ver documento
                                         </a>
-                                    </div>
-                                    <small class="text-muted d-block mb-1">Si sube un nuevo archivo, reemplazará al
-                                        actual.</small>
+                                    @endif
+                                </div>
+
+                                @if ($oficio->soporte_documental)
+                                    <small class="text-muted d-block mb-1">Si sube un nuevo archivo, reemplazará al actual.</small>
                                 @endif
+
                                 @php $hasDocError = old('error_modal_id') == $modalConcluirId && $errors->has('soporte_documental'); @endphp
                                 <input type="file" name="soporte_documental"
                                     class="form-control border-guinda {{ $hasDocError ? 'is-invalid' : '' }}"
                                     accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                                     {{ $oficio->soporte_documental ? '' : 'required' }}>
                                 @if ($hasDocError)
-                                    <span
-                                        class="invalid-feedback fw-bold mt-1">{{ $errors->first('soporte_documental') }}</span>
+                                    <span class="invalid-feedback fw-bold mt-1">{{ $errors->first('soporte_documental') }}</span>
                                 @endif
                             </div>
 

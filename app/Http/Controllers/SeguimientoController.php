@@ -168,9 +168,9 @@ class SeguimientoController extends Controller
         ];
 
         if (empty($oficio->soporte_documental)) {
-            $reglas['soporte_documental'] = 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480';
+            $reglas['soporte_documental'] = 'file|mimes:pdf|max:20480';
         } else {
-            $reglas['soporte_documental'] = 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:20480';
+            $reglas['soporte_documental'] = 'nullable|file|mimes:pdf|max:20480';
         }
 
         $request->validate($reglas, [

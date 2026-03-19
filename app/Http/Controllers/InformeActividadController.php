@@ -33,7 +33,7 @@ class InformeActividadController extends Controller
 
         // 3. LÓGICA DE LA DDL (Filtro por Unidad Administrativa)
         $unidades = collect();
-        if (in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Capturista'])) {
+        if (in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Analista'])) {
             $unidades = UnidadAdministrativa::whereNull('inactivo')
                 ->orderBy('nombre_unidad_administrativa')
                 ->pluck('nombre_unidad_administrativa', 'id');
