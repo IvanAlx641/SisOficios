@@ -92,7 +92,7 @@ class AuthController extends Controller
             ['token' => $token, 'created_at' => now()]
         );
 
-        // Enviar Correo
+        // Enviar Correo (Se envían estrictamente 2 datos: el token y el email)
         Mail::to($request->email)->send(new RecuperarContrasena($token, $request->email));
 
         return back()->with('status', '¡Enlace enviado! Revisa tu bandeja de entrada.');

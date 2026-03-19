@@ -25,7 +25,7 @@
                 </div>
                 
                 {{-- DDL de Unidad Administrativa --}}
-                @if(in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Capturista']))
+                @if(in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Analista']))
                 <div class="col-md-4">
                     <label class="form-label text-guinda2 fw-bold small">Unidad Administrativa:</label>
                     <select name="unidad_administrativa_id" id="filtro_dirigido" class="form-select border-guinda">
@@ -186,24 +186,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 2. BARRAS HORIZONTALES APILADAS: Sistemas vs Tipo Requerimiento
     @if(count($categoriasSis) > 0)
+    var seriesSisData = @json($seriesSis);
+    // Calculamos el valor máximo para evitar decimales
+    var maxSis = Math.max(...seriesSisData.map(s => Math.max(...s.data)));
+    var tickSis = (maxSis > 0 && maxSis < 5) ? maxSis : 5;
+
     var optionsSis = {
-        series: @json($seriesSis), 
-        chart: { 
-            type: 'bar', height: 350, stacked: true, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig 
-        },
+        series: seriesSisData, 
+        chart: { type: 'bar', height: 350, stacked: true, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig },
         colors: paletaInstitucional,
-        plotOptions: { 
-            bar: { horizontal: true, borderRadius: 3, barHeight: '50%', dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } } } 
-        },
+        plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '50%', dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } } } },
         xaxis: { 
             categories: @json($categoriasSis), 
-            title: { text: 'Tipo de Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, // ETIQUETA EJE X
-            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return Math.floor(val) } } 
+            title: { text: 'Tipo de Requerimiento', style: { fontWeight: 600, color: '#9D2449' } },
+            tickAmount: tickSis, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
-        yaxis: { 
-            title: { text: 'Sistema', style: { fontWeight: 600, color: '#9D2449' } }, // ETIQUETA EJE Y
-            labels: { style: { colors: '#8a8a8a', fontWeight: 600 } } 
-        },
+        yaxis: { title: { text: 'Sistema', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a', fontWeight: 600 } } },
         legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
         grid: { borderColor: '#f1f1f1' }
     };
@@ -212,20 +211,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 3. ÁREA/LÍNEAS: Evolución en el tiempo
     @if(count($categoriasTiempo) > 0)
+    var serieTiempoData = @json($seriesTiempo);
+    var maxTiempo = Math.max(...serieTiempoData);
+    var tickTiempo = (maxTiempo > 0 && maxTiempo < 5) ? maxTiempo : 5;
+
     var optionsTiempo = {
-        series: [{ name: 'Actividades Registradas', data: @json($seriesTiempo) }],
+        series: [{ name: 'Actividades Registradas', data: serieTiempoData }],
         chart: { type: 'area', height: 350, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig },
-        colors: ['#c3b08f'], 
-        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.2, stops: [0, 90, 100] } },
+        colors: ['#c3b08f'], fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.2, stops: [0, 90, 100] } },
         dataLabels: { enabled: false }, stroke: { curve: 'smooth', width: 3 },
-        xaxis: { 
-            categories: @json($categoriasTiempo), 
-            title: { text: 'Fecha', style: { fontWeight: 600, color: '#9D2449' } }, // ETIQUETA EJE X
-            labels: { style: { colors: '#8a8a8a' } } 
-        },
+        xaxis: { categories: @json($categoriasTiempo), title: { text: 'Fecha', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a' } } },
         yaxis: { 
-            title: { text: 'No. de actividades registradas', style: { fontWeight: 600, color: '#9D2449' } }, // ETIQUETA EJE Y
-            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return Math.floor(val) } } 
+            title: { text: 'No. de actividades registradas', style: { fontWeight: 600, color: '#9D2449' } },
+            tickAmount: tickTiempo, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
         grid: { borderColor: '#f1f1f1', strokeDashArray: 4 }
     };
@@ -234,21 +233,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 4. BARRAS HORIZONTALES: Responsables
     @if(count($categoriasResp) > 0)
+    var serieRespData = @json($seriesResp);
+    var maxResp = Math.max(...serieRespData);
+    var tickResp = (maxResp > 0 && maxResp < 5) ? maxResp : 5;
+
     var optionsResp = {
-        series: [{ name: 'Tareas asignadas', data: @json($seriesResp) }],
+        series: [{ name: 'Tareas asignadas', data: serieRespData }],
         chart: { type: 'bar', height: 400, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig },
         colors: ['#c9b088', '#9D2449', '#8a8a8a', '#c3b08f', '#977e5b'], 
         plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '50%', distributed: true, dataLabels: { position: 'bottom' } } },
         dataLabels: { enabled: true, style: { colors: ['#ffffff'] } },
         xaxis: { 
             categories: @json($categoriasResp), 
-            title: { text: 'No. de actividades', style: { fontWeight: 600, color: '#9D2449' } }, // ETIQUETA EJE X
-            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return Math.floor(val) } } 
+            title: { text: 'No. de actividades', style: { fontWeight: 600, color: '#9D2449' } },
+            tickAmount: tickResp, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
-        yaxis: { 
-            title: { text: 'Responsables', style: { fontWeight: 600, color: '#9D2449' } }, // ETIQUETA EJE Y
-            labels: { style: { colors: '#8a8a8a', fontWeight: 600 } } 
-        }, 
+        yaxis: { title: { text: 'Responsables', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a', fontWeight: 600 } } }, 
         legend: { show: false }, grid: { borderColor: '#f1f1f1' }
     };
     new ApexCharts(document.querySelector("#chartResp"), optionsResp).render();

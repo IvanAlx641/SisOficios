@@ -27,7 +27,7 @@
                     <input type="date" name="fecha_final" class="form-control border-guinda" value="{{ $request->fecha_final }}">
                 </div>
                 
-                @if(in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Capturista']))
+                @if(in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Analista']))
                 <div class="col-md-4">
                     <label class="form-label text-guinda2 fw-bold small">Unidad administrativa:</label>
                     <select name="unidad_administrativa_id" id="filtro_dirigido" class="form-select border-guinda">
@@ -282,32 +282,48 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 3. BARRAS: Sistemas vs Req
     @if(count($categoriasSis) > 0)
+    var seriesSisReqData = @json($seriesSisReq);
+    var maxSisReq = Math.max(...seriesSisReqData.map(s => Math.max(...s.data)));
+    var tickSisReq = (maxSisReq > 0 && maxSisReq < 5) ? maxSisReq : 5;
+
     var optionsSisReq = {
-        series: @json($seriesSisReq),
+        series: seriesSisReqData,
         chart: { type: 'bar', height: 400, stacked: true, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig },
         colors: paletaInstitucional,
         plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '55%', dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } } } },
-        xaxis: { categories: @json($categoriasSis), title: { text: 'Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return Math.floor(val) } } },
+        xaxis: { 
+            categories: @json($categoriasSis), 
+            title: { text: 'Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, 
+            tickAmount: tickSisReq, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
+        },
         yaxis: { title: { text: 'Sistema', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a', fontSize: '11px', fontWeight: 600 } } },
         legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
-        fill: { opacity: 1 },
-        grid: { borderColor: '#f1f1f1' }
+        fill: { opacity: 1 }, grid: { borderColor: '#f1f1f1' }
     };
     new ApexCharts(document.querySelector("#chartSisReq"), optionsSisReq).render();
     @endif
 
     // 4. BARRAS: Responsables vs Req
     @if(count($categoriasResp) > 0)
+    var seriesRespReqData = @json($seriesRespReq);
+    var maxRespReq = Math.max(...seriesRespReqData.map(s => Math.max(...s.data)));
+    var tickRespReq = (maxRespReq > 0 && maxRespReq < 5) ? maxRespReq : 5;
+
     var optionsRespReq = {
-        series: @json($seriesRespReq),
+        series: seriesRespReqData,
         chart: { type: 'bar', height: 400, stacked: true, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig },
         colors: ['#977e5b', '#c3b08f', '#9D2449', '#c9b088', '#8a8a8a'],
         plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '55%', dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } } } },
-        xaxis: { categories: @json($categoriasResp), title: { text: 'Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return Math.floor(val) } } },
+        xaxis: { 
+            categories: @json($categoriasResp), 
+            title: { text: 'Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, 
+            tickAmount: tickRespReq, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
+        },
         yaxis: { labels: { style: { colors: '#8a8a8a', fontSize: '11px', fontWeight: 600 } } },
         legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
-        fill: { opacity: 1 },
-        grid: { borderColor: '#f1f1f1' }
+        fill: { opacity: 1 }, grid: { borderColor: '#f1f1f1' }
     };
     new ApexCharts(document.querySelector("#chartRespReq"), optionsRespReq).render();
     @endif
