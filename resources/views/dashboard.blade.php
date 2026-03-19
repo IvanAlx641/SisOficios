@@ -188,123 +188,72 @@
 
             // --- Gráfica 1: Oficios (Sistemas vs Requerimientos) ---
             @if (count($categoriasChart1) > 0)
+                var seriesChart1Data = @json($seriesChart1);
+                // Calculamos el valor máximo para el eje X
+                var maxChart1 = Math.max(...seriesChart1Data.map(s => Math.max(...s.data)));
+                var tickChart1 = (maxChart1 > 0 && maxChart1 < 5) ? maxChart1 : 5;
+
                 var optionsOficios = {
-                    series: @json($seriesChart1),
+                    series: seriesChart1Data,
                     chart: {
-                        type: 'bar',
-                        height: 400,
-                        stacked: true,
-                        toolbar: {
-                            show: false
-                        },
-                        fontFamily: 'inherit'
+                        type: 'bar', height: 400, stacked: true, fontFamily: 'inherit',
+                        toolbar: { show: false }
                     },
                     colors: paletaInstitucional,
                     plotOptions: {
                         bar: {
-                            horizontal: true,
-                            borderRadius: 3,
-                            barHeight: '55%',
-                            dataLabels: {
-                                total: {
-                                    enabled: true,
-                                    style: {
-                                        fontWeight: 700
-                                    }
-                                }
-                            }
+                            horizontal: true, borderRadius: 3, barHeight: '55%',
+                            dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } }
                         }
                     },
                     xaxis: {
                         categories: @json($categoriasChart1),
-                        labels: {
-                            style: {
-                                colors: '#8a8a8a'
-                            }
+                        tickAmount: tickChart1, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+                        labels: { 
+                            style: { colors: '#8a8a8a' }, 
+                            formatter: function(val) { return parseInt(val); } 
                         }
                     },
-                    yaxis: {
-                        labels: {
-                            style: {
-                                colors: '#8a8a8a'
-                            }
-                        }
-                    },
-                    legend: {
-                        position: 'top',
-                        horizontalAlign: 'center',
-                        labels: {
-                            colors: '#8a8a8a'
-                        }
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    grid: {
-                        borderColor: '#f1f1f1'
-                    }
+                    yaxis: { labels: { style: { colors: '#8a8a8a' } } },
+                    legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
+                    fill: { opacity: 1 },
+                    grid: { borderColor: '#f1f1f1' }
                 };
                 new ApexCharts(document.querySelector("#chartOficios"), optionsOficios).render();
             @endif
 
             // --- Gráfica 2: Actividades (Responsables vs Sistemas) ---
             @if ($rol !== 'Capturista' && count($categoriasChart2) > 0)
+                var seriesChart2Data = @json($seriesChart2);
+                // Calculamos el valor máximo para el eje X
+                var maxChart2 = Math.max(...seriesChart2Data.map(s => Math.max(...s.data)));
+                var tickChart2 = (maxChart2 > 0 && maxChart2 < 5) ? maxChart2 : 5;
+
                 var optionsActividades = {
-                    series: @json($seriesChart2),
+                    series: seriesChart2Data,
                     chart: {
-                        type: 'bar',
-                        height: 400,
-                        stacked: true,
-                        toolbar: {
-                            show: false
-                        },
-                        fontFamily: 'inherit'
+                        type: 'bar', height: 400, stacked: true, fontFamily: 'inherit',
+                        toolbar: { show: false }
                     },
-                    // Usamos la paleta en diferente orden para diferenciar
                     colors: ['#977e5b', '#c3b08f', '#9D2449', '#c9b088', '#8a8a8a'],
                     plotOptions: {
                         bar: {
-                            horizontal: true,
-                            borderRadius: 3,
-                            barHeight: '55%',
-                            dataLabels: {
-                                total: {
-                                    enabled: true,
-                                    style: {
-                                        fontWeight: 700
-                                    }
-                                }
-                            }
+                            horizontal: true, borderRadius: 3, barHeight: '55%',
+                            dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } }
                         }
                     },
                     xaxis: {
                         categories: @json($categoriasChart2),
-                        labels: {
-                            style: {
-                                colors: '#8a8a8a'
-                            }
+                        tickAmount: tickChart2, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+                        labels: { 
+                            style: { colors: '#8a8a8a' }, 
+                            formatter: function(val) { return parseInt(val); } 
                         }
                     },
-                    yaxis: {
-                        labels: {
-                            style: {
-                                colors: '#8a8a8a'
-                            }
-                        }
-                    },
-                    legend: {
-                        position: 'top',
-                        horizontalAlign: 'center',
-                        labels: {
-                            colors: '#8a8a8a'
-                        }
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    grid: {
-                        borderColor: '#f1f1f1'
-                    }
+                    yaxis: { labels: { style: { colors: '#8a8a8a' } } },
+                    legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
+                    fill: { opacity: 1 },
+                    grid: { borderColor: '#f1f1f1' }
                 };
                 new ApexCharts(document.querySelector("#chartActividades"), optionsActividades).render();
             @endif
