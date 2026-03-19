@@ -32,7 +32,7 @@ class UsuarioController extends Controller
         'email.email' => 'El campo correo electrónico debe ser válido.',
         'email.unique' => 'Este correo electrónico ya está registrado.',
         'rol.required' => 'El campo rol es obligatorio.',
-        'unidad_administrativa_id.required_unless' => 'El campo unidad administrativa es obligatorio',
+        'unidad_administrativa_id.required_unless' => 'El campo unidad administrativa es obligatorio.',
     ];
 
     public function __construct()

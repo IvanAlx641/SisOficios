@@ -6,6 +6,7 @@ use App\Models\Oficio;
 use App\Models\ResponsableOficio;
 use App\Models\Sistema;
 use App\Models\TipoRequerimiento;
+use App\Models\UnidadAdministrativa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,15 +19,10 @@ class InformeOficioController extends Controller
         $user = auth()->user();
         $rol = $user->rol;
 
-        // 1. 🛡️ REGLA ESTRICTA: El Capturista NO tiene acceso aquí
-        if ($rol === 'Capturista') {
-            abort(403, 'No tienes permiso para acceder a los Informes de Oficios.');
-        }
-
-        // 2. INICIAR CONSULTA BASE DE OFICIOS
+        // 1. INICIAR CONSULTA BASE DE OFICIOS
         $query = Oficio::query();
 
-        // 3. 🛡️ FILTROS DE SEGURIDAD POR ROL
+        // 2. FILTROS POR ROL
         if ($rol === 'Titular de área') {
             $query->where('dirigido_id', $user->unidad_administrativa_id);
         } elseif ($rol === 'Responsable') {
@@ -34,9 +30,22 @@ class InformeOficioController extends Controller
                 $q->where('responsable_id', $user->id);
             });
         }
-        // Admin TI y Analista pasan sin restricciones y ven todo
 
-        // 4. 📅 FILTRO DE FECHAS (Basado en la fecha de recepción)
+        // 3. LÓGICA DE LA DDL (Solo Admin TI y Capturista)
+        $unidades = collect();
+        if (in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Capturista'])) {
+            
+            // Corrección: Usamos la columna y filtros correctos de tu base de datos
+            $unidades = UnidadAdministrativa::whereNull('inactivo')
+                ->orderBy('nombre_unidad_administrativa')
+                ->pluck('nombre_unidad_administrativa', 'id');
+            
+            if ($request->filled('unidad_administrativa_id')) {
+                $query->where('dirigido_id', $request->unidad_administrativa_id);
+            }
+        }
+
+        // 4. FILTRO DE FECHAS
         if ($request->filled('fecha_inicial')) {
             $query->whereDate('fecha_recepcion', '>=', $request->fecha_inicial);
         }
@@ -44,7 +53,7 @@ class InformeOficioController extends Controller
             $query->whereDate('fecha_recepcion', '<=', $request->fecha_final);
         }
 
-        // Extraer los IDs de los oficios válidos tras los filtros (Para usarlos en la gráfica de Responsables)
+        // Extraer los IDs válidos para la gráfica de Responsables
         $oficiosValidosIds = (clone $query)->pluck('id');
 
         // ========================================================
@@ -109,7 +118,6 @@ class InformeOficioController extends Controller
         // ========================================================
         // GRÁFICA 4: BARRAS - RESPONSABLE VS TIPO REQUERIMIENTO
         // ========================================================
-        // Cruzamos la tabla pivote de responsables con oficios
         $dataRespReq = ResponsableOficio::whereIn('oficio_id', $oficiosValidosIds)
             ->join('oficios', 'responsables_oficios.oficio_id', '=', 'oficios.id')
             ->select('responsables_oficios.responsable_id', 'oficios.tipo_requerimiento_id', DB::raw('count(*) as total'))
@@ -142,7 +150,7 @@ class InformeOficioController extends Controller
         }
 
         return view('informes.oficios', compact(
-            'request', 'rol',
+            'request', 'rol', 'unidades',
             'labelsPieReq', 'seriesPieReq',
             'labelsPieEstatus', 'seriesPieEstatus',
             'categoriasSis', 'seriesSisReq',

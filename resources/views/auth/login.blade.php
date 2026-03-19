@@ -237,7 +237,14 @@
                     <img src="{{ asset('materialpro/assets/images/morenaicons/pleca.png') }}" alt="Separador"
                         class="img-pleca">
 
-
+                    @if (session('success'))
+                        <div class="alert alert-success custom-alert-success small py-2 mb-3 text-center"
+                            role="alert">
+                            <div>{{ session('success') }}</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                        </div>
+                    @endif
 
                     <form action="{{ route('login.post') }}" method="POST" novalidate>
                         @csrf
@@ -255,7 +262,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">Contraseña:</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror ">
+                            <input type="password" name="password"
+                                class="form-control @error('password') is-invalid @enderror ">
                         </div>
                         @error('password')
                             <div class="text-danger small mt-1">

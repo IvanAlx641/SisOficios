@@ -138,6 +138,6 @@ class AuthController extends Controller
         // Eliminar token usado
         DB::table('password_reset_tokens')->where(['email' => $request->email])->delete();
 
-        return redirect()->route('login')->with('success', '¡Contraseña restablecida exitosamente! Ya puedes iniciar sesión.');
+        return redirect()->route('login')->with('success', '¡Contraseña restablecida exitosamente!');
     }
 }

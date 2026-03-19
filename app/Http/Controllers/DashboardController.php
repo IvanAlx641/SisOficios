@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index()
+    // 1. Agregamos (Request $request) para recibir el parámetro del formulario
+    public function index(Request $request)
     {
         $user = auth()->user();
         $rol = $user->rol;
@@ -32,6 +33,11 @@ class DashboardController extends Controller
         } elseif ($rol === 'Capturista') {
             // El capturista solo ve los concluidos según requerimiento
             $oficiosQuery->where('estatus', 'Concluido');
+        }
+
+        // 📅 FILTRO POR AÑO PARA OFICIOS
+        if ($request->filled('anio')) {
+            $oficiosQuery->whereYear('fecha_recepcion', $request->anio);
         }
 
         $totales = [
@@ -89,6 +95,11 @@ class DashboardController extends Controller
                 $actividadesQuery->where('responsable_id', $user->id);
             }
 
+            // 📅 FILTRO POR AÑO PARA ACTIVIDADES
+            if ($request->filled('anio')) {
+                $actividadesQuery->whereYear('fecha_actividad', $request->anio);
+            }
+
             $actividadesData = (clone $actividadesQuery)
                 ->select('responsable_id', 'sistema_id', DB::raw('count(*) as total'))
                 ->groupBy('responsable_id', 'sistema_id')
@@ -126,7 +137,8 @@ class DashboardController extends Controller
             'totales', 
             'categoriasChart1', 'seriesChart1', 
             'categoriasChart2', 'seriesChart2', 
-            'rol'
+            'rol',
+            'request' // Lo pasamos compacto por si lo llegas a necesitar directamente en otra parte de la vista
         ));
     }
 }

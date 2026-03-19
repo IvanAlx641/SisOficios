@@ -178,7 +178,7 @@
                                 </li>
                                 @endif
 
-                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Titular de área', 'Responsable']))
+                                @if(in_array(Auth::user()->rol, ['Administrador TI', 'Responsable']))
                                 <li class="sidebar-item">
                                     <a href="{{ route('seguimiento.index') }}" class="sidebar-link">
                                         <i class="ti ti-arrow-guide"></i>
@@ -451,7 +451,7 @@
                                 role="alert"
                                 style="background-color: #d1e7dd; color: #0f5132; border-left: 5px solid #198754 !important;">
                                 <i class="ti ti-circle-check fs-4 me-2 text-success"></i>
-                                <div><strong>¡Excelente!</strong> {{ session('success') }}</div>
+                                <div>{{ session('success') }}</div>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
@@ -461,8 +461,8 @@
                             <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 d-flex align-items-center"
                                 role="alert"
                                 style="background-color: #f8d7da; color: #842029; border-left: 5px solid #dc3545 !important;">
-                                <i class="ti ti-alert-triangle fs-4 me-2 text-danger"></i>
-                                <div><strong>¡Atención!</strong> {{ session('error') }}</div>
+                                
+                                <div>{{ session('error') }}</div>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Actividad;
 use App\Models\Sistema;
+use App\Models\TipoRequerimiento;
+use App\Models\UnidadAdministrativa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,15 +18,10 @@ class InformeActividadController extends Controller
         $user = auth()->user();
         $rol = $user->rol;
 
-        // 1. 🛡️ BLOQUEO ESTRICTO
-        if ($rol === 'Capturista') {
-            abort(403, 'No tienes permiso para acceder a los Informes de Actividades.');
-        }
-
-        // 2. CONSULTA BASE
+        // 1. CONSULTA BASE
         $query = Actividad::query();
 
-        // 3. 🛡️ FILTROS POR ROL
+        // 2. FILTROS POR ROL BASE
         if ($rol === 'Responsable') {
             $query->where('responsable_id', $user->id);
         } elseif ($rol === 'Titular de área') {
@@ -32,9 +29,24 @@ class InformeActividadController extends Controller
                 $q->where('unidad_administrativa_id', $user->unidad_administrativa_id);
             });
         }
-        // Admin TI y Analista pasan directo y ven todo
+        // Admin TI, Administrador y Capturista pasan directo y ven todo por defecto
 
-        // 4. 📅 FILTRO DE FECHAS
+        // 3. LÓGICA DE LA DDL (Filtro por Unidad Administrativa)
+        $unidades = collect();
+        if (in_array($rol, ['Administrador', 'Administrador TI', 'Admin TI', 'Capturista'])) {
+            $unidades = UnidadAdministrativa::whereNull('inactivo')
+                ->orderBy('nombre_unidad_administrativa')
+                ->pluck('nombre_unidad_administrativa', 'id');
+            
+            if ($request->filled('unidad_administrativa_id')) {
+                // Filtramos las actividades cuyos responsables pertenezcan a la unidad seleccionada
+                $query->whereHas('responsable', function($q) use ($request) {
+                    $q->where('unidad_administrativa_id', $request->unidad_administrativa_id);
+                });
+            }
+        }
+
+        // 4. FILTRO DE FECHAS
         if ($request->filled('fecha_inicial')) {
             $query->whereDate('fecha_actividad', '>=', $request->fecha_inicial);
         }
@@ -49,7 +61,6 @@ class InformeActividadController extends Controller
         // ========================================================
         $dataEstatus = DB::table('detalle_actividades')
             ->whereIn('actividad_id', $actividadesIds)
-            // AQUÍ ESTÁ LA CORRECCIÓN EXACTA DE TEXTO (Singular, tal como tu form)
             ->whereIn('estatus', ['En proceso', 'Atendida']) 
             ->select('estatus', DB::raw('count(*) as total'))
             ->groupBy('estatus')
@@ -63,21 +74,31 @@ class InformeActividadController extends Controller
         }
 
         // ========================================================
-        // GRÁFICA 2: BARRAS HORIZONTALES - SISTEMAS
+        // GRÁFICA 2: BARRAS HORIZONTALES APILADAS - SISTEMAS VS TIPO REQ
         // ========================================================
         $dataSis = (clone $query)
             ->join('detalle_actividades', 'actividades.id', '=', 'detalle_actividades.actividad_id')
-            ->select('actividades.sistema_id', DB::raw('count(detalle_actividades.id) as total'))
-            ->groupBy('actividades.sistema_id')
+            // Corrección: El tipo_requerimiento_id se toma de detalle_actividades
+            ->select('actividades.sistema_id', 'detalle_actividades.tipo_requerimiento_id', DB::raw('count(detalle_actividades.id) as total'))
+            ->groupBy('actividades.sistema_id', 'detalle_actividades.tipo_requerimiento_id')
             ->get();
 
-        $sistemasNombres = Sistema::pluck('sigla_sistema', 'id');
-        
-        $categoriasSis = [];
+        $sistemasIds = $dataSis->pluck('sistema_id')->unique();
+        $tiposReqIds = $dataSis->pluck('tipo_requerimiento_id')->unique();
+
+        $sistemasNombres = Sistema::whereIn('id', $sistemasIds)->pluck('sigla_sistema', 'id');
+        $tiposReqNombres = TipoRequerimiento::whereIn('id', $tiposReqIds)->pluck('tipo_requerimiento', 'id');
+
+        $categoriasSis = array_values($sistemasNombres->toArray());
         $seriesSis = [];
-        foreach ($dataSis as $row) {
-            $categoriasSis[] = mb_strtoupper($sistemasNombres[$row->sistema_id] ?? 'S/N');
-            $seriesSis[] = $row->total;
+
+        foreach ($tiposReqNombres as $idReq => $nomReq) {
+            $data = [];
+            foreach ($sistemasNombres as $idSis => $nomSis) {
+                $val = $dataSis->where('sistema_id', $idSis)->where('tipo_requerimiento_id', $idReq)->first()->total ?? 0;
+                $data[] = $val;
+            }
+            $seriesSis[] = ['name' => mb_strtoupper($nomReq), 'data' => $data];
         }
 
         // ========================================================
@@ -119,7 +140,7 @@ class InformeActividadController extends Controller
         }
 
         return view('informes.actividades', compact(
-            'request', 'rol',
+            'request', 'rol', 'unidades',
             'labelsPieEstatus', 'seriesPieEstatus',
             'categoriasSis', 'seriesSis',
             'categoriasTiempo', 'seriesTiempo',
