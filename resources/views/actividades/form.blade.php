@@ -97,8 +97,7 @@
 
 <style>
     /* Colores Institucionales */
-    .text-guinda { color: #9D2449 !important; }
-    .text-guinda2 { color: #4e1c24 !important; }
+    
     .bg-guinda { background-color: #9D2449 !important; }
     .border-guinda { border-color: #9D2449 !important; }
     

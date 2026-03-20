@@ -42,15 +42,15 @@
             <div class="bg-light p-4 mt-3 rounded-3 mb-4 border-0 shadow-sm">
                 <div class="row text-center text-md-start">
                     <div class="col-md-4">
-                        <label class="fw-bold text-guinda2 small d-block">Fecha:</label>
+                        <label class=" form-label fw-bold text-guinda2 small d-block">Fecha:</label>
                         <span class="text-dark">{{ $actividad->fecha_actividad ? $actividad->fecha_actividad->format('d/m/Y') : '-' }}</span>
                     </div>
                     <div class="col-md-4">
-                        <label class="fw-bold text-guinda2 small d-block">Responsable:</label>
+                        <label class="form-label fw-bold text-guinda2 small d-block">Responsable:</label>
                         <span class="text-dark">{{ mb_strtoupper($actividad->responsable->nombre ?? 'N/A') }}</span>
                     </div>
                     <div class="col-md-4">
-                        <label class="fw-bold text-guinda2 small d-block">Sistema:</label>
+                        <label class=" form-label fw-bold text-guinda2 small d-block">Sistema:</label>
                         <span class="text-dark">{{ $actividad->sistema->sigla_sistema ?? 'N/A' }}</span>
                     </div>
                 </div>
@@ -162,9 +162,7 @@
 </div>
 
 <style>
-    /* Estilos base */
-    .text-guinda { color: #9D2449 !important; }
-    .text-guinda2 { color: #4e1c24 !important; }
+   
     .bg-guinda { background-color: #9D2449 !important; }
     .border-guinda { border-color: #9D2449 !important; }
     
