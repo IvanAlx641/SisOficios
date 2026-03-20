@@ -556,13 +556,13 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-guinda2 small">Soporte documental:<span
-                                        class="text-danger">*</span></label>
+                                        class="text-danger"></span></label>
                                 
                                 <div class="mb-2 d-flex flex-wrap gap-2">
 
                                     @if ($oficio->soporte_documental)
                                         <a href="{{ asset('storage/' . $oficio->soporte_documental) }}" target="_blank"
-                                            class="btn btn-sm btn-outline-guinda py-1 px-3 rounded-pill fw-bold">
+                                            class="btn btn-sm btn-outline-guinda py-1 px-3 rounded-pill fw-bold" style="text-transform: none;">
                                             <i class="ti ti-file-check fs-5 me-1" style="vertical-align: text-bottom;"></i> Ver soporte documental
                                         </a>
                                     @endif
@@ -575,7 +575,7 @@
                                 @php $hasDocError = old('error_modal_id') == $modalConcluirId && $errors->has('soporte_documental'); @endphp
                                 <input type="file" name="soporte_documental"
                                     class="form-control border-guinda {{ $hasDocError ? 'is-invalid' : '' }}"
-                                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                    accept=".pdf"
                                     {{ $oficio->soporte_documental ? '' : 'required' }}>
                                 @if ($hasDocError)
                                     <span class="invalid-feedback fw-bold mt-1">{{ $errors->first('soporte_documental') }}</span>

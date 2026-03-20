@@ -159,14 +159,20 @@ class UsuarioController extends Controller
 
     public function notificacion(User $usuario)
     {
-        // ... (Tu código de autorización)
         $this->authorize('update', $usuario);
 
         if ($usuario->email_verified_at != null) {
-            $token = Password::createToken($usuario);
             
-            // 🚨 AQUÍ ESTÁ EL CAMBIO 🚨
-            // Solo mandamos los dos datos limpios: el token y el email
+            // 1. Generamos el token igual que en el AuthController
+            $token = Str::random(64);
+
+            // 2. Lo guardamos en la base de datos en texto plano
+            \Illuminate\Support\Facades\DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $usuario->email],
+                ['token' => $token, 'created_at' => now()]
+            );
+            
+            // 3. Enviamos el correo
             Mail::to($usuario->email)->send(new RecuperarContrasena($token, $usuario->email));
             
             return redirect()->route('usuario.index')->with('success', 'Enlace de recuperación enviado.');

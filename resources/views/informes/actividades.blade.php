@@ -55,13 +55,13 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm h-100 bg-white rounded-3">
                 <div class="card-header bg-white border-bottom-0 pt-4 text-center">
-                    <h5 class="fw-bold text-guinda mb-0">Estado General de Tareas</h5>
+                    <h5 class="fw-bold text-guinda mb-0">Estado general de actividades</h5>
                 </div>
                 <div class="card-body d-flex justify-content-center align-items-center p-4">
                     @if(count($seriesPieEstatus) > 0)
                         <div id="chartEstatus" class="w-100 d-flex justify-content-center"></div>
                     @else
-                        <div class="text-muted fst-italic py-5">No hay tareas en proceso o atendidas en este rango.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -70,13 +70,13 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm h-100 bg-white rounded-3">
                 <div class="card-header bg-white border-bottom-0 pt-4 text-center">
-                    <h5 class="fw-bold text-guinda mb-0">Carga de Trabajo por Sistema</h5>
+                    <h5 class="fw-bold text-guinda mb-0">Carga de trabajo por sistema</h5>
                 </div>
                 <div class="card-body p-4">
                     @if(count($categoriasSis) > 0)
                         <div id="chartSis" style="min-height: 350px;"></div>
                     @else
-                        <div class="text-muted text-center py-5">No hay datos para mostrar.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -85,13 +85,13 @@
         <div class="col-lg-12">
             <div class="card border-0 shadow-sm h-100 bg-white rounded-3">
                 <div class="card-header bg-white border-bottom-0 pt-4 text-center">
-                    <h5 class="fw-bold text-guinda mb-0">Tendencia de Productividad Diaria</h5>
+                    <h5 class="fw-bold text-guinda mb-0">Tendencia de productividad diaria</h5>
                 </div>
                 <div class="card-body p-4">
                     @if(count($categoriasTiempo) > 0)
                         <div id="chartTiempo" style="min-height: 350px;"></div>
                     @else
-                        <div class="text-muted text-center py-5">No hay actividad en estas fechas.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -106,7 +106,7 @@
                     @if(count($categoriasResp) > 0)
                         <div id="chartResp" style="min-height: 350px;"></div>
                     @else
-                        <div class="text-muted text-center py-5">No hay responsables asignados en este rango.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function() {
         plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '50%', dataLabels: { total: { enabled: true, style: { fontWeight: 700 } } } } },
         xaxis: { 
             categories: @json($categoriasSis), 
-            title: { text: 'Tipo de Requerimiento', style: { fontWeight: 600, color: '#9D2449' } },
+            title: { text: 'Tipo de requerimiento', style: { fontWeight: 600, color: '#9D2449' } },
             tickAmount: tickSis, // 🚨 ESTO EVITA LOS DECIMALES 🚨
             labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var tickResp = (maxResp > 0 && maxResp < 5) ? maxResp : 5;
 
     var optionsResp = {
-        series: [{ name: 'Tareas asignadas', data: serieRespData }],
+        series: [{ name: 'Actividades asignadas', data: serieRespData }],
         chart: { type: 'bar', height: 400, fontFamily: 'inherit', locales: apexLocales, defaultLocale: 'es', toolbar: toolbarConfig },
         colors: ['#c9b088', '#9D2449', '#8a8a8a', '#c3b08f', '#977e5b'], 
         plotOptions: { bar: { horizontal: true, borderRadius: 3, barHeight: '50%', distributed: true, dataLabels: { position: 'bottom' } } },

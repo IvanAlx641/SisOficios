@@ -4,7 +4,7 @@
 <div class="card border-0 shadow-sm rounded-3">
     <div class="card-header bg-light border-bottom-0 pt-4 px-4">
         <h4 class="fw-bold text-guinda mb-1">
-            {{ $sistema->exists ? 'Editar sistema' : 'Gestión de sistemas' }}
+            {{ $sistema->exists ? 'Editar sistema' : 'Sistemas' }}
         </h4>
     </div>
 

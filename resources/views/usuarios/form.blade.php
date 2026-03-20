@@ -7,7 +7,7 @@
     <div class="card-header bg-light border-bottom-0 pt-4 px-4 ">
         <div>
             <h4 class="fw-bold text-guinda mb-1">
-                {{ $usuario->exists ? 'Editar usuario' : 'Gestión de usuarios' }}
+                {{ $usuario->exists ? 'Editar usuario' : 'Usuarios' }}
             </h4>
         </div>
     </div>

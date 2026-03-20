@@ -110,7 +110,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-4">
                         <div>
-                            <h4 class="card-title fw-bold mb-0 text-guinda">Oficios por Sistema</h4>
+                            <h4 class="card-title fw-bold mb-0 text-guinda">Oficios por sistema</h4>
                         </div>
                     </div>
                     @if (count($categoriasChart1) > 0)
@@ -128,7 +128,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-4">
                             <div>
-                                <h4 class="card-title fw-bold mb-0 text-guinda">Actividades por Responsable</h4>
+                                <h4 class="card-title fw-bold mb-0 text-guinda">Actividades por responsable</h4>
                             </div>
                         </div>
                         @if (count($categoriasChart2) > 0)

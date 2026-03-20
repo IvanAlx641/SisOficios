@@ -250,7 +250,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label fw-bold small">URL del documento de respuesta (Opcional):</label>
+                                <label class="form-label fw-bold small">URL del documento de respuesta:</label>
                                 <input type="url" name="url_oficio_respuesta"
                                     value="{{ old('url_oficio_respuesta') }}"
                                     class="form-control border-guinda {{ old('form_action') == 'create' && $errors->has('url_oficio_respuesta') ? 'is-invalid' : '' }}"

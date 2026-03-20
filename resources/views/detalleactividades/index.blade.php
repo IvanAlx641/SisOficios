@@ -6,10 +6,13 @@
         {{-- Header con Título --}}
         <div class="card-header bg-light border-bottom-0 pt-4 px-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold text-guinda mb-0">Actividades
+                
+                <h4 class="fw-bold text-guinda mb-0">
                     <a href="{{ route('actividad.index') }}" class="text-guinda text-decoration-none gap-3 me-2" title="Volver al listado">
                         <i class="ti ti-arrow-back-up fs-3"></i>
                     </a>
+                    Actividades
+                    
                 </h4>
                 
                 <div class="d-flex gap-2">
@@ -78,7 +81,7 @@
                                     data-action="{{ route('detalleactividad.update', $detalle->id) }}">
                                     <i class="ti ti-pencil fs-4"></i>
                                 </button>
-                                <form action="{{ route('detalleactividad.destroy', $detalle->id) }}" method="POST" onsubmit="return confirm('¿Eliminar esta tarea?');">
+                                <form action="{{ route('detalleactividad.destroy', $detalle->id) }}" method="POST" onsubmit="return confirm('¿Eliminar esta actividad?');">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm border-0 text-guinda"><i class="ti ti-trash fs-4"></i></button>
                                 </form>
@@ -89,7 +92,7 @@
                     <div class="col-12 text-center py-5">
                         <div class="alert alert-light border shadow-sm">
                             <i class="ti ti-clipboard-x fs-1 text-muted d-block mb-2"></i>
-                            <span class="text-muted">No hay tareas registradas.</span>
+                            <span class="text-muted">No hay actividades registradas.</span>
                         </div>
                     </div>
                 @endforelse
@@ -107,7 +110,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow rounded-4">
             <div class="modal-header bg-light border-bottom-0 p-4 pb-2">
-                <h5 class="modal-title fw-bold text-guinda" id="modalDetalleTitle">Detalle de tarea</h5>
+                <h5 class="modal-title fw-bold text-guinda" id="modalDetalleTitle">Detalle de actividad</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4 pt-2">
@@ -302,7 +305,7 @@
             btn.addEventListener('click', function() {
                 const urlDatos = this.getAttribute('data-url');
                 fetch(urlDatos).then(r => r.json()).then(data => {
-                    document.getElementById('modalDetalleTitle').textContent = "Editar Tarea";
+                    document.getElementById('modalDetalleTitle').textContent = "Editar actividad";
                     form.action = this.getAttribute('data-action');
                     document.getElementById('methodContainer').innerHTML = '<input type="hidden" name="_method" value="PUT">';
                     

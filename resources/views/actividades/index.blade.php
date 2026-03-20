@@ -137,7 +137,7 @@
 
                         @if($actividad->detalle_actividades_count > 0)
                             <div class="bg-white text-center pb-3">
-                                <button class="btn btn-sm btn-more-info rounded-pill px-4 fw-bold " type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetalles{{ $actividad->id }}" aria-expanded="false">
+                                <button class="btn btn-sm btn-more-info rounded-pill px-4 fw-bold " style="text-transform: none;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetalles{{ $actividad->id }}" aria-expanded="false">
                                     Ver actividades <i class="ti ti-chevron-down ms-1 transition-icon"></i>
                                 </button>
                             </div>

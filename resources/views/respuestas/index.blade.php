@@ -361,7 +361,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label fw-bold text-guinda2 small">URL del documento de respuesta
-                                        (Opcional)
+                                        
                                         :</label>
                                     {{-- LÓGICA: Value actualizado --}}
                                     <input type="url" name="url_oficio_respuesta"

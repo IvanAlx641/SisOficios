@@ -64,7 +64,7 @@
                     @if(count($seriesPieReq) > 0)
                         <div id="chartPieReq" class="w-100 d-flex justify-content-center"></div>
                     @else
-                        <div class="text-muted fst-italic py-5">No hay oficios en este rango de fechas.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -73,13 +73,13 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm h-100 bg-white rounded-3">
                 <div class="card-header bg-white border-bottom-0 pt-4 text-center">
-                    <h5 class="fw-bold text-guinda mb-1">Requerimientos por Sistema</h5>
+                    <h5 class="fw-bold text-guinda mb-1">Requerimientos por sistema</h5>
                 </div>
                 <div class="card-body p-4">
                     @if(count($categoriasSis) > 0)
                         <div id="chartSisReq" style="min-height: 380px;"></div>
                     @else
-                        <div class="text-muted text-center py-5">No hay datos para mostrar.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -94,7 +94,7 @@
                     @if(count($seriesPieEstatus) > 0)
                         <div id="chartPieEstatus" class="w-100 d-flex justify-content-center"></div>
                     @else
-                        <div class="text-muted fst-italic py-5">No hay oficios en este rango de fechas.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
@@ -109,7 +109,7 @@
                     @if(count($categoriasResp) > 0)
                         <div id="chartRespReq" style="min-height: 380px;"></div>
                     @else
-                        <div class="text-muted text-center py-5">No hay responsables asignados en este rango.</div>
+                        <div class="text-muted text-center py-5">No se encontró información con los criterios de búsqueda seleccionados.</div>
                     @endif
                 </div>
             </div>
