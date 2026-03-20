@@ -151,7 +151,7 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
 
     const paletaInstitucional = ['#9D2449', '#977e5b', '#c3b08f', '#8a8a8a', '#c9b088'];
 
@@ -199,11 +199,15 @@ document.addEventListener("DOMContentLoaded", function() {
         xaxis: { 
             categories: @json($categoriasSis), 
             title: { text: 'Tipo de requerimiento', style: { fontWeight: 600, color: '#9D2449' } },
-            tickAmount: tickSis, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            tickAmount: tickSis,
             labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
         yaxis: { title: { text: 'Sistema', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a', fontWeight: 600 } } },
         legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
+        // 🚨 TOOLTIP: Faltaba esto para redondear el número al pasar el cursor 🚨
+        tooltip: {
+            y: { formatter: function (val) { return Math.round(val); } }
+        },
         grid: { borderColor: '#f1f1f1' }
     };
     new ApexCharts(document.querySelector("#chartSis"), optionsSis).render();
@@ -223,8 +227,12 @@ document.addEventListener("DOMContentLoaded", function() {
         xaxis: { categories: @json($categoriasTiempo), title: { text: 'Fecha', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a' } } },
         yaxis: { 
             title: { text: 'No. de actividades registradas', style: { fontWeight: 600, color: '#9D2449' } },
-            tickAmount: tickTiempo, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            tickAmount: tickTiempo,
             labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
+        },
+        // 🚨 TOOLTIP: Faltaba esto para redondear el número al pasar el cursor 🚨
+        tooltip: {
+            y: { formatter: function (val) { return Math.round(val); } }
         },
         grid: { borderColor: '#f1f1f1', strokeDashArray: 4 }
     };
@@ -246,17 +254,23 @@ document.addEventListener("DOMContentLoaded", function() {
         xaxis: { 
             categories: @json($categoriasResp), 
             title: { text: 'No. de actividades', style: { fontWeight: 600, color: '#9D2449' } },
-            tickAmount: tickResp, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            tickAmount: tickResp,
             labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
         yaxis: { title: { text: 'Responsables', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a', fontWeight: 600 } } }, 
-        legend: { show: false }, grid: { borderColor: '#f1f1f1' }
+        legend: { show: false }, 
+        // 🚨 TOOLTIP: Faltaba esto para redondear el número al pasar el cursor 🚨
+        tooltip: {
+            y: { formatter: function (val) { return Math.round(val); } }
+        },
+        grid: { borderColor: '#f1f1f1' }
     };
     new ApexCharts(document.querySelector("#chartResp"), optionsResp).render();
     @endif
 
     // SCRIPT DEL BUSCADOR
     function convertirSelectABuscador(idSelect) {
+        // ... (El resto del código del buscador permanece igual) ...
         const originalSelect = document.getElementById(idSelect);
         if (!originalSelect) return;
 
@@ -339,6 +353,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     convertirSelectABuscador('filtro_dirigido');
 
-});
+    });
 </script>
 @endsection

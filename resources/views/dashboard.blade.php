@@ -208,13 +208,21 @@
                     },
                     xaxis: {
                         categories: @json($categoriasChart1),
-                        tickAmount: tickChart1, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+                        tickAmount: tickChart1, 
                         labels: { 
                             style: { colors: '#8a8a8a' }, 
                             formatter: function(val) { return parseInt(val); } 
                         }
                     },
                     yaxis: { labels: { style: { colors: '#8a8a8a' } } },
+                    // 🚨 ESTO ARREGLA LOS DECIMALES AL PASAR EL CURSOR 🚨
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return Math.round(val);
+                            }
+                        }
+                    },
                     legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
                     fill: { opacity: 1 },
                     grid: { borderColor: '#f1f1f1' }
@@ -244,13 +252,21 @@
                     },
                     xaxis: {
                         categories: @json($categoriasChart2),
-                        tickAmount: tickChart2, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+                        tickAmount: tickChart2, 
                         labels: { 
                             style: { colors: '#8a8a8a' }, 
                             formatter: function(val) { return parseInt(val); } 
                         }
                     },
                     yaxis: { labels: { style: { colors: '#8a8a8a' } } },
+                    // 🚨 ESTO ARREGLA LOS DECIMALES AL PASAR EL CURSOR 🚨
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return Math.round(val);
+                            }
+                        }
+                    },
                     legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
                     fill: { opacity: 1 },
                     grid: { borderColor: '#f1f1f1' }

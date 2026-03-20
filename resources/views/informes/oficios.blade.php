@@ -294,12 +294,16 @@ document.addEventListener("DOMContentLoaded", function() {
         xaxis: { 
             categories: @json($categoriasSis), 
             title: { text: 'Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, 
-            tickAmount: tickSisReq, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            tickAmount: tickSisReq,
             labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
         yaxis: { title: { text: 'Sistema', style: { fontWeight: 600, color: '#9D2449' } }, labels: { style: { colors: '#8a8a8a', fontSize: '11px', fontWeight: 600 } } },
         legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
-        fill: { opacity: 1 }, grid: { borderColor: '#f1f1f1' }
+        fill: { opacity: 1 }, grid: { borderColor: '#f1f1f1' },
+        // 🚨 AQUÍ PREVENIMOS LOS DECIMALES AL PASAR EL CURSOR 🚨
+        tooltip: {
+            y: { formatter: function (val) { return Math.round(val); } }
+        }
     };
     new ApexCharts(document.querySelector("#chartSisReq"), optionsSisReq).render();
     @endif
@@ -318,12 +322,16 @@ document.addEventListener("DOMContentLoaded", function() {
         xaxis: { 
             categories: @json($categoriasResp), 
             title: { text: 'Requerimiento', style: { fontWeight: 600, color: '#9D2449' } }, 
-            tickAmount: tickRespReq, // 🚨 ESTO EVITA LOS DECIMALES 🚨
+            tickAmount: tickRespReq,
             labels: { style: { colors: '#8a8a8a' }, formatter: function(val){ return parseInt(val); } } 
         },
         yaxis: { labels: { style: { colors: '#8a8a8a', fontSize: '11px', fontWeight: 600 } } },
         legend: { position: 'top', horizontalAlign: 'center', labels: { colors: '#8a8a8a' } },
-        fill: { opacity: 1 }, grid: { borderColor: '#f1f1f1' }
+        fill: { opacity: 1 }, grid: { borderColor: '#f1f1f1' },
+        // 🚨 AQUÍ PREVENIMOS LOS DECIMALES AL PASAR EL CURSOR 🚨
+        tooltip: {
+            y: { formatter: function (val) { return Math.round(val); } }
+        }
     };
     new ApexCharts(document.querySelector("#chartRespReq"), optionsRespReq).render();
     @endif
